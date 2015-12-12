@@ -11,8 +11,11 @@
 #include <tchar.h>
 #include <iostream>
 #include <time.h>
+#include <math.h>
+#include <vector>
 #include "Task.h"
-
+#include "Generator.h"
+#include "Timeline.h"
 
 
 // TODO: reference additional headers your program requires here

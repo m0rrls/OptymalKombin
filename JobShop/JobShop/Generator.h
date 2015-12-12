@@ -7,8 +7,9 @@ public:
 	Generator(int l);
 	~Generator();
 	void rdm(int start, int end, int k);
-private:
-	int len;
+	void test();
+	int getN(int a);
+protected:
 	std::vector<int> tab;
 };
 

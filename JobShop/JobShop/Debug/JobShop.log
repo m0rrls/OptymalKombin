@@ -1,17 +1,5 @@
-﻿Build started 2015-11-24 21:08:06.
-     1>Project "C:\Users\Mariusz\Documents\GitHub\OptymalKombin\JobShop\JobShop\JobShop.vcxproj" on node 2 (Build target(s)).
-     1>ClCompile:
-         D:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Yu"stdafx.h" /Fp"Debug\JobShop.pch" /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt Generator.cpp
-         Generator.cpp
-     1>c:\users\mariusz\documents\github\optymalkombin\jobshop\jobshop\generator.cpp(20): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-       Link:
-         D:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Mariusz\Documents\GitHub\OptymalKombin\JobShop\Debug\JobShop.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:\Users\Mariusz\Documents\GitHub\OptymalKombin\JobShop\Debug\JobShop.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Mariusz\Documents\GitHub\OptymalKombin\JobShop\Debug\JobShop.lib" /MACHINE:X86 Debug\Generator.obj
-         Debug\JobShop.obj
-         Debug\stdafx.obj
-         Debug\Task.obj
-         JobShop.vcxproj -> C:\Users\Mariusz\Documents\GitHub\OptymalKombin\JobShop\Debug\JobShop.exe
-     1>Done Building Project "C:\Users\Mariusz\Documents\GitHub\OptymalKombin\JobShop\JobShop\JobShop.vcxproj" (Build target(s)).
-
-Build succeeded.
-
-Time Elapsed 00:00:00.49
+﻿  Timeline.cpp
+c:\users\mariusz\documents\github\optymalkombin\jobshop\jobshop\timeline.cpp(9): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+c:\users\mariusz\documents\github\optymalkombin\jobshop\jobshop\timeline.cpp(10): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+c:\users\mariusz\documents\github\optymalkombin\jobshop\jobshop\timeline.cpp(16): warning C4018: '<': signed/unsigned mismatch
+  JobShop.vcxproj -> C:\Users\Mariusz\Documents\GitHub\OptymalKombin\JobShop\Debug\JobShop.exe
