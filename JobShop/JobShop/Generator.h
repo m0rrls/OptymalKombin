@@ -6,7 +6,7 @@ class Generator
 public:
 	Generator(int l);
 	~Generator();
-	void rdm(int start, int end, int k);
+	virtual void rdm(int start, int end, int k);
 	void test();
 	int getN(int a);
 protected:

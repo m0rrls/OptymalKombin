@@ -1,5 +1,5 @@
-﻿  Timeline.cpp
-c:\users\mariusz\documents\github\optymalkombin\jobshop\jobshop\timeline.cpp(9): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-c:\users\mariusz\documents\github\optymalkombin\jobshop\jobshop\timeline.cpp(10): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-c:\users\mariusz\documents\github\optymalkombin\jobshop\jobshop\timeline.cpp(16): warning C4018: '<': signed/unsigned mismatch
+﻿  Readytime.cpp
+c:\users\mariusz\documents\github\optymalkombin\jobshop\jobshop\readytime.cpp(7): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+c:\users\mariusz\documents\github\optymalkombin\jobshop\jobshop\readytime.cpp(15): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+c:\users\mariusz\documents\github\optymalkombin\jobshop\jobshop\readytime.cpp(19): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
   JobShop.vcxproj -> C:\Users\Mariusz\Documents\GitHub\OptymalKombin\JobShop\Debug\JobShop.exe
