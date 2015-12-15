@@ -2,21 +2,21 @@
 #include "Readytime.h"
 
 
-void Readytime::rdm(int start, int end)
+void Readytime::rdm()
 {
 	srand(time(0));
-	int i = start;
-	for (i; i <= end/3; i++)
+	int i = 0;
+	for (i; i <= (tab.size()-1)/3.0; i++)
 	{
-		tab[i] = rand() % (end/3);
+		tab[i] = rand() % ((tab.size() - 1) /3);
 	}
-	for (i; i <= 2*end/3; i++)
+	for (i; i <= 2* (tab.size() - 1) / 3.0; i++)
 	{
-		tab[i] = rand() % (end/3) + ceil(end/3);
+		tab[i] = rand() % ((tab.size() - 1) /3) + ceil(tab.size() /3.0);
 	}
-	for (i; i <= end; i++)
+	for (i; i <= (tab.size() - 1); i++)
 	{
-		tab[i] = rand() % (end/3) + ceil(2*end/3);
+		tab[i] = rand() % ((tab.size() - 1) /3) + ceil(2* tab.size() /3.0);
 	}
 }
 

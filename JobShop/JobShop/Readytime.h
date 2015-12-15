@@ -5,7 +5,7 @@ class Readytime :
 {
 public:
 	using Generator::Generator;
-	void rdm(int start, int end);
+	void rdm();
 	~Readytime();
 };
 

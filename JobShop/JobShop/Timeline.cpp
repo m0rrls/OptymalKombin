@@ -6,8 +6,8 @@
 
 void Timeline::maintenance(int N, float kN, int maxL) //dodaje przerwy techniczne dla N zadan w stosunku kN do liczby zadan
 {													//gdzie  podana jest maksymalna dlugosc przerwy, jezeli jest
-	srand(time(0));									
-	int i = ceil(N * kN);
+	srand(time(0));									//skonfigurowane by wiêcej przer by³o na poczatku a szansa na przerwe malala
+	int i = ceil(N * kN);							//wraz z numerem pozycji przerwy w tablicy
 	int j = 0;
 	while (j < i)
 	{
@@ -28,7 +28,9 @@ void Timeline::maintenance(int N, float kN, int maxL) //dodaje przerwy techniczn
 			}
 			k++;
 		}
-		if (!alrdyTkn)
+		int h = rand()%100 + 1;
+		int g = std::ceil(100*start / (double)(tab.size()));
+		if (!alrdyTkn && h < (100 - g))
 		{
 			for (pom; pom < l; pom++)
 				tab[pom] = -1;
