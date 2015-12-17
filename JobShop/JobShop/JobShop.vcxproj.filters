@@ -33,6 +33,12 @@
     <ClInclude Include="Timeline.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Readytime.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Kappa.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -48,6 +54,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Timeline.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Readytime.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Kappa.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
