@@ -14,13 +14,13 @@ Generator::~Generator()
 {
 }
 
-void Generator::rdm(int start, int end, int k) 
+void Generator::rdm(int start, int end, int k, int j) 
 {
-	srand(time(0));
+	//srand(time(0));
 	int i = start;
 	for (i; i <= end; i++) 
 	{
-		tab[i] = rand() % k + 1;
+		tab[i] = rand() % (j-k) + 1 + k;
 	}
 }
 
@@ -35,7 +35,5 @@ void Generator::test()
 
 int Generator::getN(int a)
 {
-	int j;
-	j = this->tab[a];
-	return j;
+	return tab[a];
 }

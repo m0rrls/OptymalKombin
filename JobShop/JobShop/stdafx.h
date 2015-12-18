@@ -13,6 +13,9 @@
 #include <time.h>
 #include <math.h>
 #include <vector>
+#include <map>
+#include <fstream>
+#include <string>
 #include "Task.h"
 #include "Generator.h"
 #include "Timeline.h"

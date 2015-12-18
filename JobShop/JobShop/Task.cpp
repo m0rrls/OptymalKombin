@@ -10,12 +10,13 @@ Task::Task()
 	y2 = -1;
 }
 
-Task::Task(int a, int b, int c, int d)
+Task::Task(int a, int b, int c, int d, int e)
 {
 	x = a;
 	rt = b;
 	y1 = c;
 	y2 = d;
+	mach = e;
 	done_op1 = false;
 }
 
@@ -49,12 +50,13 @@ void Task::set_done_op1()
 	done_op1 = true;
 }
 
-void Task::set_params(int a, int b, int c, int d)
+void Task::set_params(int a, int b, int c, int d, int e)
 {
 	x = a;
 	rt = b;
 	y1 = c;
 	y2 = d;
+	mach = e;
 }
 
 
