@@ -122,15 +122,15 @@ int main()
 		zadania[i].set_params(i + 1, pom[4], pom[0], pom[1], pom[2]);
 		
 	}
-
-	for (int i = 0; i < N; i++)
-	{
-		std::cout 
-			<< zadania[i].get_nr() << " " 
-			<< zadania[i].get_op1() << " " 
-			<< zadania[i].get_op2() << " "
-			<< zadania[i].get_rt() << "\n";
-	}
+	std::cout << "Pobrano dane z pliku\n";
+	//for (int i = 0; i < N; i++) 
+	//{
+	//	std::cout 
+	//		<< zadania[i].get_nr() << " " 
+	//		<< zadania[i].get_op1() << " " 
+	//		<< zadania[i].get_op2() << " "
+	//		<< zadania[i].get_rt() << "\n";
+	//}
 
 
 	Timeline* TimeL = new Timeline(N*N);
@@ -145,10 +145,13 @@ int main()
 		}
 		if(zad[0]!='*') TimeL->SetMt(pom[3], pom[2]);
 	}
+	std::pair<Timeline, Timeline> rozw = TimeL->Instancja(zadania, N); //tworzenie rozwiazania
 
+
+
+	//zapisanie rozwiazania
 	fileOUT << "*** " << std::to_string(testNr) << " ***\n";
 
-	std::pair<Timeline, Timeline> rozw = TimeL->Instancja(zadania, N);
 	//rozw.first.test();
 	//rozw.second.test();
 	PrintableResult M1 = rozw.first.resOut(zadania, 1);
