@@ -4,6 +4,7 @@
 
 
 
+
 void Timeline::maintenance(int i, int maxL) //dodaje przerwy techniczne dla N zadan w stosunku kN do liczby zadan
 {													//gdzie  podana jest maksymalna dlugosc przerwy, jezeli jest
 	//srand(time(0));								//skonfigurowane by wiêcej przer by³o na poczatku a szansa na przerwe malala
@@ -101,6 +102,238 @@ void Timeline::SetMt(int when, int howL)
 std::map<int, int> Timeline::getMp()
 {
 	return mp;
+}
+
+std::pair<Timeline, Timeline> Timeline::Instancja(std::vector<Task> zadania, int N)
+{
+	std::pair<Timeline, Timeline> rozw;
+	std::vector<int> alrdyUsd;
+	alrdyUsd.resize(2*N);
+	for (int i = 0; i < (2*N); i++)alrdyUsd[i] = 0;
+	int done = 0;
+	rozw.first.tab = tab;
+	rozw.second.tab.resize(tab.size());
+	for (int i = 0; i < tab.size(); i++)rozw.second.tab[i] = 0;
+	while (!done)
+	{
+		int zad = rand() % N;
+		if (!alrdyUsd[zad]) //jezeli op1 nie zostala uzyta
+		{
+			if (zadania[zad].get_mach() == 1) //jezeli op1 jest na PIERWSZEJ maszynie
+			{
+				int id = zadania[zad].get_rt();
+				int k = id;
+				int empt = 0;
+				while (empt == 0) //szukaj miejsca gdzie mozna umiescic zadanie
+				{
+
+					int c = 0;
+					while (rozw.first.tab[id] != 0)id++; //przeszukiwany poczatek jest pusty
+					if (zadania[zad].get_op1()>1) //jezeli zadanie jest dluzsze niz 1 jednostka czasu to sprawd czy wejdzie
+					{
+						while ((rozw.first.tab[id + zadania[zad].get_op1() - 1] != 0))id += zadania[zad].get_op1(); // przeszukiwany koniec jest pusty
+						for (c = id + 1; (c < id + zadania[zad].get_op1() - 1) && rozw.first.tab[c] == 0; c++); //przejscie po zerach od poczatku do konca
+						if ((c - (id + 1)) == zadania[zad].get_op1() - 2) // jezeli same zera
+						{
+							empt = 1;
+						}
+						else //jezeli nie to przesun do miejsca gdzie jest ostatnie zero
+						{
+							id = c;
+						}
+					}
+					else empt = 1;
+				}
+				int c = id;
+				while (c < (id + zadania[zad].get_op1()))
+				{
+					rozw.first.tab[c] = zadania[zad].get_nr();
+					c++;
+				}
+				zadania[zad].set_done_op1(id + zadania[zad].get_op1()); //ustaw op1 na done
+			}
+			else //jezeli op1 jest na DRUGIEJ
+			{
+				int id = zadania[zad].get_rt();
+				int k = id;
+				int empt=0;
+				while (empt==0) //szukaj miejsca gdzie mozna umiescic zadanie
+				{
+					
+					int c = 0;
+					while (rozw.second.tab[id] != 0)id++; //przeszukiwany poczatek jest pusty
+					if (zadania[zad].get_op1()>1) //jezeli zadanie jest dluzsze niz 1 jednostka czasu to sprawd czy wejdzie
+					{
+						while ((rozw.second.tab[id + zadania[zad].get_op1() - 1]) != 0)id += zadania[zad].get_op1(); // przeszukiwany koniec jest pusty
+						for (c = id + 1; (c < id + zadania[zad].get_op1() - 1) && rozw.second.tab[c] == 0; c++); //przejscie po zerach od poczatku do konca
+						if ((c - (id + 1)) == zadania[zad].get_op1() - 2) // jezeli same zera
+						{
+							empt = 1;
+						}
+						else //jezeli nie to przesun do miejsca gdzie jest ostatnie zero
+						{
+							id = c;
+						}
+					}
+					else empt = 1;
+				}
+				int c = id;
+				while (c < (id + zadania[zad].get_op1()))
+				{
+					rozw.second.tab[c] = zadania[zad].get_nr();
+					c++;
+				}
+				zadania[zad].set_done_op1(id+zadania[zad].get_op1()); //ustaw op1 na done
+			}
+			alrdyUsd[zad] = 1;
+		}
+		else if (!alrdyUsd[zad + N] && zadania[zad].get_done_op1()>0) //jezeli op1 zostala zrobiona a op2 nie
+		{
+			if (zadania[zad].get_mach() == 1) //jezeli op2 jest na DRUGIEJ maszynie (op1 jest na PIERWSZEJ)
+			{
+				int id = zadania[zad].get_done_op1();
+				int k = id;
+				int empt = 0;
+				while (empt == 0) //szukaj miejsca gdzie mozna umiescic zadanie
+				{
+
+					int c = 0;
+					while (rozw.second.tab[id] != 0)id++; //przeszukiwany poczatek jest pusty
+					if (zadania[zad].get_op2()>1) //jezeli zadanie jest dluzsze niz 1 jednostka czasu to sprawd czy wejdzie
+					{
+						while ((rozw.second.tab[id + zadania[zad].get_op2() - 1] != 0))id += zadania[zad].get_op2(); // przeszukiwany koniec jest pusty
+						for (c = id + 1; (c < id + zadania[zad].get_op2() - 1) && rozw.second.tab[c] == 0; c++); //przejscie po zerach od poczatku do konca
+						if ((c - (id + 1)) == zadania[zad].get_op2() - 2) // jezeli same zera
+						{
+							empt = 1;
+						}
+						else //jezeli nie to przesun do miejsca gdzie jest ostatnie zero
+						{
+							id = c;
+						}
+					}
+					else empt = 1;
+				}
+				int c = id;
+				while (c < (id + zadania[zad].get_op2())) //umiesc zadanie na osi czasu
+				{
+					rozw.second.tab[c] = zadania[zad].get_nr();
+					c++;
+				}
+			}
+			else //jezeli op2 jest na PIERWSZEJ maszynie (op1 jest na DRUGIEJ)
+			{
+				int id = zadania[zad].get_done_op1();
+				int k = id;
+				int empt = 0;
+				while (empt == 0) //szukaj miejsca gdzie mozna umiescic zadanie
+				{
+
+					int c = 0;
+					while (rozw.first.tab[id] != 0)id++; //przeszukiwany poczatek jest pusty
+					if (zadania[zad].get_op2()>1) //jezeli zadanie jest dluzsze niz 1 jednostka czasu to sprawd czy wejdzie
+					{
+						while ((rozw.first.tab[id + zadania[zad].get_op2() - 1] != 0))id += zadania[zad].get_op2(); // przeszukiwany koniec jest pusty
+						for (c = id + 1; (c < id + zadania[zad].get_op2() - 1) && rozw.first.tab[c] == 0; c++); //przejscie po zerach od poczatku do konca
+						if ((c - (id + 1)) == zadania[zad].get_op2() - 2) // jezeli same zera
+						{
+							empt = 1;
+						}
+						else
+						{
+							id = c;
+						}
+					}
+					else empt = 1;
+				}
+				int c = id;
+				while (c < (id + zadania[zad].get_op2()))
+				{
+					rozw.first.tab[c] = zadania[zad].get_nr();
+					c++;
+				}
+			}
+			alrdyUsd[zad + N] = 1; //ustaw op2 na done
+		}
+		//spr czy uzyto juz wszystkich zadan
+		int check = 0;
+		for each (int i in alrdyUsd)
+		{
+			check += i;
+		}
+		if (check == 2*N)
+		{
+			done = 1;
+		}
+
+	}
+	return rozw;
+}
+
+
+PrintableResult Timeline::resOut(std::vector<Task> zadania, int machine)
+{
+	std::string res = "";
+	int i = 0;
+	int sumM = 0;
+	int sumI = 0;
+	int idM = 1;
+	int idI = 1;
+	while (i < tab.size())
+	{
+		if (tab[i] == -1) //jezeli przerwa tech.
+		{
+			res += ("maint" + std::to_string(idM++) + "_M" + std::to_string(machine) + ", ");
+			res += (std::to_string(i) + ", ");
+			int j = 0;
+			while (i < tab.size() && tab[i] == -1)
+			{
+				j++;
+				i++;
+			}
+			sumM += j;
+			res += (std::to_string(j) + "; ");
+		}
+		else if (tab[i] == 0) //jezeli nic nie jest robione
+		{
+			res += ("idle" + std::to_string(idI++) + "_M" + std::to_string(machine) + ", ");
+			res += (std::to_string(i) + ", ");
+			int j = 0;
+			while (i < tab.size() && tab[i] == 0)
+			{
+				j++;
+				i++;
+			}
+			sumI += j;
+			res += (std::to_string(j) + "; ");
+		}
+		else
+		{
+			res += "op";
+			if (zadania[tab[i] - 1].get_mach() == machine) //jezeli jest to maszyna na kt jest wykonywana op1
+			{
+				res += "1_";
+			}
+			else
+			{
+				res += "2_";
+			}
+			res += (std::to_string(tab[i]) + ", " + std::to_string(i) + ", ");
+			int j = 0;
+			int pom = tab[i];
+			while (i < tab.size() && tab[i] == pom)
+			{
+				j++;
+				i++;
+			}
+			res += (std::to_string(j) + "; ");
+		}
+	}
+	PrintableResult* out = new PrintableResult();
+
+	out->setALL(idM-1, sumM, idI-1, sumI);
+	out->res(res);
+	return *out;
 }
 
 Timeline::~Timeline()

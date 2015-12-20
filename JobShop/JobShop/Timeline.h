@@ -1,6 +1,7 @@
 #pragma once
 #include "Generator.h"
-#include <map>
+#include "PrintableResult.h"
+#include "stdafx.h"
 
 class Timeline :
 	public Generator
@@ -15,6 +16,10 @@ public:
 	//³adowanie wygenerowanych wczesniej przerw
 	void SetMt(int when, int howL);
 	std::map<int, int> getMp();
+	//tworzenie rozwiazania losowego ze zbioru zadan
+	std::pair<Timeline,Timeline> Instancja(std::vector<Task> zadania, int N);
+	//tworzenie ciagu do pliku wynikowego
+	PrintableResult resOut(std::vector<Task> zadania, int machine);
 	~Timeline();
 private:
 	std::map<int, int> mp;

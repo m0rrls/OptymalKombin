@@ -40,14 +40,19 @@ int Task::get_rt()
 	return rt;
 }
 
-bool Task::get_done_op1()
+int Task::get_mach()
+{
+	return mach;
+}
+
+int Task::get_done_op1()
 {
 	return done_op1;
 }
 
-void Task::set_done_op1()
+void Task::set_done_op1(int r)
 {
-	done_op1 = true;
+	done_op1 = r;
 }
 
 void Task::set_params(int a, int b, int c, int d, int e)

@@ -36,7 +36,7 @@
     <ClInclude Include="Readytime.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Kappa.h">
+    <ClInclude Include="PrintableResult.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -59,7 +59,7 @@
     <ClCompile Include="Readytime.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Kappa.cpp">
+    <ClCompile Include="PrintableResult.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

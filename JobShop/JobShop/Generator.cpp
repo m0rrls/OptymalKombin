@@ -4,6 +4,11 @@
 
 using namespace std;
 
+Generator::Generator()
+{
+	//tab.resize(0);
+}
+
 Generator::Generator(int l)
 {
 	tab.resize(l);

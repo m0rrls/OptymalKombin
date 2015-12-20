@@ -3,23 +3,30 @@
 
 #include "stdafx.h"
 
-
 int main()
 {
+	int testNr = 2;
 
+	std::string tasksFile = "tests/tasks.txt";
+	std::string resFile = "tests/results.txt";
+	tasksFile.insert(11, std::to_string(testNr));
+	resFile.insert(13, std::to_string(testNr));
 	//GENEROWANIE------------------------------------------------------------------
 	/*
 	srand(time(0));
 
-	int N = 20; //liczba operacji
-	int minX = 2; //min czas trwania operacji
-	int maxX = 5; //max czas trwania operacji
+	int N = 200; //liczba operacji
+	int minX = 20; //min czas trwania operacji
+	int maxX = 50; //max czas trwania operacji
 	int M = std::ceil(0.3*N);
-	int maxMT = 2; //max czas trwania przerwy tecknicznej
+	int maxMT = 10; //max czas trwania przerwy tecknicznej
 	int TimeX = N*maxX + M*maxMT; //dlugosc osi czasu
 
 	std::fstream fileOUT;
-	fileOUT.open("tasks1.txt", std::fstream::out);
+	fileOUT.open(tasksFile, std::fstream::out);
+
+	fileOUT << "*** " << std::to_string(testNr) << " ***\n";
+
 	fileOUT << N << "\n";
 
 
@@ -80,14 +87,19 @@ int main()
 	
 	fileOUT << "*** EOF ***";
 	fileOUT.close();
-	*/ //KONIEC GENEROWANIA ---------------------------------------------------------
+	 */ //KONIEC GENEROWANIA ---------------------------------------------------------
 
 	//ROCK 'N ROLL --------------------------------------------------------------------/*
 
 	std::fstream fileIN;
 	std::fstream fileOUT;
-	fileIN.open("tasks1.txt", std::fstream::in);
-	fileOUT.open("results1.txt", std::fstream::out);
+
+
+	fileIN.open(tasksFile, std::fstream::in);
+	fileOUT.open(resFile, std::fstream::out);
+
+	std::string tmpStr;
+	std::getline(fileIN, tmpStr);
 
 	int N;
 	fileIN >> N;
@@ -121,7 +133,7 @@ int main()
 	}
 
 
-	Timeline* TimeL = new Timeline(N*N/2);
+	Timeline* TimeL = new Timeline(N*N);
 	while (!fileIN.eof() && zad[0]!='*')
 	{
 		for (int k = 0; k < 4; k++)
@@ -134,10 +146,24 @@ int main()
 		if(zad[0]!='*') TimeL->SetMt(pom[3], pom[2]);
 	}
 
-	TimeL->test();
+	fileOUT << "*** " << std::to_string(testNr) << " ***\n";
+
+	std::pair<Timeline, Timeline> rozw = TimeL->Instancja(zadania, N);
+	//rozw.first.test();
+	//rozw.second.test();
+	PrintableResult M1 = rozw.first.resOut(zadania, 1);
+	PrintableResult M2 = rozw.second.resOut(zadania, 2);
+	fileOUT << "M1: " << M1.getS() << std::endl;
+	fileOUT << "M2: " << M2.getS() << std::endl;
+	fileOUT << M1.getM() << std::endl;
+	fileOUT << M2.getM() << std::endl;
+	fileOUT << M1.getI() << std::endl;
+	fileOUT << M2.getI() << std::endl;
+	//TimeL->test();
+	fileOUT << "*** EOF ***";
 	fileOUT.close();
 	fileIN.close();
-	// */ //KONIEC FEELSBADMAN -------------------------------------------------------------
+	//*/ //KONIEC FEELSBADMAN ------------------------------------------------------------
 
  	return 0;
 }
