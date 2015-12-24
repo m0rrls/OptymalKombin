@@ -104,8 +104,9 @@ std::map<int, int> Timeline::getMp()
 	return mp;
 }
 
-std::pair<Timeline, Timeline> Timeline::Instancja(std::vector<Task> zadania, int N)
+std::pair<Timeline, Timeline> Timeline::Instancja(std::vector<Task> z1, int N)
 {
+	std::vector<Task> zadania = z1;
 	std::pair<Timeline, Timeline> rozw;
 	std::vector<int> alrdyUsd;
 	alrdyUsd.resize(2*N);
@@ -339,3 +340,57 @@ PrintableResult Timeline::resOut(std::vector<Task> zadania, int machine)
 Timeline::~Timeline()
 {
 }
+
+std::vector<int> Timeline::getUsdTasks(int N)
+{
+	int i = 0;
+	int j = 0;
+	std::vector<int> vec;
+	vec.clear();
+	while (j < N && i < tab.size())
+	{
+		if (tab[i] > 0)
+		{
+			vec.insert(vec.end(), tab[i]);
+			j++;
+			int pom = tab[i];
+			while (tab[i] == pom)i++;
+		}
+		else i++;
+	}
+	return vec;
+}
+
+int Timeline::getIAftrNTsks(int N)
+{
+	int i = 0;
+	int j = 0;
+	while (j < N && i < tab.size())
+	{
+		if (tab[i] > 0)
+		{
+			j++;
+			int pom = tab[i];
+			while (tab[i] == pom)i++;
+		}
+		else i++;
+	}
+	return i;
+}
+
+int Timeline::whenDone(int N)
+{
+	for (int i = 0; i < tab.size(); i++) 
+	{
+		if (tab[i] == N)
+		{
+			while (tab[i]==N)
+			{
+				i++;
+			}
+			return i;
+		}
+	}
+	return -1;
+}
+

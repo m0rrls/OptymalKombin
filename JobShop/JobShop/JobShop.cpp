@@ -5,7 +5,10 @@
 
 int main()
 {
-	int testNr = 2;
+	srand(time(NULL));
+
+	int sizeOfPopulation = 50;
+	int testNr = 5;
 
 	std::string tasksFile = "tests/tasks.txt";
 	std::string resFile = "tests/results.txt";
@@ -13,9 +16,9 @@ int main()
 	resFile.insert(13, std::to_string(testNr));
 	//GENEROWANIE------------------------------------------------------------------
 	/*
-	srand(time(0));
+	
 
-	int N = 200; //liczba operacji
+	int N = 100; //liczba operacji
 	int minX = 20; //min czas trwania operacji
 	int maxX = 50; //max czas trwania operacji
 	int M = std::ceil(0.3*N);
@@ -45,7 +48,8 @@ int main()
 	rdy->test();
 
 	Timeline* TimeL1 = new Timeline(TimeX);
-	TimeL1->maintenance(M, maxMT);
+	//TimeL1->maintenance(M, maxMT);
+	TimeL1->randomMaint(M, maxMT);
 	TimeL1->test();
 
 
@@ -87,7 +91,7 @@ int main()
 	
 	fileOUT << "*** EOF ***";
 	fileOUT.close();
-	 */ //KONIEC GENEROWANIA ---------------------------------------------------------
+	//*/ //KONIEC GENEROWANIA ---------------------------------------------------------
 
 	//ROCK 'N ROLL --------------------------------------------------------------------/*
 
@@ -145,17 +149,54 @@ int main()
 		}
 		if(zad[0]!='*') TimeL->SetMt(pom[3], pom[2]);
 	}
-	std::pair<Timeline, Timeline> rozw = TimeL->Instancja(zadania, N); //tworzenie rozwiazania
+	//std::pair<Timeline, Timeline> rozw = TimeL->Instancja(zadania, N); //tworzenie rozwiazania
+	//std::pair<Timeline, Timeline> rozw1 = TimeL->Instancja(zadania, N); 
 
+	//if (rozw.first.cmp(rozw.first)) std::cout << "\ndziala porownywanie!!!!\n\n";
 
+	//if (rozw1.first.cmp(rozw.first)) std::cout << "\nTO SAMO!!!!\n\n";
+	
+	//tworzenie populacji------------------------------------------------------------------------
+	std::vector<std::pair<Timeline, Timeline>> populacja;
+	populacja.resize(sizeOfPopulation);
+	int a = 0;
+	while (a < sizeOfPopulation)
+	{
+		populacja[a] = TimeL->Instancja(zadania, N);
+		a++;
+	}
+
+	int iq = 0;
+	int iw = 0;
+	bool dupl = false;
+	for (auto &q : populacja) //sprawdzanie duplikatow w populacji
+	{
+		iw = 0;
+		for (auto &w : populacja) {
+			if (iq != iw && q.first.cmp(w.first))
+			{
+				dupl = true;
+				std::cout << iq << " i " << iw << "\tpopulacja FeelsBadMan\n\n";
+				break;
+			}
+			iw++;
+		}
+		iq++;
+	}
+
+	//if (populacja[q].first.cmp(populacja[w].first)) std::cout << "populacja FeelsBadMan\n\n";
+
+	populacja = crossing(populacja, 80, zadania);
 
 	//zapisanie rozwiazania
 	fileOUT << "*** " << std::to_string(testNr) << " ***\n";
 
 	//rozw.first.test();
 	//rozw.second.test();
-	PrintableResult M1 = rozw.first.resOut(zadania, 1);
-	PrintableResult M2 = rozw.second.resOut(zadania, 2);
+	//PrintableResult M1 = rozw.first.resOut(zadania, 1);
+	PrintableResult M1 = populacja[0].first.resOut(zadania, 1);
+	//PrintableResult M2 = rozw.second.resOut(zadania, 2);
+	PrintableResult M2 = populacja[0].first.resOut(zadania, 2);
 	fileOUT << "M1: " << M1.getS() << std::endl;
 	fileOUT << "M2: " << M2.getS() << std::endl;
 	fileOUT << M1.getM() << std::endl;

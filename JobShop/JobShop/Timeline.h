@@ -21,6 +21,15 @@ public:
 	//tworzenie ciagu do pliku wynikowego
 	PrintableResult resOut(std::vector<Task> zadania, int machine);
 	~Timeline();
+
+	//tworzenie tablicy ju¿ uzytych N operacji
+	std::vector<int> getUsdTasks(int N);
+
+	//uzyskanie indeksu gdzie juz zrobiono N operacji
+	int getIAftrNTsks(int N);
+
+	//uzyskanie czasu zakonczenia operacji zadania N na tym timeline'ie
+	int whenDone(int N);
 private:
 	std::map<int, int> mp;
 };
