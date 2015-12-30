@@ -151,6 +151,13 @@ int main()
 	std::pair<Timeline, Timeline> rozw = TimeL->Instancja(zadania, N);
 	//rozw.first.test();
 	//rozw.second.test();
+	int wartFnCelu1 = rozw.first.TargetFnctn1(rozw);
+	int wartFnCelu2 = rozw.first.TargetFnctn2(rozw);
+	int wartFnCelu = rozw.first.TargetFnctn(rozw);
+	std::cout << wartFnCelu1 << std::endl;
+	std::cout << wartFnCelu2 << std::endl;
+	std::cout << wartFnCelu1 + wartFnCelu2 << std::endl;
+	std::cout << wartFnCelu << std::endl;
 	PrintableResult M1 = rozw.first.resOut(zadania, 1);
 	PrintableResult M2 = rozw.second.resOut(zadania, 2);
 	fileOUT << "M1: " << M1.getS() << std::endl;

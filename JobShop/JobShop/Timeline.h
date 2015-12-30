@@ -21,6 +21,9 @@ public:
 	//tworzenie ciagu do pliku wynikowego
 	PrintableResult resOut(std::vector<Task> zadania, int machine);
 	~Timeline();
+	int TargetFnctn1(std::pair<Timeline, Timeline> rozw);
+	int TargetFnctn2(std::pair<Timeline, Timeline> rozw);
+	int TargetFnctn(std::pair<Timeline, Timeline> rozw);
 private:
 	std::map<int, int> mp;
 };

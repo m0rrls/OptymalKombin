@@ -339,3 +339,51 @@ PrintableResult Timeline::resOut(std::vector<Task> zadania, int machine)
 Timeline::~Timeline()
 {
 }
+
+
+int Timeline::TargetFnctn1(std::pair<Timeline, Timeline> rozw)
+{
+	int wart = 0;
+	int i = 0;
+	while (i < rozw.first.tab.size() - 1) {
+		if ((rozw.first.tab[i] > 0) && (rozw.first.tab[i + 1] != rozw.first.tab[i])) {
+			wart += i;
+		}
+		i++;
+	}
+	return wart;
+}
+
+int Timeline::TargetFnctn2(std::pair<Timeline, Timeline> rozw)
+{
+	int wart = 0;
+	int i = 0;
+	while (i < rozw.second.tab.size() - 1) {
+		if ((rozw.second.tab[i] > 0) && (rozw.second.tab[i + 1] != rozw.second.tab[i])) {
+			wart += i;
+		}
+		i++;
+	}
+	return wart;
+}
+
+
+int Timeline::TargetFnctn(std::pair<Timeline, Timeline> rozw)
+{
+	int wart = 0;
+	int i = 0;
+	while (i < rozw.second.tab.size() - 1) {
+		if ((rozw.second.tab[i] > 0) && (rozw.second.tab[i + 1] != rozw.second.tab[i])) {
+			wart += i;
+		}
+		i++;
+	}
+	i = 0;
+	while (i < rozw.first.tab.size() - 1) {
+		if ((rozw.first.tab[i] > 0) && (rozw.first.tab[i + 1] != rozw.first.tab[i])) {
+			wart += i;
+		}
+		i++;
+	}
+	return wart;
+}
