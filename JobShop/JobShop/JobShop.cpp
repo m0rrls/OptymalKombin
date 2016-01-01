@@ -7,7 +7,7 @@ int main()
 {
 	srand(time(NULL));
 
-	int sizeOfPopulation = 50;
+	int sizeOfPopulation = 5;
 	int testNr = 5;
 
 	std::string tasksFile = "tests/tasks.txt";
@@ -157,13 +157,33 @@ int main()
 	//if (rozw1.first.cmp(rozw.first)) std::cout << "\nTO SAMO!!!!\n\n";
 	
 	//tworzenie populacji------------------------------------------------------------------------
-	std::vector<std::pair<Timeline, Timeline>> populacja;
+ 	std::vector<std::pair<Timeline, Timeline>> populacja;
 	populacja.resize(sizeOfPopulation);
 	int a = 0;
+	std::pair<Timeline, Timeline> tmpSol;
+
+
+
+	
+	//if (TimeL->compareTsks(populacja[0].first, -1))std::cout << "jest to samo\n\n";
+
 	while (a < sizeOfPopulation)
 	{
-		populacja[a] = TimeL->Instancja(zadania, N);
-		a++;
+		tmpSol = TimeL->Instancja(zadania, N);
+		if (TimeL->compareTsks(tmpSol.first, -1))
+		{
+			populacja[a] = tmpSol;
+			a++;
+		}
+		else
+		{
+			if (!(TimeL->compareTsks(tmpSol.first, -1)))
+			{
+				std::cout << "WRONG MAINT! " << std::endl;
+			}
+			std::cout << "AGAIN for inst " << a << std::endl;			
+		}
+			
 	}
 
 	int iq = 0;
@@ -173,23 +193,30 @@ int main()
 	{
 		iw = 0;
 		for (auto &w : populacja) {
-			if (iq != iw && q.first.cmp(w.first))
+			if (iq != iw && q.first.cmp(w.first) && q.second.cmp(w.second))
 			{
 				dupl = true;
 				std::cout << iq << " i " << iw << "\tpopulacja FeelsBadMan\n\n";
-				break;
+				//break;
 			}
 			iw++;
 		}
 		iq++;
 	}
-
+/*
+	populacja[0].first.test();
+	populacja[0].first.del(populacja[0].first.getIAftrNTsks(4));
+	populacja[0].first.test();
+	populacja[0].first.napraw(populacja[0].first.getIAftrNTsks(4), zadania, 1);
+	populacja[0].first.test();
+*/
 	//if (populacja[q].first.cmp(populacja[w].first)) std::cout << "populacja FeelsBadMan\n\n";
 
 	populacja = crossing(populacja, 80, zadania);
 
 	//zapisanie rozwiazania
 	fileOUT << "*** " << std::to_string(testNr) << " ***\n";
+
 
 	//rozw.first.test();
 	//rozw.second.test();

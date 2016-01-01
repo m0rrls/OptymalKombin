@@ -1,9 +1,27 @@
-﻿  Crossover.cpp
+﻿  stdafx.cpp
+  Timeline.cpp
+c:\users\mariusz\documents\github\optymalkombin\jobshop\jobshop\timeline.cpp(21): warning C4018: '>=': signed/unsigned mismatch
+c:\users\mariusz\documents\github\optymalkombin\jobshop\jobshop\timeline.cpp(33): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\mariusz\documents\github\optymalkombin\jobshop\jobshop\timeline.cpp(54): warning C4018: '>=': signed/unsigned mismatch
+c:\users\mariusz\documents\github\optymalkombin\jobshop\jobshop\timeline.cpp(76): warning C4018: '<': signed/unsigned mismatch
+c:\users\mariusz\documents\github\optymalkombin\jobshop\jobshop\timeline.cpp(117): warning C4018: '<': signed/unsigned mismatch
+c:\users\mariusz\documents\github\optymalkombin\jobshop\jobshop\timeline.cpp(284): warning C4018: '<': signed/unsigned mismatch
+c:\users\mariusz\documents\github\optymalkombin\jobshop\jobshop\timeline.cpp(319): warning C4018: '<': signed/unsigned mismatch
+c:\users\mariusz\documents\github\optymalkombin\jobshop\jobshop\timeline.cpp(345): warning C4018: '<': signed/unsigned mismatch
+c:\users\mariusz\documents\github\optymalkombin\jobshop\jobshop\timeline.cpp(352): warning C4018: '<': signed/unsigned mismatch
+c:\users\mariusz\documents\github\optymalkombin\jobshop\jobshop\timeline.cpp(365): warning C4018: '<': signed/unsigned mismatch
+c:\users\mariusz\documents\github\optymalkombin\jobshop\jobshop\timeline.cpp(387): warning C4018: '<': signed/unsigned mismatch
+c:\users\mariusz\documents\github\optymalkombin\jobshop\jobshop\timeline.cpp(412): warning C4018: '<': signed/unsigned mismatch
+c:\users\mariusz\documents\github\optymalkombin\jobshop\jobshop\timeline.cpp(430): warning C4018: '<': signed/unsigned mismatch
+c:\users\mariusz\documents\github\optymalkombin\jobshop\jobshop\timeline.cpp(445): warning C4018: '<': signed/unsigned mismatch
+  JobShop.cpp
+c:\users\mariusz\documents\github\optymalkombin\jobshop\jobshop\jobshop.cpp(8): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+c:\users\mariusz\documents\github\optymalkombin\jobshop\jobshop\jobshop.cpp(166): error C2039: 'checkInst': is not a member of 'Timeline'
+  c:\users\mariusz\documents\github\optymalkombin\jobshop\jobshop\timeline.h(6): note: see declaration of 'Timeline'
+  Crossover.cpp
   Generating Code...
   Skipping... (no relevant changes detected)
   Task.cpp
   Readytime.cpp
   PrintableResult.cpp
-  JobShop.cpp
   Generator.cpp
-  JobShop.vcxproj -> C:\Users\Mariusz\Documents\GitHub\OptymalKombin\JobShop\Debug\JobShop.exe
