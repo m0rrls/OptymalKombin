@@ -20,6 +20,10 @@ public:
 	//tworzenie rozwiazania losowego ze zbioru zadan
 	std::pair<Timeline,Timeline> Instancja(std::vector<Task> zadania, int N);
 	
+	//drugie podejscie
+	std::pair<Timeline, Timeline> Timeline::Instancja123(std::vector<Task> zad);
+
+
 	//sprawdzenie czy rozwiazanie jest dopuszczalne na tej maszynie: true jezeli jest dopuszczalne
 	bool checkMach(std::vector<Task> zadania, int mach);
 

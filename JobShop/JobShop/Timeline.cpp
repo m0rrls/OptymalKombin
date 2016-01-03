@@ -93,6 +93,10 @@ void Timeline::CntMt()
 void Timeline::SetMt(int when, int howL)
 {
 	int tmp = when;
+	if ((when+howL) > tab.size()) 
+	{
+		tab.resize(when + howL + 1);
+	}
 	for (int i=when; i < (when + howL); i++)
 	{
 		tab[i] = -1;
@@ -311,7 +315,7 @@ bool Timeline::checkMach(std::vector<Task> zadania, int mach)
 			{
 				if (j != zadania[pom - 1].get_op1())
 				{
-					std::cout << "WRONG LENGTH OF " << pom << " ON M" << mach << std::endl;
+					//std::cout << "WRONG LENGTH OF " << pom << " ON M" << mach << std::endl;
 					return false;
 				}
 				else
@@ -321,7 +325,7 @@ bool Timeline::checkMach(std::vector<Task> zadania, int mach)
 			{
 				if (j != zadania[pom - 1].get_op2())
 				{
-					std::cout << "WRONG LENGTH OF " << pom << " ON M" << mach << std::endl;
+					//std::cout << "WRONG LENGTH OF " << pom << " ON M" << mach << std::endl;
 					return false;
 				}
 				else
@@ -335,7 +339,7 @@ bool Timeline::checkMach(std::vector<Task> zadania, int mach)
 	{
 		if (us[j] == 0)
 		{
-			std::cout << "NOT USED " << (j + 1) << std::endl;
+			//std::cout << "NOT USED " << (j + 1) << std::endl;
 			checkd = false;
 		}
 	}
@@ -358,7 +362,7 @@ void Timeline::napraw(int pkt, std::vector<Task> zadania, int mach)
 		if (tab[x] > 0)
 		{
 			int pom = tab[x];
-			std::cout << pom << " ";
+			//std::cout << pom << " ";
 			//Tsks[pom - 1] = 0;
 			Tsks.erase(std::remove(Tsks.begin(), Tsks.end(), pom - 1), Tsks.end());
 			while (tab[x] == pom)x++;
@@ -367,13 +371,14 @@ void Timeline::napraw(int pkt, std::vector<Task> zadania, int mach)
 			x++;
 	}
 		//Tsks.erase(std::remove(Tsks.begin(), Tsks.end(), 0), Tsks.end());
-		
+		/*
 		std::cout << "\n\n";
 		for (int i = 0; i < Tsks.size(); i++)
 		{
 			std::cout << Tsks[i]+1 << " ";
 		}
 		std::cout << "\n";
+		*/
 
 	while (!Tsks.empty())
 	{
@@ -448,6 +453,7 @@ void Timeline::napraw(int pkt, std::vector<Task> zadania, int mach)
 		Tsks.erase(std::remove(Tsks.begin(), Tsks.end(), j), Tsks.end());
 	 }
 }
+
 
 
 PrintableResult Timeline::resOut(std::vector<Task> zadania, int machine)
@@ -656,3 +662,223 @@ bool Timeline::FirstIsFirst(Timeline otherOne, std::vector<Task> zadania, int ma
 	return true;
 }
 
+std::pair<Timeline, Timeline> Timeline::Instancja123(std::vector<Task> zadania)
+{
+	std::vector<Task> zad = zadania;
+
+	std::pair<Timeline, Timeline> rozw;
+	rozw.first.tab = tab;
+	rozw.second.tab.clear();
+	rozw.second.tab.resize(tab.size());
+
+	int N = zad.size();
+	bool done = false;
+
+	std::vector<int> uzyte;
+	uzyte.resize(2*N);
+	for (auto &i : uzyte) 
+	{
+		i = 0;
+	}
+	for (auto &i : zad)
+	{
+		i.reset();
+	}
+
+	std::pair<std::vector<int>, std::vector<int>> Tsks;
+	Tsks.first.clear();
+	Tsks.second.clear();
+
+
+
+
+	std::pair<int, int> id; //wskaznik
+	id.first = 0;
+	id.second = 0;
+
+
+	int space = 0;
+
+
+	while (!done)
+	{
+		Tsks.first.clear();
+		Tsks.second.clear();
+		space = 0;
+
+		//std::cout << "M1: " << id.first<< "\tM2: " << id.second;
+		//obliczenie wolnego miejsca na maszynach
+		int tmp123 = id.first;
+		while (rozw.first.getN(tmp123++) == 0) 
+		{
+			space++;
+		}
+
+		for (int i = 0; i < zad.size(); i++)//dodanie do tablic operacje ktore mozemy wykonac
+		{
+			if (!uzyte[i] && zad[i].get_mach() == 1 && zad[i].get_op1()<=space && zad[i].get_rt() <= id.first) //op1 dla M1
+				Tsks.first.insert(Tsks.first.begin(), i);
+			if (!uzyte[i] && zad[i].get_mach() == 2 && zad[i].get_rt() <= id.second) //op1 dla M2
+				Tsks.second.insert(Tsks.second.begin(), i);
+			if (!uzyte[N+i] && zad[i].get_mach() == 1 && zad[i].get_done_op1() != 0 && zad[i].get_done_op1() <= id.second) //op2 dla M2
+				Tsks.second.insert(Tsks.second.begin(), i);
+			if (!uzyte[N+i] && zad[i].get_mach() == 2 && zad[i].get_done_op1() != 0 && zad[i].get_op2() <= space && zad[i].get_done_op1() <= id.first) //op2 dla M1
+				Tsks.first.insert(Tsks.first.begin(), i);
+		}
+
+		int mach = rand() % 2 + 1;
+		//std::cout << "\tlosM: " << mach << std::endl;
+		int i;
+		if (mach == 1)
+		{
+			if (!Tsks.first.empty()) //wylos M1
+			{
+				int los = rand() % Tsks.first.size();
+				int x = Tsks.first[los];
+				Task z = zad[x];
+				bool empty = false;
+				while (!empty)
+				{
+					while (rozw.first.getN(id.first) != 0)id.first++;
+					i = id.first;
+					if (z.get_mach() == 1)
+					{
+						if (z.get_op1() == 1)
+						{
+							//Tsks.first.erase(Tsks.first.begin() + los); //uzyto juz
+							empty = true;
+						}
+						else
+						{
+							int czas = z.get_op1();
+							while (czas > 0 && rozw.first.getN(i++) == 0)
+							{
+								czas--;
+							}
+							if (czas == 0) empty = true;
+							else id.first = i;
+						}
+					}
+					else if (z.get_mach() == 2 && uzyte[x])
+					{
+						if (z.get_op2() == 1)
+						{
+							empty = true;
+						}
+						else
+						{
+							int czas = z.get_op2();
+							while (czas > 0 && rozw.first.getN(i++) == 0)
+							{
+								czas--;
+							}
+							if (czas == 0) empty = true;
+							else id.first = i;
+						}
+					}
+				}//jest wolne miejsce
+				int pom = 0;
+				if (z.get_mach() == 1)
+				{
+					pom = z.get_op1();
+					zad[x].set_done_op1(id.first + pom);
+					uzyte[x] = 1;
+					Tsks.first.erase(Tsks.first.begin() + los);
+				}
+				else if (z.get_mach() == 2)
+				{
+					pom = z.get_op2();
+					uzyte[N + x] = 1;
+					Tsks.first.erase(Tsks.first.begin() + los);
+				}
+				for (int j = id.first; j < id.first + pom; j++)
+				{
+					rozw.first.set(j, z.get_nr());
+				}
+				id.first += pom;
+			}
+			else
+			{
+				id.first++;
+			}
+			//if (Tsks.second.empty())id.second++;
+		}
+		if (mach == 2) //wylos M2
+		{
+			if (!Tsks.second.empty())
+			{
+				int los = rand() % Tsks.second.size();
+				int x = Tsks.second[los];
+				Task z = zad[x];
+				bool empty = false;
+				while (!empty)
+				{
+					while (rozw.second.getN(id.second) != 0)id.second++;
+					i = id.second;
+					if (z.get_mach() == 2)
+					{
+						if (z.get_op1() == 1)
+						{
+							empty = true;
+						}
+						else
+						{
+							int czas = z.get_op1();
+							while (czas > 0 && rozw.second.getN(i++) == 0)
+							{
+								czas--;
+							}
+							if (czas == 0) empty = true;
+							else id.second = i;
+						}
+					}
+					else if (z.get_mach() == 1 && uzyte[x])
+					{
+						if (z.get_op2() == 1)
+						{
+							empty = true;
+						}
+						else
+						{
+							int czas = z.get_op2();
+							while (czas > 0 && rozw.second.getN(i++) == 0)
+							{
+								czas--;
+							}
+							if (czas == 0) empty = true;
+							else id.second = i;
+						}
+					}
+				}//jest wolne miejsce
+				int pom = 0;
+				if (z.get_mach() == 2)
+				{
+					pom = z.get_op1();
+					zad[x].set_done_op1(id.first + pom);
+					uzyte[x] = 1;
+					Tsks.second.erase(Tsks.second.begin() + los);
+				}
+				else if (z.get_mach() == 1)
+				{
+					pom = z.get_op2();
+					uzyte[N + x] = 1;
+					Tsks.second.erase(Tsks.second.begin() + los);
+				}
+				for (int j = id.second; j < id.second + pom; j++)
+				{
+					rozw.second.set(j, z.get_nr());
+				}
+				id.second += pom;
+			}
+			else
+			{
+				id.second++;
+			}
+			//if (Tsks.first.empty())id.first++;
+		}
+		int uzytL = 0;
+		for (auto &i : uzyte) uzytL += i;
+		if (Tsks.first.empty() && Tsks.second.empty() && uzytL==uzyte.size()) done = true;
+	}
+	return rozw;
+}

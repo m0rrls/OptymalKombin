@@ -1,5 +1,1 @@
-﻿  Timeline.cpp
-c:\users\mariusz\documents\github\optymalkombin\jobshop\jobshop\timeline.cpp(21): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-c:\users\mariusz\documents\github\optymalkombin\jobshop\jobshop\timeline.cpp(33): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-c:\users\mariusz\documents\github\optymalkombin\jobshop\jobshop\timeline.cpp(54): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-  JobShop.vcxproj -> C:\Users\Mariusz\Documents\GitHub\OptymalKombin\JobShop\x64\Debug\JobShop.exe
+﻿  JobShop.vcxproj -> C:\Users\Mariusz\Documents\GitHub\OptymalKombin\JobShop\x64\Debug\JobShop.exe
