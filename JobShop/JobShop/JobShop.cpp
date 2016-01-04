@@ -5,7 +5,7 @@
 
 int main()
 {
-	int testNr = 2;
+	int testNr = 6;
 
 	std::string tasksFile = "tests/tasks.txt";
 	std::string resFile = "tests/results.txt";
@@ -87,10 +87,10 @@ int main()
 	
 	fileOUT << "*** EOF ***";
 	fileOUT.close();
-	 */ //KONIEC GENEROWANIA ---------------------------------------------------------
+		/* */ //KONIEC GENEROWANIA ---------------------------------------------------------
 
 	//ROCK 'N ROLL --------------------------------------------------------------------/*
-
+/**/
 	std::fstream fileIN;
 	std::fstream fileOUT;
 
@@ -158,6 +158,11 @@ int main()
 	std::cout << wartFnCelu2 << std::endl;
 	std::cout << wartFnCelu1 + wartFnCelu2 << std::endl;
 	std::cout << wartFnCelu << std::endl;
+
+	rozw = rozw.first.Mutacja(rozw,zadania, N);
+	wartFnCelu = rozw.first.TargetFnctn(rozw);
+	std::cout << wartFnCelu << std::endl;
+
 	PrintableResult M1 = rozw.first.resOut(zadania, 1);
 	PrintableResult M2 = rozw.second.resOut(zadania, 2);
 	fileOUT << "M1: " << M1.getS() << std::endl;
