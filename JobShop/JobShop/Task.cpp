@@ -8,6 +8,7 @@ Task::Task()
 	rt = -1;
 	y1 = -1;
 	y2 = -1;
+	done_op1 = 0;
 }
 
 Task::Task(int a, int b, int c, int d, int e)
@@ -17,7 +18,7 @@ Task::Task(int a, int b, int c, int d, int e)
 	y1 = c;
 	y2 = d;
 	mach = e;
-	done_op1 = false;
+	done_op1 = 0;
 }
 
 int Task::get_nr() 
@@ -62,6 +63,11 @@ void Task::set_params(int a, int b, int c, int d, int e)
 	y1 = c;
 	y2 = d;
 	mach = e;
+}
+
+void Task::reset()
+{
+	done_op1 = 0;
 }
 
 

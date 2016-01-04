@@ -13,6 +13,7 @@ public:
 	int get_done_op1();
 	void set_done_op1(int r);
 	void set_params(int a, int b, int c, int d, int e);
+	void reset();
 private:
 	int x; //numer zadania
 	int y1, y2; //czas trwania operacji 1 i 2

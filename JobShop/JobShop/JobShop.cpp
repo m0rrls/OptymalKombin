@@ -5,7 +5,10 @@
 
 int main()
 {
-	int testNr = 2;
+	srand(time(NULL));
+
+	int sizeOfPopulation = 50;
+	int testNr = 4;
 
 	std::string tasksFile = "tests/tasks.txt";
 	std::string resFile = "tests/results.txt";
@@ -13,9 +16,9 @@ int main()
 	resFile.insert(13, std::to_string(testNr));
 	//GENEROWANIE------------------------------------------------------------------
 	/*
-	srand(time(0));
+	
 
-	int N = 200; //liczba operacji
+	int N = 100; //liczba operacji
 	int minX = 20; //min czas trwania operacji
 	int maxX = 50; //max czas trwania operacji
 	int M = std::ceil(0.3*N);
@@ -34,19 +37,20 @@ int main()
 
 	Generator* gen1 = new Generator(N);
 	gen1->rdm(0, N - 1, minX, maxX);
-	gen1->test();
+	//gen1->test();
 
 	Generator* gen2 = new Generator(N);
-	gen2->rdm(0, N-1, minX, maxX);
-	gen2->test();
+	gen2->rdm(0, N - 1, minX, maxX);
+	//gen2->test();
 
 	Readytime* rdy = new Readytime(N);
 	rdy->rdm();
-	rdy->test();
+	//rdy->test();
 
 	Timeline* TimeL1 = new Timeline(TimeX);
 	TimeL1->maintenance(M, maxMT);
-	TimeL1->test();
+	//TimeL1->randomMaint(M, maxMT);
+	//TimeL1->test();
 
 
 	std::vector<Task> zadania;
@@ -87,7 +91,7 @@ int main()
 	
 	fileOUT << "*** EOF ***";
 	fileOUT.close();
-	 */ //KONIEC GENEROWANIA ---------------------------------------------------------
+	//*/ //KONIEC GENEROWANIA ---------------------------------------------------------
 
 	//ROCK 'N ROLL --------------------------------------------------------------------/*
 
@@ -122,15 +126,15 @@ int main()
 		zadania[i].set_params(i + 1, pom[4], pom[0], pom[1], pom[2]);
 		
 	}
-
-	for (int i = 0; i < N; i++)
-	{
-		std::cout 
-			<< zadania[i].get_nr() << " " 
-			<< zadania[i].get_op1() << " " 
-			<< zadania[i].get_op2() << " "
-			<< zadania[i].get_rt() << "\n";
-	}
+	std::cout << "Pobrano dane z pliku\n";
+	//for (int i = 0; i < N; i++) 
+	//{
+	//	std::cout 
+	//		<< zadania[i].get_nr() << " " 
+	//		<< zadania[i].get_op1() << " " 
+	//		<< zadania[i].get_op2() << " "
+	//		<< zadania[i].get_rt() << "\n";
+	//}
 
 
 	Timeline* TimeL = new Timeline(N*N);
@@ -143,16 +147,81 @@ int main()
 			zad.pop_back();
 			pom[k] = std::stoi(zad, 0, 10);
 		}
-		if(zad[0]!='*') TimeL->SetMt(pom[3], pom[2]);
+		if (zad[0] != '*')
+		{
+			TimeL->SetMt(pom[3], pom[2]);
+		}
+	}
+	//std::pair<Timeline, Timeline> rozw = TimeL->Instancja(zadania, N); //tworzenie rozwiazania
+	//std::pair<Timeline, Timeline> rozw1 = TimeL->Instancja(zadania, N); 
+
+	//if (rozw.first.cmp(rozw.first)) std::cout << "\ndziala porownywanie!!!!\n\n";
+
+	//if (rozw1.first.cmp(rozw.first)) std::cout << "\nTO SAMO!!!!\n\n";
+	
+	//tworzenie populacji------------------------------------------------------------------------
+ 	std::vector<std::pair<Timeline, Timeline>> populacja;
+	populacja.resize(sizeOfPopulation);
+	int a = 0;
+	std::pair<Timeline, Timeline> tmpSol;
+	
+	//TimeL->test();
+	//populacja[0] = TimeL->Instancja123(zadania);
+	//populacja[0].first.test();
+	//populacja[0].second.test();
+	
+	//if (TimeL->compareTsks(populacja[0].first, -1))std::cout << "jest to samo\n\n";
+
+	while (a < sizeOfPopulation)
+	{
+		tmpSol = TimeL->Instancja123(zadania);
+		if (TimeL->compareTsks(tmpSol.first, -1))
+		{
+  			populacja[a] = tmpSol;
+			a++;
+		}
+		else
+		{
+			if (!(TimeL->compareTsks(tmpSol.first, -1)))
+			{
+				std::cout << "WRONG MAINT! " << std::endl;
+			}
+			std::cout << "AGAIN for inst " << a << std::endl;			
+		}
+			
 	}
 
+	int iq = 0;
+	int iw = 0;
+	bool dupl = false;
+	for (auto &q : populacja) //sprawdzanie duplikatow w populacji
+	{
+		iw = 0;
+		for (auto &w : populacja) {
+			if (iq != iw &&q.first.cmp(w.first) && q.second.cmp(w.second))
+			{
+				dupl = true;
+				std::cout << iq << " i " << iw << "\tpopulacja FeelsBadMan\n\n";
+				//break;
+			}
+			iw++;
+		}
+		iq++;
+	}
+
+
+	populacja = crossing(populacja, 80, zadania, sizeOfPopulation);
+
+	//zapisanie rozwiazania
 	fileOUT << "*** " << std::to_string(testNr) << " ***\n";
 
-	std::pair<Timeline, Timeline> rozw = TimeL->Instancja(zadania, N);
+
 	//rozw.first.test();
 	//rozw.second.test();
-	PrintableResult M1 = rozw.first.resOut(zadania, 1);
-	PrintableResult M2 = rozw.second.resOut(zadania, 2);
+	//PrintableResult M1 = rozw.first.resOut(zadania, 1);
+	PrintableResult M1 = populacja[0].first.resOut(zadania, 1);
+	//PrintableResult M2 = rozw.second.resOut(zadania, 2);
+	PrintableResult M2 = populacja[0].first.resOut(zadania, 2);
 	fileOUT << "M1: " << M1.getS() << std::endl;
 	fileOUT << "M2: " << M2.getS() << std::endl;
 	fileOUT << M1.getM() << std::endl;
