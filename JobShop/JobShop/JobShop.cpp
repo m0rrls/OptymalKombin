@@ -5,7 +5,7 @@
 
 int main()
 {
-	int testNr = 6;
+	int testNr = 9;
 
 	std::string tasksFile = "tests/tasks.txt";
 	std::string resFile = "tests/results.txt";
@@ -15,7 +15,7 @@ int main()
 	/*
 	srand(time(0));
 
-	int N = 200; //liczba operacji
+	int N = 75; //liczba operacji
 	int minX = 20; //min czas trwania operacji
 	int maxX = 50; //max czas trwania operacji
 	int M = std::ceil(0.3*N);
