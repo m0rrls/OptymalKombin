@@ -34,6 +34,7 @@ void Generator::test()
 	for (int j = 0; j < (int)tab.size(); j++) 
 	{
 		cout << tab[j] << " ";
+	//	if (j % 100 == 0) for (int z = 0;z < 100000000;z++);
 	}
 	cout << endl;
 }

@@ -17,7 +17,6 @@
 #include <fstream>
 #include <string>
 #include <algorithm>
-#include <set>
 #include <list>
 #include "Task.h"
 #include "Generator.h"
@@ -25,5 +24,6 @@
 #include "Readytime.h"
 #include "PrintableResult.h"
 #include "Crossover.h"
+#include "Selection.h"
 
 // TODO: reference additional headers your program requires here

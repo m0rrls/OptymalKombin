@@ -222,6 +222,18 @@ int main()
 	PrintableResult M1 = populacja[0].first.resOut(zadania, 1);
 	//PrintableResult M2 = rozw.second.resOut(zadania, 2);
 	PrintableResult M2 = populacja[0].first.resOut(zadania, 2);
+	int wartFnCelu1 = populacja[0].first.TargetFnctn1(rozw);
+	int wartFnCelu2 = populacja[0].first.TargetFnctn2(rozw);
+	int wartFnCelu = populacja[0].first.TargetFnctn(rozw);
+	std::cout << wartFnCelu1 << std::endl;
+	std::cout << wartFnCelu2 << std::endl;
+	std::cout << wartFnCelu1 + wartFnCelu2 << std::endl;
+	std::cout << wartFnCelu << std::endl;
+
+	populacja[0] = populacja[0].first.Mutacja(populacja[0],zadania, N);
+	wartFnCelu = populacja[0].first.TargetFnctn(populacja[0]);
+	std::cout << wartFnCelu << std::endl;
+
 	fileOUT << "M1: " << M1.getS() << std::endl;
 	fileOUT << "M2: " << M2.getS() << std::endl;
 	fileOUT << M1.getM() << std::endl;
