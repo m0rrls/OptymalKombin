@@ -146,8 +146,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Generator.h" />
+    <ClInclude Include="Selection.h" />
     <ClInclude Include="PrintableResult.h" />
     <ClInclude Include="Readytime.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Task.h" />
@@ -158,6 +160,7 @@
     <ClCompile Include="JobShop.cpp" />
     <ClCompile Include="PrintableResult.cpp" />
     <ClCompile Include="Readytime.cpp" />
+    <ClCompile Include="Selection.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -166,6 +169,9 @@
     </ClCompile>
     <ClCompile Include="Task.cpp" />
     <ClCompile Include="Timeline.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="JobShop.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
