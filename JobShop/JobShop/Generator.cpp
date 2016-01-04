@@ -43,3 +43,51 @@ int Generator::getN(int a)
 {
 	return tab[a];
 }
+
+int Generator::getSoT()
+{
+	return tab.size();
+}
+
+bool Generator::cmp(Generator a)
+{
+	int i = 0;
+	while (i < this->getSoT())
+	{
+		if (getN(i) != a.getN(i)) return false;
+		else i++;
+	}
+	return true;
+}
+
+void Generator::del(int start, int end)
+{
+	for (int i = start; i < end; i++)
+	{
+		if (tab[i] > 0) tab[i] = 0;
+	}
+}
+
+void Generator::del(int start)
+{
+	for (int i = start; i < tab.size(); i++)
+	{
+		if (tab[i] > 0) tab[i] = 0;
+	}
+}
+
+void Generator::
+add(int val)
+{
+	tab.insert(tab.end(), val);
+}
+
+void Generator::add(std::vector<int> vec)
+{
+	tab.insert(tab.end(), vec.begin(), vec.end());
+}
+
+void Generator::set(int it, int val)
+{
+	tab[it] = val;
+}

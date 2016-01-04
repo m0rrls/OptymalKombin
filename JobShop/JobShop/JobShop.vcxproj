@@ -145,6 +145,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Crossover.h" />
     <ClInclude Include="Generator.h" />
     <ClInclude Include="Selection.h" />
     <ClInclude Include="PrintableResult.h" />
@@ -156,6 +157,7 @@
     <ClInclude Include="Timeline.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Crossover.cpp" />
     <ClCompile Include="Generator.cpp" />
     <ClCompile Include="JobShop.cpp" />
     <ClCompile Include="PrintableResult.cpp" />

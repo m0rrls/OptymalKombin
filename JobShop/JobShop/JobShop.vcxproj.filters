@@ -39,6 +39,9 @@
     <ClInclude Include="PrintableResult.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Crossover.h">
+		<Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -68,6 +71,9 @@
     <ClCompile Include="PrintableResult.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Crossover.cpp">
+	  <Filter>Source Files</Filter>
+    </ClInclude>
     <ClCompile Include="Selection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
