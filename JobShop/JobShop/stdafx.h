@@ -25,5 +25,6 @@
 #include "PrintableResult.h"
 #include "Crossover.h"
 #include "Selection.h"
+#include "Mutation.h"
 
 // TODO: reference additional headers your program requires here

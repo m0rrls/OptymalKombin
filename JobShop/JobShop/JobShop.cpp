@@ -8,7 +8,7 @@ int main()
 	srand(time(NULL));
 
 	int sizeOfPopulation = 50;
-	int testNr = 4;
+	int testNr = 6;
 
 	std::string tasksFile = "tests/tasks.txt";
 	std::string resFile = "tests/results.txt";
@@ -222,15 +222,16 @@ int main()
 	PrintableResult M1 = populacja[0].first.resOut(zadania, 1);
 	//PrintableResult M2 = rozw.second.resOut(zadania, 2);
 	PrintableResult M2 = populacja[0].first.resOut(zadania, 2);
-	int wartFnCelu1 = populacja[0].first.TargetFnctn1(rozw);
-	int wartFnCelu2 = populacja[0].first.TargetFnctn2(rozw);
-	int wartFnCelu = populacja[0].first.TargetFnctn(rozw);
-	std::cout << wartFnCelu1 << std::endl;
-	std::cout << wartFnCelu2 << std::endl;
-	std::cout << wartFnCelu1 + wartFnCelu2 << std::endl;
-	std::cout << wartFnCelu << std::endl;
+//	int wartFnCelu1 = populacja[0].first.TargetFnctn1(rozw);
+//	int wartFnCelu2 = populacja[0].first.TargetFnctn2(rozw);
+//	int wartFnCelu = populacja[0].first.TargetFnctn(rozw);
+//	std::cout << wartFnCelu1 << std::endl;
+//	std::cout << wartFnCelu2 << std::endl;
+//	std::cout << wartFnCelu1 + wartFnCelu2 << std::endl;
+//	std::cout << wartFnCelu << std::endl;
+	int wartFnCelu=0;
 
-	populacja[0] = populacja[0].first.Mutacja(populacja[0],zadania, N);
+	populacja[0] = Mutacja(populacja[0],zadania, N, 100);
 	wartFnCelu = populacja[0].first.TargetFnctn(populacja[0]);
 	std::cout << wartFnCelu << std::endl;
 
@@ -246,6 +247,7 @@ int main()
 	fileIN.close();
 	//*/ //KONIEC FEELSBADMAN ------------------------------------------------------------
 
- 	return 0;
+
+	return 0;
 }
 

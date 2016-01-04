@@ -55,9 +55,8 @@ public:
 	int TargetFnctn1(std::pair<Timeline, Timeline> rozw);
 	int TargetFnctn2(std::pair<Timeline, Timeline> rozw);
 	int TargetFnctn(std::pair<Timeline, Timeline> rozw);
-	std::pair<Timeline, Timeline> Mutacja(std::pair<Timeline, Timeline> rozw, std::vector<Task> zadania, int N);
+	
 private:
 	std::map<int, int> mp;
-	int MutChance = 100;
 };
 

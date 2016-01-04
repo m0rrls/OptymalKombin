@@ -147,6 +147,7 @@
   <ItemGroup>
     <ClInclude Include="Crossover.h" />
     <ClInclude Include="Generator.h" />
+    <ClInclude Include="Mutation.h" />
     <ClInclude Include="Selection.h" />
     <ClInclude Include="PrintableResult.h" />
     <ClInclude Include="Readytime.h" />
@@ -163,6 +164,7 @@
     <ClCompile Include="PrintableResult.cpp" />
     <ClCompile Include="Readytime.cpp" />
     <ClCompile Include="Selection.cpp" />
+    <ClCompile Include="Mutation.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
