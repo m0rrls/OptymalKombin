@@ -8,7 +8,7 @@ int main()
 	srand(time(NULL));
 
 	int sizeOfPopulation = 50;
-	int testNr = 5;
+	int testNr = 6;
 
 	std::string tasksFile = "tests/tasks.txt";
 	std::string resFile = "tests/results.txt";
@@ -210,9 +210,9 @@ int main()
 	}
 
 
-	populacja = crossing(populacja, 80, zadania, sizeOfPopulation);
+//	populacja = crossing(populacja, 80, zadania, sizeOfPopulation);
 
-	populacja = wybierz(populacja, 10);
+//	populacja = wybierz(populacja, 10);
 
 	//zapisanie rozwiazania
 	fileOUT << "*** " << std::to_string(testNr) << " ***\n";
@@ -236,6 +236,7 @@ int main()
 //	std::cout << wartFnCelu << std::endl;
 	int wartFnCelu=0;
 
+	std::cout << std::endl << "Mutacja" << std::endl;
 	populacja[0] = Mutacja(populacja[0],zadania, N, 100);
 	wartFnCelu = populacja[0].first.TargetFnctn(populacja[0]);
 	std::cout << wartFnCelu << std::endl;

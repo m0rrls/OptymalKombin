@@ -7,8 +7,8 @@
 
 void Timeline::maintenance(int i, int maxL) //dodaje przerwy techniczne dla N zadan w stosunku kN do liczby zadan
 {													//gdzie  podana jest maksymalna dlugosc przerwy, jezeli jest
-	//srand(time(0));								//skonfigurowane by wiêcej przer by³o na poczatku a szansa na przerwe malala
-	//int i = ceil(N * kN);							//wraz z numerem pozycji przerwy w tablicy
+													//srand(time(0));								//skonfigurowane by wiêcej przer by³o na poczatku a szansa na przerwe malala
+													//int i = ceil(N * kN);							//wraz z numerem pozycji przerwy w tablicy
 	int j = 0;
 	while (j < i)
 	{
@@ -21,7 +21,7 @@ void Timeline::maintenance(int i, int maxL) //dodaje przerwy techniczne dla N za
 		if (l >= tab.size()) l = tab.size() - 1;
 		int pom = k;
 
-		while (!alrdyTkn && k < l+1)
+		while (!alrdyTkn && k < l + 1)
 		{
 			if (tab[k] == -1)
 			{
@@ -29,8 +29,8 @@ void Timeline::maintenance(int i, int maxL) //dodaje przerwy techniczne dla N za
 			}
 			k++;
 		}
-		int h = rand()%100 + 1;
-		int g = std::ceil(100*start / (double)(tab.size()));
+		int h = rand() % 100 + 1;
+		int g = std::ceil(100 * start / (double)(tab.size()));
 		if (!alrdyTkn && h < (100 - g))
 		{
 			for (pom; pom < l; pom++)
@@ -93,11 +93,11 @@ void Timeline::CntMt()
 void Timeline::SetMt(int when, int howL)
 {
 	int tmp = when;
-	if ((when+howL) > tab.size()) 
+	if ((when + howL) > tab.size())
 	{
 		tab.resize(when + howL + 1);
 	}
-	for (int i=when; i < (when + howL); i++)
+	for (int i = when; i < (when + howL); i++)
 	{
 		tab[i] = -1;
 	}
@@ -114,7 +114,7 @@ std::pair<Timeline, Timeline> Timeline::Instancja(std::vector<Task> z1, int N)
 	std::vector<Task> zadania = z1;
 	std::pair<Timeline, Timeline> rozw;
 	std::vector<int> alrdyUsd;
-	
+
 	while (!dNc)
 	{
 		alrdyUsd.clear();
@@ -280,8 +280,8 @@ std::pair<Timeline, Timeline> Timeline::Instancja(std::vector<Task> z1, int N)
 
 		}
 		if (rozw.first.checkMach(z1, 1) &&
-			rozw.second.checkMach(z1, 2) 
-			&& rozw.first.FirstIsFirst(rozw.second,zadania, 1)
+			rozw.second.checkMach(z1, 2)
+			&& rozw.first.FirstIsFirst(rozw.second, zadania, 1)
 			)
 		{
 			dNc = true;
@@ -292,7 +292,7 @@ std::pair<Timeline, Timeline> Timeline::Instancja(std::vector<Task> z1, int N)
 
 bool Timeline::checkMach(std::vector<Task> zadania, int mach)
 {
-	int i=0;
+	int i = 0;
 	bool checkd = true;
 	std::vector<int> us;
 	us.resize(zadania.size());
@@ -357,7 +357,7 @@ void Timeline::napraw(int pkt, std::vector<Task> zadania, int mach)
 		Tsks[i] = i;
 	}
 	int x = 0;
-	while(x < pkt) //usuwanie zadan przed pkt do naprawy, bo ich nie ruszamy
+	while (x < pkt) //usuwanie zadan przed pkt do naprawy, bo ich nie ruszamy
 	{
 		if (tab[x] > 0)
 		{
@@ -370,15 +370,15 @@ void Timeline::napraw(int pkt, std::vector<Task> zadania, int mach)
 		else
 			x++;
 	}
-		//Tsks.erase(std::remove(Tsks.begin(), Tsks.end(), 0), Tsks.end());
-		/*
-		std::cout << "\n\n";
-		for (int i = 0; i < Tsks.size(); i++)
-		{
-			std::cout << Tsks[i]+1 << " ";
-		}
-		std::cout << "\n";
-		*/
+	//Tsks.erase(std::remove(Tsks.begin(), Tsks.end(), 0), Tsks.end());
+	/*
+	std::cout << "\n\n";
+	for (int i = 0; i < Tsks.size(); i++)
+	{
+	std::cout << Tsks[i]+1 << " ";
+	}
+	std::cout << "\n";
+	*/
 
 	while (!Tsks.empty())
 	{
@@ -451,7 +451,7 @@ void Timeline::napraw(int pkt, std::vector<Task> zadania, int mach)
 			}
 		}
 		Tsks.erase(std::remove(Tsks.begin(), Tsks.end(), j), Tsks.end());
-	 }
+	}
 }
 
 
@@ -516,7 +516,7 @@ PrintableResult Timeline::resOut(std::vector<Task> zadania, int machine)
 	}
 	PrintableResult* out = new PrintableResult();
 
-	out->setALL(idM-1, sumM, idI-1, sumI);
+	out->setALL(idM - 1, sumM, idI - 1, sumI);
 	out->res(res);
 	return *out;
 }
@@ -545,6 +545,119 @@ std::vector<int> Timeline::getUsdTasks(int N)
 	return vec;
 }
 
+std::vector<Timeline> Timeline::copyTimeline(int dokiedy)
+{
+	std::vector<Timeline> rozw;
+	rozw.resize(dokiedy + 1);
+	for (int i = 0; i <= dokiedy;i++) rozw[i] = 0;
+
+	for (int i = 0; i <= dokiedy;i++) {
+		rozw[i] = tab[i];
+	}
+
+	return rozw;
+}
+
+std::vector<Timeline> Timeline::copyTimelineend(int odkiedy)
+{
+	std::vector<Timeline> rozw;
+	int rozm = tab.size() - odkiedy + 1;
+	rozw.resize(rozm);
+	for (int i = 0; i <= rozm;i++) rozw[i] = 0;
+	int j = 0;
+	for (int i = odkiedy; i < tab.size(); i++) {
+		rozw[j] = tab[i];
+		j++;
+	}
+
+	return rozw;
+}
+
+std::vector<Timeline> Timeline::copyTimelineM2(int dokiedy)
+{
+	std::vector<Timeline> rozw;
+	rozw.resize(dokiedy + 50);
+	for (int i = 0; i <= dokiedy + 50; i++) rozw[i] = 0;
+	int i = dokiedy;
+	if (tab[dokiedy] == 0) {}
+	else
+	{
+		while (tab[i] == tab[dokiedy]) { i++; }
+	}
+	for (int j = 0; j <= i; j++) {
+		rozw[j] = tab[j];
+	}
+	rozw.resize(i + 1);
+	return rozw;
+}
+
+std::vector<Timeline> Timeline::copyTimelineendM2(int odkiedy)
+{
+	std::vector<Timeline> rozw;
+	int rozm = tab.size() - odkiedy + 1;
+	rozw.resize(rozm);
+	int k = odkiedy;
+	if (tab[k] == 0) {}
+	else
+	{
+		while (tab[k] == tab[odkiedy])k++;
+	}
+	for (int i = 0; i <= rozm;i++) rozw[i] = 0;
+	int j = 0;
+	for (int i = k; i < tab.size(); i++) {
+		rozw[j] = tab[i];
+		j++;
+	}
+	rozw.resize(tab.size() - k + 1);
+
+	return rozw;
+}
+
+void Timeline::wyswietl(int od, int dok)
+{
+	int i = od;
+	for (i; i < dok; i++) {
+		std::cout << tab[i] << " ";
+	}
+
+
+}
+
+int Timeline::get_nr_zad(int N)
+{
+	int zad;
+	int i = 0;
+	int j = 0;
+	while (j != N)
+	{
+		if (tab[i]>0)
+		{
+			j++;
+			zad = tab[i];
+			while (tab[i] == zad)i++;
+		}
+		else
+		{
+			i++;
+		}
+	}
+
+	return zad;
+}
+
+int Timeline::getTime_on_M2(int N)
+{
+	int i = N;
+	if (tab[N] == 0) return N;
+	else {
+		while (tab[i] == tab[N]) {
+			i++;
+		}
+	}
+
+	return i;
+}
+
 int Timeline::getIAftrNTsks(int N)
 {
 	int i = 0;
@@ -564,11 +677,11 @@ int Timeline::getIAftrNTsks(int N)
 
 int Timeline::whenDone(int N)
 {
-	for (int i = 0; i < tab.size(); i++) 
+	for (int i = 0; i < tab.size(); i++)
 	{
 		if (tab[i] == N)
 		{
-			while (tab[i]==N)
+			while (tab[i] == N)
 			{
 				i++;
 			}
@@ -592,9 +705,9 @@ bool Timeline::compareTsks(Timeline solution, int N)
 
 void Timeline::getOp1Ends(std::vector<Task> zadania, int mach)
 {
-	
+
 	int i = 0;
-	while (i < tab.size()) 
+	while (i < tab.size())
 	{
 		if (tab[i]>0) //jezeli zadanie
 		{
@@ -614,11 +727,11 @@ void Timeline::getOp1Ends(std::vector<Task> zadania, int mach)
 
 bool Timeline::FirstIsFirst(Timeline otherOne, std::vector<Task> zadania, int mach)
 {
-	
+
 	//wszystko jest git jak op1 jest zawsze przed op2, wszystkie zadania s¹ na timelin'ie i nie naruszono przerw
-	
+
 	this->getOp1Ends(zadania, mach);
-	otherOne.getOp1Ends(zadania, 3-mach);
+	otherOne.getOp1Ends(zadania, 3 - mach);
 	int i = 0;
 	while (i < zadania.size())
 	{
@@ -629,11 +742,11 @@ bool Timeline::FirstIsFirst(Timeline otherOne, std::vector<Task> zadania, int ma
 			{
 				j++;
 			}
-			if(zadania[i].get_op2() == 1 && otherOne.whenDone(i+1) == j + 1)
+			if (zadania[i].get_op2() == 1 && otherOne.whenDone(i + 1) == j + 1)
 			{
 				i++;
 			}
-			else if ((otherOne.whenDone(i+1) - j) != zadania[i].get_op2())
+			else if ((otherOne.whenDone(i + 1) - j) != zadania[i].get_op2())
 			{
 				return false;
 			}
@@ -642,17 +755,17 @@ bool Timeline::FirstIsFirst(Timeline otherOne, std::vector<Task> zadania, int ma
 		}
 		else //jezeli na drugiej
 		{
-			while (j < tab.size() && tab[j] != zadania[i].get_nr())
+			while (tab[j] != zadania[i].get_nr() && j < tab.size())
 			{
 				j++;
 			}
-			if (zadania[i].get_op2()==1 && this->whenDone(i+1) == j+1)
+			if (zadania[i].get_op2() == 1 && this->whenDone(i + 1) == j + 1)
 			{
 				i++;
 			}
-			else if ((this->whenDone(i+1) - j) != zadania[i].get_op2())
+			else if ((this->whenDone(i + 1) - j) != zadania[i].get_op2())
 			{
-				std::cout << "WHEN DONE dla " << i << " : " << this->whenDone(i+1);
+				std::cout << "WHEN DONE dla " << i << " : " << this->whenDone(i + 1);
 				return false;
 			}
 			else
@@ -675,8 +788,8 @@ std::pair<Timeline, Timeline> Timeline::Instancja123(std::vector<Task> zadania)
 	bool done = false;
 
 	std::vector<int> uzyte;
-	uzyte.resize(2*N);
-	for (auto &i : uzyte) 
+	uzyte.resize(2 * N);
+	for (auto &i : uzyte)
 	{
 		i = 0;
 	}
@@ -709,20 +822,20 @@ std::pair<Timeline, Timeline> Timeline::Instancja123(std::vector<Task> zadania)
 		//std::cout << "M1: " << id.first<< "\tM2: " << id.second;
 		//obliczenie wolnego miejsca na maszynach
 		int tmp123 = id.first;
-		while (tmp123 < rozw.first.getSoT() && rozw.first.getN(tmp123++) == 0)
+		while (rozw.first.getN(tmp123++) == 0)
 		{
 			space++;
 		}
 
 		for (int i = 0; i < zad.size(); i++)//dodanie do tablic operacje ktore mozemy wykonac
 		{
-			if (!uzyte[i] && zad[i].get_mach() == 1 && zad[i].get_op1()<=space && zad[i].get_rt() <= id.first) //op1 dla M1
+			if (!uzyte[i] && zad[i].get_mach() == 1 && zad[i].get_op1() <= space && zad[i].get_rt() <= id.first) //op1 dla M1
 				Tsks.first.insert(Tsks.first.begin(), i);
 			if (!uzyte[i] && zad[i].get_mach() == 2 && zad[i].get_rt() <= id.second) //op1 dla M2
 				Tsks.second.insert(Tsks.second.begin(), i);
-			if (!uzyte[N+i] && zad[i].get_mach() == 1 && zad[i].get_done_op1() != 0 && zad[i].get_done_op1() <= id.second) //op2 dla M2
+			if (!uzyte[N + i] && zad[i].get_mach() == 1 && zad[i].get_done_op1() != 0 && zad[i].get_done_op1() <= id.second) //op2 dla M2
 				Tsks.second.insert(Tsks.second.begin(), i);
-			if (!uzyte[N+i] && zad[i].get_mach() == 2 && zad[i].get_done_op1() != 0 && zad[i].get_op2() <= space && zad[i].get_done_op1() <= id.first) //op2 dla M1
+			if (!uzyte[N + i] && zad[i].get_mach() == 2 && zad[i].get_done_op1() != 0 && zad[i].get_op2() <= space && zad[i].get_done_op1() <= id.first) //op2 dla M1
 				Tsks.first.insert(Tsks.first.begin(), i);
 		}
 
@@ -813,7 +926,7 @@ std::pair<Timeline, Timeline> Timeline::Instancja123(std::vector<Task> zadania)
 				bool empty = false;
 				while (!empty)
 				{
-					while (id.second < rozw.second.getSoT() && rozw.second.getN(id.second) != 0)id.second++;
+					while (rozw.second.getN(id.second) != 0)id.second++;
 					i = id.second;
 					if (z.get_mach() == 2)
 					{
@@ -878,7 +991,7 @@ std::pair<Timeline, Timeline> Timeline::Instancja123(std::vector<Task> zadania)
 		}
 		int uzytL = 0;
 		for (auto &i : uzyte) uzytL += i;
-		if (Tsks.first.empty() && Tsks.second.empty() && uzytL==uzyte.size()) done = true;
+		if (Tsks.first.empty() && Tsks.second.empty() && uzytL == uzyte.size()) done = true;
 	}
 	return rozw;
 }

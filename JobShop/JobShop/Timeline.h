@@ -11,15 +11,15 @@ public:
 	//metoda maintenance generuje readytime'y tak by prawdopodob ich istnienia malalo wraz z odlegloscia od poczatku timeline'u
 	void maintenance(int i, int maxL); //generowanie i przerw o maksymalnej dl maxL
 	void randomMaint(int i, int maxL); // generator nieuwzgledniajacy odleglosci
-	//obliczanie parametrow wygen. maint
+									   //obliczanie parametrow wygen. maint
 	void CntMt();
 	//³adowanie wygenerowanych wczesniej przerw
 	void SetMt(int when, int howL);
 	std::map<int, int> getMp();
 
 	//tworzenie rozwiazania losowego ze zbioru zadan
-	std::pair<Timeline,Timeline> Instancja(std::vector<Task> zadania, int N);
-	
+	std::pair<Timeline, Timeline> Instancja(std::vector<Task> zadania, int N);
+
 	//drugie podejscie
 	std::pair<Timeline, Timeline> Timeline::Instancja123(std::vector<Task> zad);
 
@@ -36,6 +36,27 @@ public:
 
 	//tworzenie tablicy ju¿ uzytych N operacji
 	std::vector<int> getUsdTasks(int N);
+
+	//kopiowanie rozwi¹zania do pewnego momentu dla m1
+	std::vector<Timeline> copyTimeline(int dokiedy);
+
+	//kopiowanie rozwi¹zania od pewnego momentu dla m1
+	std::vector<Timeline> copyTimelineend(int odkiedy);
+
+	//kopiowanie rozwi¹zania do pewnego momentu dla m2
+	std::vector<Timeline> copyTimelineM2(int dokiedy);
+
+	//kopiowanie rozwi¹zania od pewnego momentu dla m2
+	std::vector<Timeline> copyTimelineendM2(int odkiedy);
+
+	//wyswietl
+	void wyswietl(int od, int dok);
+
+	//zwraca numer zadania które jest N-te od pocz¹tku
+	int get_nr_zad(int N);
+
+	//zwraca czas zakoñczenia zadania pod miejscem zamiany(mutacja)
+	int getTime_on_M2(int N);
 
 	//uzyskanie indeksu gdzie juz zrobiono N operacji
 	int getIAftrNTsks(int N);
@@ -55,7 +76,7 @@ public:
 	int TargetFnctn1(std::pair<Timeline, Timeline> rozw);
 	int TargetFnctn2(std::pair<Timeline, Timeline> rozw);
 	int TargetFnctn(std::pair<Timeline, Timeline> rozw);
-	
+
 private:
 	std::map<int, int> mp;
 };
