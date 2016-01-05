@@ -7,15 +7,31 @@ std::vector<std::pair<Timeline, Timeline>> crossing(std::vector<std::pair<Timeli
 	std::vector<Task> zadania = z1;
 	int N = zadania.size();
 	std::vector<std::pair<Timeline, Timeline>> tmp = pop;
+
+	int wantedSize = std::ceil(pop.size() * perc / 100);
+
+	while (tmp.size() > wantedSize) //wybieramy zadania kt zostana uzyte do krzyzowania
+	{
+		int los = rand() % tmp.size();
+		tmp.erase(tmp.begin() + los); //poprzez usuwanie losowych az nie bedzie tyle ile ich chcemy
+	}
+
 	std::vector<std::pair<Timeline, Timeline>> res;
 	res.clear();
-	std::vector<int> usedSol;
+	std::vector<std::vector<int>> usedSol;
 	std::vector<int> usedTasks;
 	usedSol.resize(tmp.size());
 	for (auto &i : usedSol)
 	{
-		i = 0;
+		i.resize(tmp.size());
+		for (auto &j : i)
+		{
+			j = 0;
+		}
 	}
+	//usedSol[0][0] = 0;
+
+
 	int i1, i2, id;
 	std::vector<int> Tsks;
 	std::list<int> kol;
@@ -24,16 +40,18 @@ std::vector<std::pair<Timeline, Timeline>> crossing(std::vector<std::pair<Timeli
 	
 
 	int licz = 0; //postep
-	while (tmp.size() > 1)
+	while (licz < rozmiar)
 	{
 		
-
+		int nrOfTsks = rand() % (N - 2) + 1; //uciecie wszystkich zadan nie ma sensu tak samo uciecie wszystkich lub oprócz jednego, wiec ucinamy przynajmniej 2
+		
 		i1 = rand() % tmp.size();
 		i2 = rand() % tmp.size();
-		while (i1 == i2) i2 = rand() % tmp.size();
-		//int nrOfTsks = (rand()%(std::ceil(0.8*N))) + (N - std::ceil(0.8*N));
-		int nrOfTsks = rand() % (N - 2) + 1; //uciecie wszystkich zadan nie ma sensu tak samo uciecie wszystkich lub oprócz jednego, wiec ucinamy przynajmniej 2
-		while (tmp[i1].first.cmp(tmp[i2].first)) i2 = rand() % tmp.size(); //jezeli wylosowano to samo zadanie losuj raz jeszcze
+		while (i1 == i2 || usedSol[i1][i2] == 1 || tmp[i1].first.cmp(tmp[i2].first)) //jezeli wylosowano te same liczby 
+		{																			//lub wylosowano pare kt byla juz wczesniej krzyzowana 
+			i1 = rand() % tmp.size();												//lub para ma tak samo uszeregowana M1
+			i2 = rand() % tmp.size();
+		}
 		int ren = 0;
 		child[0] = tmp[i1];
 		child[1] = tmp[i2];
@@ -231,21 +249,26 @@ std::vector<std::pair<Timeline, Timeline>> crossing(std::vector<std::pair<Timeli
 			child[1].second.checkMach(zadania, 2) &&
 			child[1].first.FirstIsFirst(child[1].second, zadania, 1)) //warunek sprawdzajacy poprawnosc rozwiazan
 		{
-			std::cout << "\tdobre rozw nr "<< ++licz << std::endl;
-			std::cout << "\tdobre rozw nr " << ++licz << std::endl;
+			licz++;
+			//std::cout << "\tdobre rozw nr "<< licz << std::endl;
+			licz++;
+			//std::cout << "\tdobre rozw nr " << licz << std::endl;
 			res.insert(res.end(), child[0]);
 			res.insert(res.end(), child[1]);
 
-			if (i1 > i2)
-			{
-				tmp.erase(tmp.begin() + i1);
-				tmp.erase(tmp.begin() + i2);
-			}
-			else
-			{
-				tmp.erase(tmp.begin() + i2);
-				tmp.erase(tmp.begin() + i1);
-			}
+			//if (i1 > i2)
+			//{
+				//tmp.erase(tmp.begin() + i1);
+				//tmp.erase(tmp.begin() + i2);
+			//}
+			//else
+			//{
+				//tmp.erase(tmp.begin() + i2);
+				//tmp.erase(tmp.begin() + i1);
+			//}
+
+			usedSol[i1][i2] = 1; //
+			usedSol[i2][i1] = 1; //uzyto juz ten pary
 		}
 		else
 			std::cout << "\t\tno nie wyszlo\n\n\n";

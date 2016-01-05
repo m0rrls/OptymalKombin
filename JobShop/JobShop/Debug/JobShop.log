@@ -1,3 +1,3 @@
-﻿  Mutation.cpp
-c:\users\zieiony\documents\github\ok\optymalkombin\jobshop\jobshop\mutation.cpp(7): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-  JobShop.vcxproj -> C:\Users\ZieIony\Documents\GitHub\OK\OptymalKombin\JobShop\Debug\JobShop.exe
+﻿  JobShop.cpp
+c:\users\mariusz\documents\github\optymalkombin\jobshop\jobshop\jobshop.cpp(8): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  JobShop.vcxproj -> C:\Users\Mariusz\Documents\GitHub\OptymalKombin\JobShop\Debug\JobShop.exe

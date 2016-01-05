@@ -211,9 +211,9 @@ int main()
 
 // TU BYL BREAKPOINT
 //-------------------------------
-	//populacja = crossing(populacja, 80, zadania, sizeOfPopulation);
+	populacja = crossing(populacja, 80, zadania, 3*sizeOfPopulation);
 
-	//populacja = wybierz(populacja, 10);
+	populacja = wybierz(populacja, 10);
 
 	//zapisanie rozwiazania
 	fileOUT << "*** " << std::to_string(testNr) << " ***\n";

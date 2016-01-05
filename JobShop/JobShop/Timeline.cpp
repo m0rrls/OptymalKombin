@@ -850,47 +850,47 @@ std::pair<Timeline, Timeline> Timeline::Instancja123(std::vector<Task> zadania)
 				int los = rand() % Tsks.first.size();
 				int x = Tsks.first[los];
 				Task z = zad[x];
-				bool empty = false;
-				while (!empty)
-				{
-					while (rozw.first.getN(id.first) != 0)id.first++;
-					i = id.first;
-					if (z.get_mach() == 1)
-					{
-						if (z.get_op1() == 1)
-						{
-							//Tsks.first.erase(Tsks.first.begin() + los); //uzyto juz
-							empty = true;
-						}
-						else
-						{
-							int czas = z.get_op1();
-							while (czas > 0 && rozw.first.getN(i++) == 0)
-							{
-								czas--;
-							}
-							if (czas == 0) empty = true;
-							else id.first = i;
-						}
-					}
-					else if (z.get_mach() == 2 && uzyte[x])
-					{
-						if (z.get_op2() == 1)
-						{
-							empty = true;
-						}
-						else
-						{
-							int czas = z.get_op2();
-							while (czas > 0 && rozw.first.getN(i++) == 0)
-							{
-								czas--;
-							}
-							if (czas == 0) empty = true;
-							else id.first = i;
-						}
-					}
-				}//jest wolne miejsce
+				//bool empty = false;
+				//while (!empty)
+				//{
+				//	while (rozw.first.getN(id.first) != 0)id.first++;
+				//	i = id.first;
+				//	if (z.get_mach() == 1)
+				//	{
+				//		if (z.get_op1() == 1)
+				//		{
+				//			//Tsks.first.erase(Tsks.first.begin() + los); //uzyto juz
+				//			empty = true;
+				//		}
+				//		else
+				//		{
+				//			int czas = z.get_op1();
+				//			while (czas > 0 && rozw.first.getN(i++) == 0)
+				//			{
+				//				czas--;
+				//			}
+				//			if (czas == 0) empty = true;
+				//			else id.first = i;
+				//		}
+				//	}
+				//	else if (z.get_mach() == 2 && uzyte[x])
+				//	{
+				//		if (z.get_op2() == 1)
+				//		{
+				//			empty = true;
+				//		}
+				//		else
+				//		{
+				//			int czas = z.get_op2();
+				//			while (czas > 0 && rozw.first.getN(i++) == 0)
+				//			{
+				//				czas--;
+				//			}
+				//			if (czas == 0) empty = true;
+				//			else id.first = i;
+				//		}
+				//	}
+				//}//jest wolne miejsce
 				int pom = 0;
 				if (z.get_mach() == 1)
 				{
@@ -924,46 +924,46 @@ std::pair<Timeline, Timeline> Timeline::Instancja123(std::vector<Task> zadania)
 				int los = rand() % Tsks.second.size();
 				int x = Tsks.second[los];
 				Task z = zad[x];
-				bool empty = false;
-				while (!empty)
-				{
-					while (id.second < rozw.second.getSoT() && rozw.second.getN(id.second) != 0)id.second++;
-					i = id.second;
-					if (z.get_mach() == 2)
-					{
-						if (z.get_op1() == 1)
-						{
-							empty = true;
-						}
-						else
-						{
-							int czas = z.get_op1();
-							while (czas > 0 && rozw.second.getN(i++) == 0)
-							{
-								czas--;
-							}
-							if (czas == 0) empty = true;
-							else id.second = i;
-						}
-					}
-					else if (z.get_mach() == 1 && uzyte[x])
-					{
-						if (z.get_op2() == 1)
-						{
-							empty = true;
-						}
-						else
-						{
-							int czas = z.get_op2();
-							while (czas > 0 && rozw.second.getN(i++) == 0)
-							{
-								czas--;
-							}
-							if (czas == 0) empty = true;
-							else id.second = i;
-						}
-					}
-				}//jest wolne miejsce
+				//bool empty = false;
+				//while (!empty)
+				//{
+				//	while (id.second < rozw.second.getSoT() && rozw.second.getN(id.second) != 0)id.second++;
+				//	i = id.second;
+				//	if (z.get_mach() == 2)
+				//	{
+				//		if (z.get_op1() == 1)
+				//		{
+				//			empty = true;
+				//		}
+				//		else
+				//		{
+				//			int czas = z.get_op1();
+				//			while (czas > 0 && rozw.second.getN(i++) == 0)
+				//			{
+				//				czas--;
+				//			}
+				//			if (czas == 0) empty = true;
+				//			else id.second = i;
+				//		}
+				//	}
+				//	else if (z.get_mach() == 1 && uzyte[x])
+				//	{
+				//		if (z.get_op2() == 1)
+				//		{
+				//			empty = true;
+				//		}
+				//		else
+				//		{
+				//			int czas = z.get_op2();
+				//			while (czas > 0 && rozw.second.getN(i++) == 0)
+				//			{
+				//				czas--;
+				//			}
+				//			if (czas == 0) empty = true;
+				//			else id.second = i;
+				//		}
+				//	}
+				//}//jest wolne miejsce
 				int pom = 0;
 				if (z.get_mach() == 2)
 				{
