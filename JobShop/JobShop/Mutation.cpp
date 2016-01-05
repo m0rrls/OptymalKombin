@@ -11,6 +11,7 @@ std::pair<Timeline, Timeline> Mutacja(std::pair<Timeline, Timeline> rozw, std::v
 		//DEKLARACJE
 
 		std::vector <int> Tsks;
+		Tsks.resize(N);
 		std::vector <int> usedTasks;
 		std::pair<Timeline, Timeline> rozw1 = rozw;
 		std::vector<Task> zadania = zadania1;
@@ -63,8 +64,8 @@ std::pair<Timeline, Timeline> Mutacja(std::pair<Timeline, Timeline> rozw, std::v
 		}
 
 		// KOPIOWANIE ROZW PRZED MIEJSCEM ZAMIANY
-		tmpbegin.first.copyTimeline(tx_m1);				//kopiowanie przodu rozw M1
-		tmpbegin.second.copyTimelineM2(tx_m1);			//kopiowanie przodu rozw M2
+		//tmpbegin.first.copyTimeline(tx_m1);				//kopiowanie przodu rozw M1
+		//tmpbegin.second.copyTimelineM2(tx_m1);			//kopiowanie przodu rozw M2
 
 
 														// BEZ SENSU, BO ZADANIA MOGA SIE PRZESUNAC														

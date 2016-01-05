@@ -8,7 +8,7 @@ int main()
 	srand(time(NULL));
 
 	int sizeOfPopulation = 50;
-	int testNr = 6;
+	int testNr = 5;
 
 	std::string tasksFile = "tests/tasks.txt";
 	std::string resFile = "tests/results.txt";
@@ -193,7 +193,7 @@ int main()
 
 	int iq = 0;
 	int iw = 0;
-	bool dupl = false;
+ 	bool dupl = false;
 	for (auto &q : populacja) //sprawdzanie duplikatow w populacji
 	{
 		iw = 0;
@@ -209,10 +209,11 @@ int main()
 		iq++;
 	}
 
+// TU BYL BREAKPOINT
+//-------------------------------
+	//populacja = crossing(populacja, 80, zadania, sizeOfPopulation);
 
-//	populacja = crossing(populacja, 80, zadania, sizeOfPopulation);
-
-//	populacja = wybierz(populacja, 10);
+	//populacja = wybierz(populacja, 10);
 
 	//zapisanie rozwiazania
 	fileOUT << "*** " << std::to_string(testNr) << " ***\n";

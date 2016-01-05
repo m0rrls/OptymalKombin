@@ -545,119 +545,6 @@ std::vector<int> Timeline::getUsdTasks(int N)
 	return vec;
 }
 
-std::vector<Timeline> Timeline::copyTimeline(int dokiedy)
-{
-	std::vector<Timeline> rozw;
-	rozw.resize(dokiedy + 1);
-	for (int i = 0; i <= dokiedy;i++) rozw[i] = 0;
-
-	for (int i = 0; i <= dokiedy;i++) {
-		rozw[i] = tab[i];
-	}
-
-	return rozw;
-}
-
-std::vector<Timeline> Timeline::copyTimelineend(int odkiedy)
-{
-	std::vector<Timeline> rozw;
-	int rozm = tab.size() - odkiedy + 1;
-	rozw.resize(rozm);
-	for (int i = 0; i <= rozm;i++) rozw[i] = 0;
-	int j = 0;
-	for (int i = odkiedy; i < tab.size(); i++) {
-		rozw[j] = tab[i];
-		j++;
-	}
-
-	return rozw;
-}
-
-std::vector<Timeline> Timeline::copyTimelineM2(int dokiedy)
-{
-	std::vector<Timeline> rozw;
-	rozw.resize(dokiedy + 50);
-	for (int i = 0; i <= dokiedy + 50; i++) rozw[i] = 0;
-	int i = dokiedy;
-	if (tab[dokiedy] == 0) {}
-	else
-	{
-		while (tab[i] == tab[dokiedy]) { i++; }
-	}
-	for (int j = 0; j <= i; j++) {
-		rozw[j] = tab[j];
-	}
-	rozw.resize(i + 1);
-	return rozw;
-}
-
-std::vector<Timeline> Timeline::copyTimelineendM2(int odkiedy)
-{
-	std::vector<Timeline> rozw;
-	int rozm = tab.size() - odkiedy + 1;
-	rozw.resize(rozm);
-	int k = odkiedy;
-	if (tab[k] == 0) {}
-	else
-	{
-		while (tab[k] == tab[odkiedy])k++;
-	}
-	for (int i = 0; i <= rozm;i++) rozw[i] = 0;
-	int j = 0;
-	for (int i = k; i < tab.size(); i++) {
-		rozw[j] = tab[i];
-		j++;
-	}
-	rozw.resize(tab.size() - k + 1);
-
-	return rozw;
-}
-
-void Timeline::wyswietl(int od, int dok)
-{
-	int i = od;
-	for (i; i < dok; i++) {
-		std::cout << tab[i] << " ";
-	}
-
-
-}
-
-int Timeline::get_nr_zad(int N)
-{
-	int zad;
-	int i = 0;
-	int j = 0;
-	while (j != N)
-	{
-		if (tab[i]>0)
-		{
-			j++;
-			zad = tab[i];
-			while (tab[i] == zad)i++;
-		}
-		else
-		{
-			i++;
-		}
-	}
-
-	return zad;
-}
-
-int Timeline::getTime_on_M2(int N)
-{
-	int i = N;
-	if (tab[N] == 0) return N;
-	else {
-		while (tab[i] == tab[N]) {
-			i++;
-		}
-	}
-
-	return i;
-}
-
 int Timeline::getIAftrNTsks(int N)
 {
 	int i = 0;
@@ -728,7 +615,7 @@ void Timeline::getOp1Ends(std::vector<Task> zadania, int mach)
 bool Timeline::FirstIsFirst(Timeline otherOne, std::vector<Task> zadania, int mach)
 {
 
-	//wszystko jest git jak op1 jest zawsze przed op2, wszystkie zadania s¹ na timelin'ie i nie naruszono przerw
+	//wszystko jest git jak op1 jest zawsze przed op2, wszystkie zadania sš na timelin'ie i nie naruszono przerw
 
 	this->getOp1Ends(zadania, mach);
 	otherOne.getOp1Ends(zadania, 3 - mach);
@@ -755,7 +642,7 @@ bool Timeline::FirstIsFirst(Timeline otherOne, std::vector<Task> zadania, int ma
 		}
 		else //jezeli na drugiej
 		{
-			while (tab[j] != zadania[i].get_nr() && j < tab.size())
+			while (j < tab.size() && tab[j] != zadania[i].get_nr())
 			{
 				j++;
 			}
@@ -822,7 +709,7 @@ std::pair<Timeline, Timeline> Timeline::Instancja123(std::vector<Task> zadania)
 		//std::cout << "M1: " << id.first<< "\tM2: " << id.second;
 		//obliczenie wolnego miejsca na maszynach
 		int tmp123 = id.first;
-		while (rozw.first.getN(tmp123++) == 0)
+		while (tmp123 < rozw.first.getSoT() && rozw.first.getN(tmp123++) == 0)
 		{
 			space++;
 		}
@@ -926,7 +813,7 @@ std::pair<Timeline, Timeline> Timeline::Instancja123(std::vector<Task> zadania)
 				bool empty = false;
 				while (!empty)
 				{
-					while (rozw.second.getN(id.second) != 0)id.second++;
+					while (id.second < rozw.second.getSoT() && rozw.second.getN(id.second) != 0)id.second++;
 					i = id.second;
 					if (z.get_mach() == 2)
 					{
@@ -1043,3 +930,115 @@ int Timeline::TargetFnctn(std::pair<Timeline, Timeline> rozw)
 	return wart;
 }
 
+std::vector<Timeline> Timeline::copyTimeline(int dokiedy)
+{
+	std::vector<Timeline> rozw;
+	rozw.resize(dokiedy + 1);
+	for (int i = 0; i <= dokiedy;i++) rozw[i] = 0;
+
+	for (int i = 0; i <= dokiedy;i++) {
+		rozw[i] = tab[i];
+	}
+
+	return rozw;
+}
+
+std::vector<Timeline> Timeline::copyTimelineend(int odkiedy)
+{
+	std::vector<Timeline> rozw;
+	int rozm = tab.size() - odkiedy + 1;
+	rozw.resize(rozm);
+	for (int i = 0; i <= rozm;i++) rozw[i] = 0;
+	int j = 0;
+	for (int i = odkiedy; i < tab.size(); i++) {
+		rozw[j] = tab[i];
+		j++;
+	}
+
+	return rozw;
+}
+
+std::vector<Timeline> Timeline::copyTimelineM2(int dokiedy)
+{
+	std::vector<Timeline> rozw;
+	rozw.resize(dokiedy + 50);
+	for (int i = 0; i <= dokiedy + 50; i++) rozw[i] = 0;
+	int i = dokiedy;
+	if (tab[dokiedy] == 0) {}
+	else
+	{
+		while (tab[i] == tab[dokiedy]) { i++; }
+	}
+	for (int j = 0; j <= i; j++) {
+		rozw[j] = tab[j];
+	}
+	rozw.resize(i + 1);
+	return rozw;
+}
+
+std::vector<Timeline> Timeline::copyTimelineendM2(int odkiedy)
+{
+	std::vector<Timeline> rozw;
+	int rozm = tab.size() - odkiedy + 1;
+	rozw.resize(rozm);
+	int k = odkiedy;
+	if (tab[k] == 0) {}
+	else
+	{
+		while (tab[k] == tab[odkiedy])k++;
+	}
+	for (int i = 0; i <= rozm;i++) rozw[i] = 0;
+	int j = 0;
+	for (int i = k; i < tab.size(); i++) {
+		rozw[j] = tab[i];
+		j++;
+	}
+	rozw.resize(tab.size() - k + 1);
+
+	return rozw;
+}
+
+void Timeline::wyswietl(int od, int dok)
+{
+	int i = od;
+	for (i; i < dok; i++) {
+		std::cout << tab[i] << " ";
+	}
+
+
+}
+
+int Timeline::get_nr_zad(int N)
+{
+	int zad;
+	int i = 0;
+	int j = 0;
+	while (j != N)
+	{
+		if (tab[i]>0)
+		{
+			j++;
+			zad = tab[i];
+			while (tab[i] == zad)i++;
+		}
+		else
+		{
+			i++;
+		}
+	}
+
+	return zad;
+}
+
+int Timeline::getTime_on_M2(int N)
+{
+	int i = N;
+	if (tab[N] == 0) return N;
+	else {
+		while (tab[i] == tab[N]) {
+			i++;
+		}
+	}
+
+	return i;
+}
