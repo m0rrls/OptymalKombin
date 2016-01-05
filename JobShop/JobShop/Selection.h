@@ -1,5 +1,5 @@
 #pragma once
 #include<vector>
 
-template <class T>
-std::vector <std::pair <typename T, typename T>> Selekcja(std::vector <std::pair <typename T, typename T>> instancje, int N, std::vector<int> wart);
+//selekcja; arg: populacja, liczba rozw kt pozostana
+std::vector<std::pair<Timeline, Timeline>> wybierz(std::vector <std::pair<Timeline, Timeline>> populacja, int k);

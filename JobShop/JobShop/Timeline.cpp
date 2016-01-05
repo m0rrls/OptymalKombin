@@ -642,7 +642,7 @@ bool Timeline::FirstIsFirst(Timeline otherOne, std::vector<Task> zadania, int ma
 		}
 		else //jezeli na drugiej
 		{
-			while (tab[j] != zadania[i].get_nr() && j < tab.size())
+			while (j < tab.size() && tab[j] != zadania[i].get_nr())
 			{
 				j++;
 			}
@@ -709,7 +709,7 @@ std::pair<Timeline, Timeline> Timeline::Instancja123(std::vector<Task> zadania)
 		//std::cout << "M1: " << id.first<< "\tM2: " << id.second;
 		//obliczenie wolnego miejsca na maszynach
 		int tmp123 = id.first;
-		while (rozw.first.getN(tmp123++) == 0) 
+		while (tmp123 < rozw.first.getSoT() && rozw.first.getN(tmp123++) == 0)
 		{
 			space++;
 		}
@@ -813,7 +813,7 @@ std::pair<Timeline, Timeline> Timeline::Instancja123(std::vector<Task> zadania)
 				bool empty = false;
 				while (!empty)
 				{
-					while (rozw.second.getN(id.second) != 0)id.second++;
+					while (id.second < rozw.second.getSoT() && rozw.second.getN(id.second) != 0)id.second++;
 					i = id.second;
 					if (z.get_mach() == 2)
 					{
