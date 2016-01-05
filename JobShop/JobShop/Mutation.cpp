@@ -153,6 +153,7 @@ std::pair<Timeline, Timeline> Mutacja(std::pair<Timeline, Timeline> rozw, std::v
 				//std::cout << *itM2 << "   ";
 				if (*itM2 == zadx) {
 					std::cout << std::endl << "YES_przerzucono op2 na pocz¹tek "<<*itM2 << std::endl;
+					kol_M2.erase(itM2);
 					for (int i = tx_m2 + 1;i < tx_m2 + zadania[zadx - 1].get_op1() + 1; i++) 
 					{
 						tmp.second.set(i, zadx);
@@ -163,6 +164,7 @@ std::pair<Timeline, Timeline> Mutacja(std::pair<Timeline, Timeline> rozw, std::v
 						while (tmp.first.getN(tx_m1 + 1) == -1) tx_m1++;
 					}
 					tx_m2 += zadania[zadx - 1].get_op1();
+					break;
 				}
 			}
 		}
@@ -181,6 +183,7 @@ std::pair<Timeline, Timeline> Mutacja(std::pair<Timeline, Timeline> rozw, std::v
 					pom = *itM2;
 					kol_M2.erase(itM2);
 					kol_po_M2.push_back(zady);
+					break;
 				}
 			}
 		}
