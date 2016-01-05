@@ -1,6 +1,6 @@
 *** 5 ***
-M1: op1_6, 0, 1; idle1_M1, 1, 1; maint1_M1, 2, 1; op1_3, 3, 2; op1_4, 5, 4; maint2_M1, 9, 2; op2_2, 11, 2; op2_1, 13, 1; idle2_M1, 14, 3; maint3_M1, 17, 1; op2_5, 18, 4; idle3_M1, 22, 6; maint4_M1, 28, 2; idle4_M1, 30, 6; 
-M2: op2_6, 0, 1; idle1_M2, 1, 1; maint1_M2, 2, 1; op2_3, 3, 2; op2_4, 5, 4; maint2_M2, 9, 2; op1_2, 11, 2; op1_1, 13, 1; idle2_M2, 14, 3; maint3_M2, 17, 1; op1_5, 18, 4; idle3_M2, 22, 6; maint4_M2, 28, 2; idle4_M2, 30, 6; 
+M1: op1_6, 0, 1; idle1_M1, 1, 1; maint1_M1, 2, 1; op1_3, 3, 2; op1_4, 5, 4; maint2_M1, 9, 2; op2_5, 11, 4; op2_1, 15, 1; idle2_M1, 16, 1; maint3_M1, 17, 1; op2_2, 18, 2; idle3_M1, 20, 8; maint4_M1, 28, 2; idle4_M1, 30, 6; 
+M2: op2_6, 0, 1; idle1_M2, 1, 1; maint1_M2, 2, 1; op2_3, 3, 2; op2_4, 5, 4; maint2_M2, 9, 2; op1_5, 11, 4; op1_1, 15, 1; idle2_M2, 16, 1; maint3_M2, 17, 1; op1_2, 18, 2; idle3_M2, 20, 8; maint4_M2, 28, 2; idle4_M2, 30, 6; 
 4, 6
 4, 6
 4, 16

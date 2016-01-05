@@ -139,22 +139,45 @@ std::pair<Timeline, Timeline> Mutacja(std::pair<Timeline, Timeline> rozw, std::v
 		//kol_M2
 
 		int zadx = 0, zady = 0, zadpom = 0;
-		zadx = kol_M1.back();
+		zadx = kol_M1.back();		//za zadx podstawione jest zady
 		kol_M1.pop_back();
-		zady = kol_M1.front();
+		zady = kol_M1.front();		//za zady podstawione jest zadx
 		kol_M1.pop_front();
-		kol_M1.push_back(zady);
-		kol_M1.push_front(zadx);
-		if (zadania[zadx].get_mach() == 2) {
-			for (auto itM2 = kol_M2.begin(); itM2 != kol_M2.end(); itM2++) {
+		kol_M1.push_back(zady);		//zady wrzucone na koniec (czyli by³e zadx)
+		kol_M1.push_front(zadx);	//zadx wrzucone na pocz¹tek (czyli by³e zady)
+		if (zadania[zadx-1].get_mach() == 2) {
+			for (itM2 = kol_M2.begin(); itM2 != kol_M2.end(); itM2++) {
+				std::cout << *itM2 << "   ";
 				if (*itM2 == zadx) {
-
+					std::cout << std::endl << "YES" << std::endl;
+					for (int i = tx_m2 + 1;i < tx_m2 + zadania[zadx - 1].get_op1() + 1; i++) 
+					{
+						tmp.second.set(i, zadx);
+					}
+					tx_m1 = tx_m2 + zadania[zadx - 1].get_op1();
+					if (tmp.first.getN(tx_m1) == -1)
+					{
+						while (tmp.first.getN(tx_m1 + 1) == -1) tx_m1++;
+					}
+					tx_m2 += zadania[zadx - 1].get_op1();
 				}
 			}
 		}
+		if (zadania[zady - 1].get_mach() == 1) {
+			for (itM2 = kol_M2.begin(); itM2 != kol_M2.end(); itM2++) 
+			{
+				std::cout << *itM2 << "   ";
+				if (*itM2 == zady) 
+				{
+					std::cout << std::endl << "YES" << std::endl;
+				}
+			}
+		}
+		else
+			std::cout << "Not this time" << std::endl;
 
-
-
+		tmp.first.test();
+		tmp.second.test();
 
 
 		return rozw1;
