@@ -27,6 +27,7 @@ std::pair<Timeline, Timeline> Mutacja(std::pair<Timeline, Timeline> rozw, std::v
 		//		std::pair<Timeline, Timeline> tmpend;		//TO NIE MA SENSU
 		std::list<int> kol_po_M1;			//kolejka zadañ po zamianie
 		std::list<int> kol_po_M2;			//kolejka zadañ po zamianie
+		std::list<int>::iterator itM2_po = kol_po_M2.begin();	
 		std::list<int> kol_M1;				//kolejka zadañ w obszarze zamian
 		std::list<int>::iterator itM1 = kol_M1.begin();
 		std::list<int> kol_M2;				//kolejka zadañ w obszarze zamian
@@ -94,6 +95,8 @@ std::pair<Timeline, Timeline> Mutacja(std::pair<Timeline, Timeline> rozw, std::v
 														//		tmpend.second.copyTimelineendM2(ty_m1 + 1);		//kopiowanie tylu rozw M2
 
 		tmp.first.test();
+		std::cout<<std::endl;
+		tmp.second.test();
 
 		//TWORZENIE KOLEJKI ZADAN W OBSZARZE ZAMIANY
 		kol_M1.clear();
@@ -147,9 +150,9 @@ std::pair<Timeline, Timeline> Mutacja(std::pair<Timeline, Timeline> rozw, std::v
 		kol_M1.push_front(zadx);	//zadx wrzucone na pocz¹tek (czyli by³e zady)
 		if (zadania[zadx-1].get_mach() == 2) {
 			for (itM2 = kol_M2.begin(); itM2 != kol_M2.end(); itM2++) {
-				std::cout << *itM2 << "   ";
+				//std::cout << *itM2 << "   ";
 				if (*itM2 == zadx) {
-					std::cout << std::endl << "YES" << std::endl;
+					std::cout << std::endl << "YES_przerzucono op2 na pocz¹tek "<<*itM2 << std::endl;
 					for (int i = tx_m2 + 1;i < tx_m2 + zadania[zadx - 1].get_op1() + 1; i++) 
 					{
 						tmp.second.set(i, zadx);
@@ -163,20 +166,31 @@ std::pair<Timeline, Timeline> Mutacja(std::pair<Timeline, Timeline> rozw, std::v
 				}
 			}
 		}
+		else
+			std::cout << "Not this time1" << std::endl;
+
 		if (zadania[zady - 1].get_mach() == 1) {
 			for (itM2 = kol_M2.begin(); itM2 != kol_M2.end(); itM2++) 
 			{
-				std::cout << *itM2 << "   ";
+				//std::cout << *itM2 << "   ";
 				if (*itM2 == zady) 
 				{
-					std::cout << std::endl << "YES" << std::endl;
+					int pom;
+					std::cout << std::endl << "YES_przerzucono op1 na koniec  " << *itM2<< std::endl;
+					itM2_po = kol_po_M2.begin();
+					pom = *itM2;
+					kol_M2.erase(itM2);
+					kol_po_M2.push_back(zady);
 				}
 			}
 		}
 		else
-			std::cout << "Not this time" << std::endl;
+			std::cout << "Not this time2" << std::endl;
 
+		std::cout << std::endl;
 		tmp.first.test();
+		std::cout << std::endl;
+		std::cout << std::endl;
 		tmp.second.test();
 
 
