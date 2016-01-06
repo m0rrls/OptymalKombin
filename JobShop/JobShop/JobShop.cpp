@@ -19,7 +19,7 @@ int main()
 	/*
 	
 
-	int N = 20; //liczba operacji
+	int N = 100; //liczba operacji
 	int minX = 20; //min czas trwania operacji
 	int maxX = 50; //max czas trwania operacji
 	int M = std::ceil(0.3*N);
@@ -293,16 +293,16 @@ int main()
 	std::vector<std::pair<Timeline, Timeline>> populacja_mut;
 	std::pair<std::pair<Timeline, Timeline>, int> instan;
 	
-		for (int i = 0; i < pop_size && mut_done < std::ceil(populacja.size() * (mut_chance / 100)); i++) {
-		instan = Mutacja(populacja[i], zadania, N, mut_chance);
-			//wartFnCelu = populacja[0].first.TargetFnctn(populacja[0]);
-			if (instan.second == 1) {
-			mut_done++;
-			std::cout << std::endl << "Mutacja " << mut_done << std::endl;
-			populacja_mut.insert(populacja_mut.end(), instan.first);	
-		}
-			//std::cout << wartFnCelu << std::endl;
-	}
+	//	for (int i = 0; i < pop_size && mut_done < std::ceil(populacja.size() * (mut_chance / 100)); i++) {
+	//	instan = Mutacja(populacja[i], zadania, N, mut_chance);
+	//		//wartFnCelu = populacja[0].first.TargetFnctn(populacja[0]);
+	//		if (instan.second == 1) {
+	//		mut_done++;
+	//		std::cout << std::endl << "Mutacja " << mut_done << std::endl;
+	//		populacja_mut.insert(populacja_mut.end(), instan.first);	
+	//	}
+	//		//std::cout << wartFnCelu << std::endl;
+	//}
 
 	fileOUT << po <<", "<<przed << std::endl;
 	fileOUT << "M1: " << M1.getS() << std::endl;
