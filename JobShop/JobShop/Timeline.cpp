@@ -783,7 +783,7 @@ std::vector<Task> Timeline::getOp1Ends(std::vector<Task> z1, int mach)
 	return zadania;
 }
 
-bool Timeline::FirstIsFirst(Timeline otherOne, std::vector<Task> z1, int mach)
+int Timeline::FirstIsFirst(Timeline otherOne, std::vector<Task> z1, int mach)
 {
 	std::vector<Task> zadania = z1;
 	//wszystko jest git jak op1 jest zawsze przed op2, wszystkie zadania sš na timelin'ie i nie naruszono przerw
@@ -809,7 +809,8 @@ bool Timeline::FirstIsFirst(Timeline otherOne, std::vector<Task> z1, int mach)
 			}
 			else if ((otherOne.whenDone(i + 1) - j) != zadania[i].get_op2())
 			{
-				return false;
+				//std::cout << "op1 zadania " << (i+1) << " "
+				return (i+1);
 			}
 			else
 				i++;
@@ -827,13 +828,13 @@ bool Timeline::FirstIsFirst(Timeline otherOne, std::vector<Task> z1, int mach)
 			else if ((this->whenDone(i + 1) - j) != zadania[i].get_op2())
 			{
 				//std::cout << "WHEN DONE dla " << i << " : " << this->whenDone(i + 1);
-				return false;
+				return (i+1);
 			}
 			else
 				i++;
 		}
 	}
-	return true;
+	return -1;
 }
 
 std::pair<Timeline, Timeline> Timeline::Instancja123(std::vector<Task> zadania)
@@ -894,16 +895,16 @@ std::pair<Timeline, Timeline> Timeline::Instancja123(std::vector<Task> zadania)
 				Tsks.first.insert(Tsks.first.begin(), i);
 			if (!uzyte[i] && zad[i].get_mach() == 2 && zad[i].get_rt() <= id.second) //op1 dla M2
 				Tsks.second.insert(Tsks.second.begin(), i);
-			if (!uzyte[N + i] && zad[i].get_mach() == 1 && zad[i].get_done_op1() != 0 && zad[i].get_done_op1() <= id.second) //op2 dla M2
+			if (uzyte[i] && !uzyte[N + i] && zad[i].get_mach() == 1 && zad[i].get_done_op1() != 0 && zad[i].get_done_op1() <= id.second) //op2 dla M2
 				Tsks.second.insert(Tsks.second.begin(), i);
-			if (!uzyte[N + i] && zad[i].get_mach() == 2 && zad[i].get_done_op1() != 0 && zad[i].get_op2() <= space && zad[i].get_done_op1() <= id.first) //op2 dla M1
+			if (uzyte[i] && !uzyte[N + i] && zad[i].get_mach() == 2 && zad[i].get_done_op1() != 0 && zad[i].get_op2() <= space && zad[i].get_done_op1() <= id.first) //op2 dla M1
 				Tsks.first.insert(Tsks.first.begin(), i);
 		}
 
 		int mach = rand() % 2 + 1;
 		//std::cout << "\tlosM: " << mach << std::endl;
 		int i;
-		if (mach == 1)
+		if (mach == 1 || (mach == 2 && Tsks.second.empty()))
 		{
 			if (!Tsks.first.empty()) //wylos M1
 			{
@@ -977,7 +978,7 @@ std::pair<Timeline, Timeline> Timeline::Instancja123(std::vector<Task> zadania)
 			}
 			//if (Tsks.second.empty())id.second++;
 		}
-		if (mach == 2) //wylos M2
+		if (mach == 2 || (mach == 1 && Tsks.first.empty())) //wylos M2
 		{
 			if (!Tsks.second.empty())
 			{
@@ -1028,7 +1029,7 @@ std::pair<Timeline, Timeline> Timeline::Instancja123(std::vector<Task> zadania)
 				if (z.get_mach() == 2)
 				{
 					pom = z.get_op1();
-					zad[x].set_done_op1(id.first + pom);
+					zad[x].set_done_op1(id.second + pom);
 					uzyte[x] = 1;
 					Tsks.second.erase(Tsks.second.begin() + los);
 				}

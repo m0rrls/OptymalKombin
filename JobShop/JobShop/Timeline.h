@@ -24,7 +24,7 @@ public:
 	std::pair<Timeline, Timeline> Timeline::Instancja123(std::vector<Task> zad);
 
 
-	//sprawdzenie czy rozwiazanie jest dopuszczalne na tej maszynie: true jezeli jest dopuszczalne
+	//sprawdzenie czy rozwiazanie jest dopuszczalne na tej maszynie (operacje sa na prawidlowej maszynie i o prawidlowej dlugosci): true jezeli jest dopuszczalne
 	bool checkMach(std::vector<Task> zadania, int mach);
 
 	//naprawianie eventualnego timeline'u dla konkretnej maszyny od konkretnego pkt na lini czasu
@@ -70,8 +70,8 @@ public:
 	//zebranie zakonczen op1
 	std::vector<Task> Timeline::getOp1Ends(std::vector<Task> z1, int mach);
 
-	//sprawdzanie zgodnosci z druga maszyna dla tych samych zadan
-	bool FirstIsFirst(Timeline otherOne, std::vector<Task> zadania, int mach);
+	//sprawdzanie zgodnosci z druga maszyna dla tych samych zadan, jezeli true to -1, jezeli nie to zwraca kt zadanie jest zle
+	int FirstIsFirst(Timeline otherOne, std::vector<Task> zadania, int mach);
 
 	int TargetFnctn1(std::pair<Timeline, Timeline> rozw);
 	int TargetFnctn2(std::pair<Timeline, Timeline> rozw);

@@ -43,8 +43,8 @@ std::vector<std::pair<Timeline, Timeline>> crossing(std::vector<std::pair<Timeli
 	while (licz < rozmiar)
 	{
 		
-		int nrOfTsks = rand() % (N - 2) + 1; //uciecie wszystkich zadan nie ma sensu tak samo uciecie wszystkich lub oprócz jednego, wiec ucinamy przynajmniej 2
-		
+		//int nrOfTsks = rand() % (N - 2) + 1; //uciecie wszystkich zadan nie ma sensu tak samo uciecie wszystkich lub oprócz jednego, wiec ucinamy przynajmniej 2
+		int nrOfTsks = rand() % ((int)(std::ceil(N / 2) - 1)) + (std::ceil(N / 2) - 1);	//poprawka: ucinamy za polowa, zeby jak najmniej naprawiac
 		i1 = rand() % tmp.size();
 		i2 = rand() % tmp.size();
 		while (i1 == i2 || usedSol[i1][i2] == 1 || tmp[i1].first.cmp(tmp[i2].first)) //jezeli wylosowano te same liczby 
@@ -240,7 +240,13 @@ std::vector<std::pair<Timeline, Timeline>> crossing(std::vector<std::pair<Timeli
 				bool ch2 = child[ren].second.checkMach(zadania, 2);
 				bool ch3 = child[ren].first.FirstIsFirst(child[ren].second, zadania, 1);
 				ren = 0;
-				nrOfTsks = rand() % (N - 2) + 1;
+				i1 = rand() % tmp.size(); //byl problem? losujemy inna pare
+				i2 = rand() % tmp.size();
+				while (i1 == i2 || usedSol[i1][i2] == 1 || tmp[i1].first.cmp(tmp[i2].first)) //jezeli wylosowano te same liczby 
+				{																			//lub wylosowano pare kt byla juz wczesniej krzyzowana 
+					i1 = rand() % tmp.size();												//lub para ma tak samo uszeregowana M1
+					i2 = rand() % tmp.size();
+				}
 				child[0] = tmp[i1];
 				child[1] = tmp[i2];
 			}
@@ -255,9 +261,9 @@ std::vector<std::pair<Timeline, Timeline>> crossing(std::vector<std::pair<Timeli
 			child[1].first.FirstIsFirst(child[1].second, zadania, 1)) //warunek sprawdzajacy poprawnosc rozwiazan
 		{
 			licz++;
-			//std::cout << "\tdobre rozw nr "<< licz << std::endl;
+			std::cout << "\tdobre rozw nr "<< licz << std::endl;
 			licz++;
-			//std::cout << "\tdobre rozw nr " << licz << std::endl;
+			std::cout << "\tdobre rozw nr " << licz << std::endl;
 			res.insert(res.end(), child[0]);
 			res.insert(res.end(), child[1]);
 

@@ -7,8 +7,9 @@ int main()
 {
 	srand(time(NULL));
 
-	int sizeOfPopulation = 50;
-	int testNr = 5;
+	int sizeOfPopulation = 30;
+	int testNr = 4;
+	int mut_chance = 100;
 
 	std::string tasksFile = "tests/tasks.txt";
 	std::string resFile = "tests/results.txt";
@@ -18,7 +19,7 @@ int main()
 	/*
 	
 
-	int N = 100; //liczba operacji
+	int N = 20; //liczba operacji
 	int minX = 20; //min czas trwania operacji
 	int maxX = 50; //max czas trwania operacji
 	int M = std::ceil(0.3*N);
@@ -91,9 +92,9 @@ int main()
 	
 	fileOUT << "*** EOF ***";
 	fileOUT.close();
-	//*/ //KONIEC GENEROWANIA ---------------------------------------------------------
+	//*/ //KONIEC GENEROWANIA --------------------------------------------------------------------------------------------
 
-	//ROCK 'N ROLL --------------------------------------------------------------------/*
+	//ROCK 'N ROLL -------------------------------------------------------------------------------------------------------/*
 
 	std::fstream fileIN;
 	std::fstream fileOUT;
@@ -137,7 +138,7 @@ int main()
 	//}
 
 
-	Timeline* TimeL = new Timeline(100);
+	Timeline* TimeL = new Timeline(10000);
 	while (!fileIN.eof() && zad[0]!='*')
 	{
 		for (int k = 0; k < 4; k++)
@@ -174,8 +175,9 @@ int main()
 
 	while (a < sizeOfPopulation)
 	{
+
 		tmpSol = TimeL->Instancja123(zadania);
-		if (TimeL->compareTsks(tmpSol.first, -1) && tmpSol.first.FirstIsFirst(tmpSol.second,zadania,1))
+		if (TimeL->compareTsks(tmpSol.first, -1) && tmpSol.first.checkMach(zadania,1) && tmpSol.second.checkMach(zadania,2) && tmpSol.first.FirstIsFirst(tmpSol.second,zadania,1)==-1)
 		{
   			populacja[a] = tmpSol;
 			a++;
@@ -186,6 +188,15 @@ int main()
 			{
 				std::cout << "WRONG MAINT! " << std::endl;
 			}
+			if (!tmpSol.first.checkMach(zadania, 1) || !tmpSol.second.checkMach(zadania, 2))
+			{
+				std::cout << "blad z zadaniami" << std::endl;
+			}
+			if (tmpSol.first.FirstIsFirst(tmpSol.second, zadania, 1)>0)
+			{
+				std::cout << "op2 nie jest za op1 w zadaniu " << tmpSol.first.FirstIsFirst(tmpSol.second, zadania, 1);
+				std::cout << "\t";
+			}
 			std::cout << "AGAIN for inst " << a << std::endl;			
 		}
 			
@@ -193,7 +204,7 @@ int main()
 
 	int iq = 0;
 	int iw = 0;
- 	bool dupl = false;
+	bool dupl = false;
 	for (auto &q : populacja) //sprawdzanie duplikatow w populacji
 	{
 		iw = 0;
@@ -208,11 +219,13 @@ int main()
 		}
 		iq++;
 	}
-
+	std::vector<std::pair<Timeline, Timeline>> najlepszyWynik = wybierz(populacja, 1);
+	int przed = najlepszyWynik[0].first.TargetFnctn(najlepszyWynik[0]);
+	
 	//std::pair<Timeline, Timeline> proba;
-	//std::vector<int> tab1 = {3,3,-1,4,4,4,4,0,0,-1,1,0,2,2,0};
+	//std::vector<int> tab1 = {0,0,-1,0,0,2,2,1,0,-1};
 	//proba.first.copy(tab1);
-	//tab1 = { 0,3,3,3,3,1,1,4,4,4,4,2,0,0,0};
+	//tab1 = {1,1,0,2,0,0,0,0,0,0};
 	//proba.second.copy(tab1);
 
 	//proba.first.test();
@@ -221,19 +234,20 @@ int main()
 	//{
 	//	std::cout << "dziala\n";
 	//}
+	//
 
-
-	for (auto &i : populacja)
-	{
-		if (!i.first.FirstIsFirst(i.second, zadania, 1))
-		{
-			std::cout << std::endl;
-		}
-	}
+	//for (auto &i : populacja)
+	//{
+	//	if (!i.first.FirstIsFirst(i.second, zadania, 1))
+	//	{
+	//		std::cout << std::endl;
+	//	}
+	//}
 
 // TU BYL BREAKPOINT
 //-------------------------------
 	populacja = crossing(populacja, 80, zadania, 3*sizeOfPopulation);
+	
 	for (auto &i : populacja)
 	{
 		if (!i.first.FirstIsFirst(i.second, zadania, 1))
@@ -249,7 +263,10 @@ int main()
 	fileOUT << "*** " << std::to_string(testNr) << " ***\n";
 
 	//najlepszy wynik
-	std::vector<std::pair<Timeline, Timeline>> najlepszyWynik = wybierz(populacja, 1);
+	najlepszyWynik = wybierz(populacja, 1);
+
+	int po = najlepszyWynik[0].first.TargetFnctn(najlepszyWynik[0]);
+
 	std::cout << std::endl;
 	najlepszyWynik[0].first.test();
 	std::cout << najlepszyWynik[0].first.TargetFnctn1(najlepszyWynik[0]) << std::endl;
@@ -271,11 +288,23 @@ int main()
 //	std::cout << wartFnCelu << std::endl;
 	int wartFnCelu=0;
 
-	std::cout << std::endl << "Mutacja" << std::endl;
-	populacja[0] = Mutacja(populacja[0],zadania, N, 100);
-	wartFnCelu = populacja[0].first.TargetFnctn(populacja[0]);
-	std::cout << wartFnCelu << std::endl;
+	int mut_done = 0; //zrobione mutacje
+	int pop_size = populacja.size();
+	std::vector<std::pair<Timeline, Timeline>> populacja_mut;
+	std::pair<std::pair<Timeline, Timeline>, int> instan;
+	
+		for (int i = 0; i < pop_size && mut_done < std::ceil(populacja.size() * (mut_chance / 100)); i++) {
+		instan = Mutacja(populacja[i], zadania, N, mut_chance);
+			//wartFnCelu = populacja[0].first.TargetFnctn(populacja[0]);
+			if (instan.second == 1) {
+			mut_done++;
+			std::cout << std::endl << "Mutacja " << mut_done << std::endl;
+			populacja_mut.insert(populacja_mut.end(), instan.first);	
+		}
+			//std::cout << wartFnCelu << std::endl;
+	}
 
+	fileOUT << po <<", "<<przed << std::endl;
 	fileOUT << "M1: " << M1.getS() << std::endl;
 	fileOUT << "M2: " << M2.getS() << std::endl;
 	fileOUT << M1.getM() << std::endl;

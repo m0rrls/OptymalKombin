@@ -1,3 +1,10 @@
 ﻿  JobShop.cpp
 c:\users\mariusz\documents\github\optymalkombin\jobshop\jobshop\jobshop.cpp(8): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  Crossover.cpp
+c:\users\mariusz\documents\github\optymalkombin\jobshop\jobshop\crossover.cpp(11): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\mariusz\documents\github\optymalkombin\jobshop\jobshop\crossover.cpp(13): warning C4018: '>': signed/unsigned mismatch
+c:\users\mariusz\documents\github\optymalkombin\jobshop\jobshop\crossover.cpp(47): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\mariusz\documents\github\optymalkombin\jobshop\jobshop\crossover.cpp(71): warning C4018: '<': signed/unsigned mismatch
+c:\users\mariusz\documents\github\optymalkombin\jobshop\jobshop\crossover.cpp(241): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+  Generating Code...
   JobShop.vcxproj -> C:\Users\Mariusz\Documents\GitHub\OptymalKombin\JobShop\Debug\JobShop.exe
