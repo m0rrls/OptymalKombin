@@ -230,7 +230,7 @@ std::vector<std::pair<Timeline, Timeline>> crossing(std::vector<std::pair<Timeli
 			
 			if (child[ren].first.checkMach(zadania, 1) &&
 				child[ren].second.checkMach(zadania, 2) &&
-				child[ren].first.FirstIsFirst(child[ren].second, zadania, 1))
+				child[ren].first.FirstIsFirst(child[ren].second, zadania, 1)<0)
 			{
 				ren++;
 			}
@@ -238,7 +238,7 @@ std::vector<std::pair<Timeline, Timeline>> crossing(std::vector<std::pair<Timeli
 			{
 				bool ch1 = child[ren].first.checkMach(zadania, 1);
 				bool ch2 = child[ren].second.checkMach(zadania, 2);
-				bool ch3 = child[ren].first.FirstIsFirst(child[ren].second, zadania, 1);
+				int ch3 = child[ren].first.FirstIsFirst(child[ren].second, zadania, 1);
 				ren = 0;
 				i1 = rand() % tmp.size(); //byl problem? losujemy inna pare
 				i2 = rand() % tmp.size();
@@ -255,10 +255,10 @@ std::vector<std::pair<Timeline, Timeline>> crossing(std::vector<std::pair<Timeli
 
 		if (child[0].first.checkMach(zadania, 1) &&
 			child[0].second.checkMach(zadania, 2) &&
-			child[0].first.FirstIsFirst(child[0].second, zadania, 1) &&
+			child[0].first.FirstIsFirst(child[0].second, zadania, 1)<0 &&
 			child[1].first.checkMach(zadania, 1) &&
 			child[1].second.checkMach(zadania, 2) &&
-			child[1].first.FirstIsFirst(child[1].second, zadania, 1)) //warunek sprawdzajacy poprawnosc rozwiazan
+			child[1].first.FirstIsFirst(child[1].second, zadania, 1)<0) //warunek sprawdzajacy poprawnosc rozwiazan
 		{
 			licz++;
 			std::cout << "\tdobre rozw nr "<< licz << std::endl;

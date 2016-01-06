@@ -8,7 +8,7 @@ int main()
 	srand(time(NULL));
 
 	int sizeOfPopulation = 30;
-	int testNr = 4;
+	int testNr = 5;
 	int mut_chance = 100;
 
 	std::string tasksFile = "tests/tasks.txt";
@@ -246,7 +246,7 @@ int main()
 
 // TU BYL BREAKPOINT
 //-------------------------------
-	populacja = crossing(populacja, 80, zadania, 3*sizeOfPopulation);
+	/*populacja = crossing(populacja, 80, zadania, 3*sizeOfPopulation);
 	
 	for (auto &i : populacja)
 	{
@@ -254,7 +254,7 @@ int main()
 		{
 			std::cout << std::endl;
 		}
-	}
+	}*/
 
 
 	populacja = wybierz(populacja, 10);
