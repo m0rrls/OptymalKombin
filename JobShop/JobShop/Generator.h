@@ -29,6 +29,8 @@ public:
 	//ustawienie komorki na wartosc
 	void set(int it, int val);
 
+	void copy(std::vector<int> t);
+
 protected:
 	std::vector<int> tab;
 };

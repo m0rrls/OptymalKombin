@@ -91,3 +91,8 @@ void Generator::set(int it, int val)
 {
 	tab[it] = val;
 }
+
+void Generator::copy(std::vector<int> t)
+{
+	tab = t;
+}

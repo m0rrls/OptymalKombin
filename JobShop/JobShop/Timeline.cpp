@@ -350,6 +350,7 @@ void Timeline::napraw(int pkt, std::vector<Task> zadania, int mach)
 {
 	int id = pkt;
 	std::vector<int> Tsks;	//zadania do umieszczenia
+	std::vector<int> AvTsks; //zadania kt mozna umiescic w tym momencie
 	Tsks.resize(zadania.size());
 
 	for (int i = 0; i < zadania.size(); i++)
@@ -370,6 +371,57 @@ void Timeline::napraw(int pkt, std::vector<Task> zadania, int mach)
 		else
 			x++;
 	}
+
+	int space = 0;
+	bool done = false;
+	while (!done)
+	{
+		AvTsks.clear();
+		space = 0;
+		int tmp123 = id;
+		while (tmp123 < tab.size() && tab[tmp123++] == 0)
+		{
+			space++;
+		}
+		for (int i = 0; i < Tsks.size(); i++)
+		{
+			if (zadania[Tsks[i]].get_mach() == mach && zadania[Tsks[i]].get_op1() <= space && zadania[Tsks[i]].get_rt() <= id) //op1
+				AvTsks.insert(AvTsks.begin(), Tsks[i]);
+			else if (zadania[Tsks[i]].get_mach() != mach && zadania[Tsks[i]].get_done_op1() != 0 && zadania[Tsks[i]].get_op2() <= space && zadania[Tsks[i]].get_done_op1() <= id) //op2
+				AvTsks.insert(AvTsks.begin(), Tsks[i]);
+		}
+		if (!AvTsks.empty())
+		{
+			int los = rand() % AvTsks.size();
+			int x = AvTsks[los];
+			Task z = zadania[x];
+
+			int pom = 0;
+			if (z.get_mach() == mach)
+			{
+				pom = z.get_op1();
+				zadania[x].set_done_op1(id + pom);
+				AvTsks.erase(AvTsks.begin() + los);
+				Tsks.erase(std::remove(Tsks.begin(), Tsks.end(), zadania[x].get_nr()-1), Tsks.end());
+			}
+			else if (z.get_mach() != mach)
+			{
+				pom = z.get_op2();
+				AvTsks.erase(AvTsks.begin() + los);
+				Tsks.erase(std::remove(Tsks.begin(), Tsks.end(), zadania[x].get_nr()-1), Tsks.end());
+			}
+			for (int j = id; j < id + pom; j++)
+			{
+				tab[j] = z.get_nr();
+			}
+			id += pom;
+		}
+		else
+		{
+			id++;
+		}
+		if (Tsks.empty())done = true;
+	}
 	//Tsks.erase(std::remove(Tsks.begin(), Tsks.end(), 0), Tsks.end());
 	/*
 	std::cout << "\n\n";
@@ -380,6 +432,9 @@ void Timeline::napraw(int pkt, std::vector<Task> zadania, int mach)
 	std::cout << "\n";
 	*/
 
+
+
+	/*
 	while (!Tsks.empty())
 	{
 		int i = rand() % Tsks.size();
@@ -452,6 +507,7 @@ void Timeline::napraw(int pkt, std::vector<Task> zadania, int mach)
 		}
 		Tsks.erase(std::remove(Tsks.begin(), Tsks.end(), j), Tsks.end());
 	}
+	*/
 }
 
 
@@ -704,9 +760,9 @@ bool Timeline::compareTsks(Timeline solution, int N)
 	return true;
 }
 
-void Timeline::getOp1Ends(std::vector<Task> zadania, int mach)
+std::vector<Task> Timeline::getOp1Ends(std::vector<Task> z1, int mach)
 {
-
+	std::vector<Task> zadania = z1;
 	int i = 0;
 	while (i < tab.size())
 	{
@@ -724,22 +780,26 @@ void Timeline::getOp1Ends(std::vector<Task> zadania, int mach)
 		else
 			i++;
 	}
+	return zadania;
 }
 
-bool Timeline::FirstIsFirst(Timeline otherOne, std::vector<Task> zadania, int mach)
+bool Timeline::FirstIsFirst(Timeline otherOne, std::vector<Task> z1, int mach)
 {
-
+	std::vector<Task> zadania = z1;
 	//wszystko jest git jak op1 jest zawsze przed op2, wszystkie zadania sš na timelin'ie i nie naruszono przerw
-
-	this->getOp1Ends(zadania, mach);
-	otherOne.getOp1Ends(zadania, 3 - mach);
+	for (auto &i : zadania)
+	{
+		i.reset();
+	}
+	zadania = this->getOp1Ends(zadania, mach);
+	zadania = otherOne.getOp1Ends(zadania, 3 - mach);
 	int i = 0;
 	while (i < zadania.size())
 	{
 		int j = zadania[i].get_done_op1();
 		if (zadania[i].get_mach() == mach) //jezeli op1 jest na tej maszynie
 		{
-			while (otherOne.getN(j) != zadania[i].get_nr() && j < otherOne.getSoT())
+			while (j < otherOne.getSoT() && otherOne.getN(j) != zadania[i].get_nr())
 			{
 				j++;
 			}
@@ -766,7 +826,7 @@ bool Timeline::FirstIsFirst(Timeline otherOne, std::vector<Task> zadania, int ma
 			}
 			else if ((this->whenDone(i + 1) - j) != zadania[i].get_op2())
 			{
-				std::cout << "WHEN DONE dla " << i << " : " << this->whenDone(i + 1);
+				//std::cout << "WHEN DONE dla " << i << " : " << this->whenDone(i + 1);
 				return false;
 			}
 			else

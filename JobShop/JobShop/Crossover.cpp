@@ -79,6 +79,10 @@ std::vector<std::pair<Timeline, Timeline>> crossing(std::vector<std::pair<Timeli
 				{
 					i.set_done_op1(child[ren].first.whenDone(i.get_nr()));
 				}
+				if (i.get_mach() == 1)
+				{
+					i.set_done_op1(child[ren].second.whenDone(i.get_nr()));
+				}
 			}
 
 			//std::cout << "N: " << N << std::endl;
@@ -211,6 +215,7 @@ std::vector<std::pair<Timeline, Timeline>> crossing(std::vector<std::pair<Timeli
 			}
 			if (Tsks.size() == usT)
 			{
+				zadania = child[ren].first.getOp1Ends(zadania, 1);
 				child[ren].second.del(child[ren].second.getIAftrNTsks(nrOfTsks));
 				child[ren].second.napraw(child[ren].second.getIAftrNTsks(nrOfTsks), zadania, 2);
 			}

@@ -68,7 +68,7 @@ public:
 	bool compareTsks(Timeline solution, int N);
 
 	//zebranie zakonczen op1
-	void getOp1Ends(std::vector<Task> zadania, int mach);
+	std::vector<Task> Timeline::getOp1Ends(std::vector<Task> z1, int mach);
 
 	//sprawdzanie zgodnosci z druga maszyna dla tych samych zadan
 	bool FirstIsFirst(Timeline otherOne, std::vector<Task> zadania, int mach);

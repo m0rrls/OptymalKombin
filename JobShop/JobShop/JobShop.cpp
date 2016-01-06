@@ -137,7 +137,7 @@ int main()
 	//}
 
 
-	Timeline* TimeL = new Timeline(N*N);
+	Timeline* TimeL = new Timeline(100);
 	while (!fileIN.eof() && zad[0]!='*')
 	{
 		for (int k = 0; k < 4; k++)
@@ -175,7 +175,7 @@ int main()
 	while (a < sizeOfPopulation)
 	{
 		tmpSol = TimeL->Instancja123(zadania);
-		if (TimeL->compareTsks(tmpSol.first, -1))
+		if (TimeL->compareTsks(tmpSol.first, -1) && tmpSol.first.FirstIsFirst(tmpSol.second,zadania,1))
 		{
   			populacja[a] = tmpSol;
 			a++;
@@ -209,9 +209,39 @@ int main()
 		iq++;
 	}
 
+	std::pair<Timeline, Timeline> proba;
+	std::vector<int> tab1 = {3,3,-1,4,4,4,4,0,0,-1,1,0,2,2,0};
+	proba.first.copy(tab1);
+	tab1 = { 0,3,3,3,3,1,1,4,4,4,4,2,0,0,0};
+	proba.second.copy(tab1);
+
+	proba.first.test();
+	proba.second.test();
+	if (!proba.first.FirstIsFirst(proba.second, zadania, 1))
+	{
+		std::cout << "dziala\n";
+	}
+
+
+	for (auto &i : populacja)
+	{
+		if (!i.first.FirstIsFirst(i.second, zadania, 1))
+		{
+			std::cout << std::endl;
+		}
+	}
+
 // TU BYL BREAKPOINT
 //-------------------------------
-	populacja = crossing(populacja, 80, zadania, 3*sizeOfPopulation);
+	populacja = crossing(populacja, 80, zadania, sizeOfPopulation);
+	for (auto &i : populacja)
+	{
+		if (!i.first.FirstIsFirst(i.second, zadania, 1))
+		{
+			std::cout << std::endl;
+		}
+	}
+
 
 	populacja = wybierz(populacja, 10);
 
@@ -220,7 +250,11 @@ int main()
 
 	//najlepszy wynik
 	std::vector<std::pair<Timeline, Timeline>> najlepszyWynik = wybierz(populacja, 1);
-	
+	std::cout << std::endl;
+	najlepszyWynik[0].first.test();
+	std::cout << najlepszyWynik[0].first.TargetFnctn1(najlepszyWynik[0]) << std::endl;
+	najlepszyWynik[0].second.test();
+	std::cout << najlepszyWynik[0].second.TargetFnctn2(najlepszyWynik[0]) << std::endl;
 
 	//rozw.first.test();
 	//rozw.second.test();
