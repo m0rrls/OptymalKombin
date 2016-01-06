@@ -52,9 +52,9 @@ std::pair<Timeline, Timeline> Mutacja(std::pair<Timeline, Timeline> rozw, std::v
 
 
 		std::cout << "Rozw " << std::endl;
-		//rozw.first.test();
+		rozw.first.test();
 		std::cout << std::endl;
-		//rozw.second.test();
+		rozw.second.test();
 		std::cout << "--------------------------------------" << std::endl;
 
 
@@ -170,13 +170,18 @@ std::pair<Timeline, Timeline> Mutacja(std::pair<Timeline, Timeline> rozw, std::v
 		
 
 		int zadx = 0, zady = 0, zadpom = 0;
-		zadx = kol_M1.back();		//za zadx podstawione jest zady
-		kol_M1.pop_back();
-		zady = kol_M1.front();		//za zady podstawione jest zadx
-		kol_M1.pop_front();
-		kol_M1.push_back(zady);		//zady wrzucone na koniec (czyli by³e zadx)
-		kol_M1.push_front(zadx);	//zadx wrzucone na pocz¹tek (czyli by³e zady)
-		if (zadania[zadx-1].get_mach() == 2) {
+		if (kol_M1.empty() == false) {
+			zadx = kol_M1.back();		//za zadx podstawione jest zady
+			kol_M1.pop_back();
+		}
+		if (kol_M1.empty() == false) {
+			zady = kol_M1.front();		//za zady podstawione jest zadx
+			kol_M1.pop_front();
+		}
+		if (zady != 0)	kol_M1.push_back(zady); 	//zady wrzucone na koniec (czyli by³e zadx)
+		if (zadx != 0)	kol_M1.push_front(zadx);	//zadx wrzucone na pocz¹tek (czyli by³e zady)
+		
+		if (zadania[zadx-1].get_mach() == 2 && kol_M2.empty() == false) {
 			for (itM2 = kol_M2.begin(); itM2 != kol_M2.end(); itM2++) {
 				//std::cout << *itM2 << "   ";
 				if (*itM2 == zadx) {
@@ -199,7 +204,7 @@ std::pair<Timeline, Timeline> Mutacja(std::pair<Timeline, Timeline> rozw, std::v
 		else 
 			std::cout << "Not this time1" << std::endl;
 
-		if (zadania[zady - 1].get_mach() == 1) {
+		if (zadania[zady - 1].get_mach() == 1 && kol_M2.empty() == false) {
 			for (itM2 = kol_M2.begin(); itM2 != kol_M2.end(); itM2++) 
 			{
 				//std::cout << *itM2 << "   ";
@@ -960,9 +965,9 @@ std::pair<Timeline, Timeline> Mutacja(std::pair<Timeline, Timeline> rozw, std::v
 		}
 
 		std::cout << "Jest GIT " << std::endl;
-		//tmp.first.test();
+		tmp.first.test();
 		std::cout << std::endl;
-		//tmp.second.test();
+		tmp.second.test();
 		std::cout << "--------------------------------------" << std::endl;
 
 		return tmp;
