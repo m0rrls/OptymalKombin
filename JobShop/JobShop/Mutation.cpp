@@ -2,14 +2,16 @@
 #include "Mutation.h"
 #include <algorithm>
 
-std::pair<Timeline, Timeline> Mutacja(std::pair<Timeline, Timeline> rozw, std::vector<Task> zadania1, int N, int mutChance)
+std::pair<std::pair<Timeline, Timeline>,int> Mutacja(std::pair<Timeline, Timeline> rozw, std::vector<Task> zadania1, int N, int mutChance)
 {
-	srand(time(0));
+
+	std::pair<std::pair<Timeline, Timeline>, int> instancja;
+	instancja.second = 0;
+	instancja.first = rozw;
 
 	if (rand() % 101 <= mutChance) {
 
 		//DEKLARACJE
-
 		std::vector <int> Tsks_M1;
 		std::vector <int> Tsks_M2;
 		Tsks_M1.resize(N); Tsks_M2.resize(N);
@@ -51,11 +53,11 @@ std::pair<Timeline, Timeline> Mutacja(std::pair<Timeline, Timeline> rozw, std::v
 		}
 
 
-		std::cout << "Rozw " << std::endl;
+		/*std::cout << "Rozw " << std::endl;
 		rozw.first.test();
 		std::cout << std::endl;
 		rozw.second.test();
-		std::cout << "--------------------------------------" << std::endl;
+		std::cout << "--------------------------------------" << std::endl;*/
 
 
 
@@ -111,11 +113,11 @@ std::pair<Timeline, Timeline> Mutacja(std::pair<Timeline, Timeline> rozw, std::v
 			}
 		}
 
-		std::cout <<"Po skopiowaniu poczatku "<< std::endl;
-		//tmp.first.test();
-		std::cout << std::endl;
-		//tmp.second.test();
-		std::cout << "--------------------------------------" << std::endl;
+		//std::cout <<"Po skopiowaniu poczatku "<< std::endl;
+		////tmp.first.test();
+		//std::cout << std::endl;
+		////tmp.second.test();
+		//std::cout << "--------------------------------------" << std::endl;
 		
 //NIEPOTRZEBNE I NIE DO KONCA DZIALA		
 //		tmpbegin.first.copyTimeline(tx_m1);				//kopiowanie przodu rozw M1
@@ -181,11 +183,16 @@ std::pair<Timeline, Timeline> Mutacja(std::pair<Timeline, Timeline> rozw, std::v
 		if (zady != 0)	kol_M1.push_back(zady); 	//zady wrzucone na koniec (czyli by³e zadx)
 		if (zadx != 0)	kol_M1.push_front(zadx);	//zadx wrzucone na pocz¹tek (czyli by³e zady)
 		
+		if (zadx == 0 || zady == 0) {
+			std::cout << "Coœ posz³o nie tak" << std::endl;
+			return instancja;
+		}
+
 		if (zadania[zadx-1].get_mach() == 2 && kol_M2.empty() == false) {
 			for (itM2 = kol_M2.begin(); itM2 != kol_M2.end(); itM2++) {
 				//std::cout << *itM2 << "   ";
 				if (*itM2 == zadx) {
-					std::cout << std::endl << "YES_przerzucono op2 na pocz¹tek "<<*itM2 << std::endl;
+					//std::cout << std::endl << "YES_przerzucono op2 na pocz¹tek "<<*itM2 << std::endl;
 					kol_M2.erase(itM2);
 					for (int i = tx_m2 + 1;i < tx_m2 + zadania[zadx - 1].get_op1() + 1; i++) 
 					{
@@ -201,8 +208,8 @@ std::pair<Timeline, Timeline> Mutacja(std::pair<Timeline, Timeline> rozw, std::v
 				}
 			}
 		}
-		else 
-			std::cout << "Not this time1" << std::endl;
+		/*else 
+			std::cout << "Not this time1" << std::endl;*/
 
 		if (zadania[zady - 1].get_mach() == 1 && kol_M2.empty() == false) {
 			for (itM2 = kol_M2.begin(); itM2 != kol_M2.end(); itM2++) 
@@ -211,7 +218,7 @@ std::pair<Timeline, Timeline> Mutacja(std::pair<Timeline, Timeline> rozw, std::v
 				if (*itM2 == zady) 
 				{
 					int pom;
-					std::cout << std::endl << "YES_przerzucono op1 na koniec  " << *itM2<< std::endl;
+					//std::cout << std::endl << "YES_przerzucono op1 na koniec  " << *itM2<< std::endl;
 					itM2_po = kol_po_M2.begin();
 					pom = *itM2;
 					kol_M2.erase(itM2);
@@ -220,14 +227,14 @@ std::pair<Timeline, Timeline> Mutacja(std::pair<Timeline, Timeline> rozw, std::v
 				}
 			}
 		}
-		else
-			std::cout << "Not this time2" << std::endl;
+		/*else
+			std::cout << "Not this time2" << std::endl;*/
 
-		std::cout << "Po przerzuceniu zadan " << std::endl;
-		//tmp.first.test();
-		std::cout << std::endl;
-		//tmp.second.test();
-		std::cout << "--------------------------------------" << std::endl;
+		//std::cout << "Po przerzuceniu zadan " << std::endl;
+		////tmp.first.test();
+		//std::cout << std::endl;
+		////tmp.second.test();
+		//std::cout << "--------------------------------------" << std::endl;
 
 		int zad_m1 = 0, zad_m2 = 0;
 
@@ -579,11 +586,11 @@ std::pair<Timeline, Timeline> Mutacja(std::pair<Timeline, Timeline> rozw, std::v
 
 		}
 
-		std::cout << "Po pierwszej kolejce zadan " << std::endl;
+		//std::cout << "Po pierwszej kolejce zadan " << std::endl;
 		//tmp.first.test();
-		std::cout << std::endl;
+		//std::cout << std::endl;
 		//tmp.second.test();
-		std::cout << "--------------------------------------" << std::endl;
+		//std::cout << "--------------------------------------" << std::endl;
 
 		while (kol_po_M1.empty() == false || kol_po_M2.empty() == false)
 		{
@@ -964,13 +971,15 @@ std::pair<Timeline, Timeline> Mutacja(std::pair<Timeline, Timeline> rozw, std::v
 
 		}
 
-		std::cout << "Jest GIT " << std::endl;
+		/*std::cout << "Jest GIT " << std::endl;
 		tmp.first.test();
 		std::cout << std::endl;
 		tmp.second.test();
-		std::cout << "--------------------------------------" << std::endl;
+		std::cout << "--------------------------------------" << std::endl;*/
 
-		return tmp;
+		instancja.first = tmp;
+		instancja.second = 1;
+		return instancja;
 	}
-	return rozw;
+	return instancja;
 }

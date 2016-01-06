@@ -9,6 +9,7 @@ int main()
 
 	int sizeOfPopulation = 50;
 	int testNr = 5;
+	int mut_chance = 100;
 
 	std::string tasksFile = "tests/tasks.txt";
 	std::string resFile = "tests/results.txt";
@@ -270,12 +271,22 @@ int main()
 //	std::cout << wartFnCelu1 + wartFnCelu2 << std::endl;
 //	std::cout << wartFnCelu << std::endl;
 	int wartFnCelu=0;
+	
+	int mut_done=0; //zrobione mutacje
+	int pop_size = populacja.size();
+	std::vector<std::pair<Timeline, Timeline>> populacja_mut;
+	std::pair<std::pair<Timeline, Timeline>, int> instan;
 
-	std::cout << std::endl << "Mutacja" << std::endl;
-	populacja[0] = Mutacja(populacja[0],zadania, N, 100);
-	wartFnCelu = populacja[0].first.TargetFnctn(populacja[0]);
-	std::cout << wartFnCelu << std::endl;
-
+	for (int i = 0;i < pop_size && mut_done < std::ceil(populacja.size() * (mut_chance / 100));i++) {
+	instan = Mutacja(populacja[i],zadania, N, mut_chance);
+	//wartFnCelu = populacja[0].first.TargetFnctn(populacja[0]);
+	if (instan.second==1) {
+		mut_done++;
+		std::cout << std::endl << "Mutacja " <<mut_done<< std::endl;
+		populacja_mut.insert(populacja_mut.end(), instan.first);
+	}
+	//std::cout << wartFnCelu << std::endl;
+	}
 	fileOUT << "M1: " << M1.getS() << std::endl;
 	fileOUT << "M2: " << M2.getS() << std::endl;
 	fileOUT << M1.getM() << std::endl;
