@@ -17,7 +17,7 @@ std::pair<Timeline, Timeline> Mutacja(std::pair<Timeline, Timeline> rozw, std::v
 		std::vector <int> usedTasks_M2;
 		std::pair<Timeline, Timeline> rozw1 = rozw;
 		std::vector<Task> zadania = zadania1;
-		Timeline *newTimeline = new Timeline(N*N);
+		Timeline *newTimeline = new Timeline(rozw.first.getSoT());
 		std::pair<Timeline, Timeline> tmpbegin;
 		tmpbegin.first = *newTimeline;
 		tmpbegin.second = *newTimeline;
@@ -39,10 +39,25 @@ std::pair<Timeline, Timeline> Mutacja(std::pair<Timeline, Timeline> rozw, std::v
 
 									//LOSOWANIE ZADAÑ
 		x = rand() % (N-1) + 2;				//które zadanie od pocz¹tku
-		y = rand() % (N-1) + 2;				//które zadanie od pocz¹tku
-		while (x == y)y = rand() % (N-1)+2;
-
+		y = rand() % (N/5) + 1;				//które zadanie od pocz¹tku
+		if (x + y > N) y = x - y;
+		else y = x + y;
 		if (x > y) { pom = x; x = y; y = pom; }
+		for (int i = 0;i < rozw.first.getSoT();i++) {
+			if (rozw.first.getN(i)== -1)
+			{
+				tmp.first.set(i, -1);
+			}
+		}
+
+
+		std::cout << "Rozw " << std::endl;
+		//rozw.first.test();
+		std::cout << std::endl;
+		//rozw.second.test();
+		std::cout << "--------------------------------------" << std::endl;
+
+
 
 		//NR ZADAN
 		xzad = rozw1.first.get_nr_zad(x);
@@ -78,12 +93,29 @@ std::pair<Timeline, Timeline> Mutacja(std::pair<Timeline, Timeline> rozw, std::v
 		}
 		// KOPIOWANIE ROZW PRZED MIEJSCEM ZAMIANY
 
-		for (int i = 0;i < tx_m1 +1;i++) {
+		for (int i = 0;i < tx_m1 ;i++) {
 			tmp.first.set(i, rozw1.first.getN(i));
 		}
 		for (int i = 0;i < tx_m2 + 1;i++) {
 			tmp.second.set(i, rozw1.second.getN(i));
 		}
+
+		for (int i = 0;i < tmp.first.getSoT()-1;i++) {
+			if (tmp.first.getN(i)>0 && tmp.first.getN(i + 1) != tmp.first.getN(i)) {
+				if (zadania[tmp.first.getN(i) - 1].get_mach() == 1) zadania[tmp.first.getN(i) - 1].set_done_op1(i);
+			}
+		}
+		for (int i = 0;i < tmp.second.getSoT()-1;i++) {
+			if (tmp.second.getN(i)>0 && tmp.second.getN(i + 1) != tmp.second.getN(i)) {
+				if (zadania[tmp.second.getN(i) - 1].get_mach() == 2) zadania[tmp.second.getN(i) - 1].set_done_op1(i);
+			}
+		}
+
+		std::cout <<"Po skopiowaniu poczatku "<< std::endl;
+		//tmp.first.test();
+		std::cout << std::endl;
+		//tmp.second.test();
+		std::cout << "--------------------------------------" << std::endl;
 		
 //NIEPOTRZEBNE I NIE DO KONCA DZIALA		
 //		tmpbegin.first.copyTimeline(tx_m1);				//kopiowanie przodu rozw M1
@@ -94,9 +126,6 @@ std::pair<Timeline, Timeline> Mutacja(std::pair<Timeline, Timeline> rozw, std::v
 														//		tmpend.first.copyTimelineend(ty_m1 + 1);		//kopiowanie ty³u rozwi¹zania M1
 														//		tmpend.second.copyTimelineendM2(ty_m1 + 1);		//kopiowanie tylu rozw M2
 
-		tmp.first.test();
-		std::cout<<std::endl;
-		tmp.second.test();
 
 		//TWORZENIE KOLEJKI ZADAN W OBSZARZE ZAMIANY
 		kol_M1.clear();
@@ -138,8 +167,7 @@ std::pair<Timeline, Timeline> Mutacja(std::pair<Timeline, Timeline> rozw, std::v
 		}
 
 		//MODYFIKOWANIE KOLEJKI, TAK ABY GDY SA OBIE OPERACJE W OBSZARZE ZAMIANY, TO op1 BYLO PIERWSZE
-		//kol_M1
-		//kol_M2
+		
 
 		int zadx = 0, zady = 0, zadpom = 0;
 		zadx = kol_M1.back();		//za zadx podstawione jest zady
@@ -168,7 +196,7 @@ std::pair<Timeline, Timeline> Mutacja(std::pair<Timeline, Timeline> rozw, std::v
 				}
 			}
 		}
-		else
+		else 
 			std::cout << "Not this time1" << std::endl;
 
 		if (zadania[zady - 1].get_mach() == 1) {
@@ -190,14 +218,754 @@ std::pair<Timeline, Timeline> Mutacja(std::pair<Timeline, Timeline> rozw, std::v
 		else
 			std::cout << "Not this time2" << std::endl;
 
+		std::cout << "Po przerzuceniu zadan " << std::endl;
+		//tmp.first.test();
 		std::cout << std::endl;
-		tmp.first.test();
-		std::cout << std::endl;
-		std::cout << std::endl;
-		tmp.second.test();
+		//tmp.second.test();
+		std::cout << "--------------------------------------" << std::endl;
+
+		int zad_m1 = 0, zad_m2 = 0;
+
+		while (kol_M1.empty() == false || kol_M2.empty() == false) 
+		{
+
+			if (kol_M1.empty() == false) { zad_m1 = kol_M1.front();}
+			if (kol_M2.empty() == false) { zad_m2 = kol_M2.front();}
+//------------------------
+			if (kol_M2.empty() == true) //robi zadania z kolejki M1
+			{
+				int dlg = zadania[zad_m1 - 1].get_op1();;		// d³ugoœæ trwania zadania
+				if (zadania[zad_m1 - 1].get_mach() == 2) dlg = zadania[zad_m1 - 1].get_op2();
+
+				int id = zadania[zad_m1-1].get_rt();
+				if (tx_m1 + 1 >  zadania[zad_m1-1].get_rt())id = tx_m1 + 1;
+				if ((zadania[zad_m1 - 1].get_mach() == 2) && (id < zadania[zad_m1 - 1].get_done_op1())) id = zadania[zad_m1 - 1].get_done_op1();
+				int empt = 0;
+				while (empt == 0) //szukaj miejsca gdzie mozna umiescic zadanie
+				{
+
+					int c = 0;
+					while (tmp.first.getN(id) != 0)id++; //przeszukiwany poczatek jest pusty
+					if (dlg>1) //jezeli zadanie jest dluzsze niz 1 jednostka czasu to sprawd czy wejdzie
+					{
+						while ((tmp.first.getN(id + dlg - 1) != 0))id += dlg; // przeszukiwany koniec jest pusty
+						for (c = id + 1; (c < id + dlg - 1) && tmp.first.getN(c) == 0; c++); //przejscie po zerach od poczatku do konca
+						if ((c - (id + 1)) == dlg - 2) // jezeli same zera
+						{
+							empt = 1;
+						}
+						else //jezeli nie to przesun do miejsca gdzie jest ostatnie zero
+						{
+							id = c;
+						}
+					}
+					else empt = 1;
+				}
+				int c = id;
+				while (c < (id + dlg))
+				{
+					tmp.first.set(c, zadania[zad_m1 - 1].get_nr());
+					c++;
+				}
+				if(zadania[zad_m1-1].get_mach()==1)  zadania[zad_m1 - 1].set_done_op1(id + dlg); //ustaw op1 na done
+				kol_M1.pop_front();
+			}
+//------------------------------
+			else if (kol_M1.empty() == true) //robi zadania z kolejki M2
+			{
+				int dlg2 = zadania[zad_m2 - 1].get_op2();;		// d³ugoœæ trwania zadania
+				if (zadania[zad_m2 - 1].get_mach() == 2) dlg2 = zadania[zad_m2 - 1].get_op1();
+				int id2 = zadania[zad_m2 - 1].get_rt();
+				if (tx_m2 + 1 >  zadania[zad_m2 - 1].get_rt())id2 = tx_m2 + 1;
+				if ((zadania[zad_m2 - 1].get_mach() == 1) && (id2 < zadania[zad_m2 - 1].get_done_op1())) id2 = zadania[zad_m2 - 1].get_done_op1()+1;
+				int empt2 = 0;
+				while (empt2 == 0) //szukaj miejsca gdzie mozna umiescic zadanie
+				{
+
+					int c2 = 0;
+					while (tmp.second.getN(id2) != 0)id2++; //przeszukiwany poczatek jest pusty
+					if (dlg2>1) //jezeli zadanie jest dluzsze niz 1 jednostka czasu to sprawd czy wejdzie
+					{
+						while ((tmp.second.getN(id2 + dlg2 - 1) != 0))id2 += dlg2; // przeszukiwany koniec jest pusty
+						for (c2 = id2 + 1; (c2 < id2 + dlg2 - 1) && tmp.second.getN(c2) == 0; c2++); //przejscie po zerach od poczatku do konca
+						if ((c2 - (id2 + 1)) == dlg2 - 2) // jezeli same zera
+						{
+							empt2 = 1;
+						}
+						else //jezeli nie to przesun do miejsca gdzie jest ostatnie zero
+						{
+							id2 = c2;
+						}
+					}
+					else empt2 = 1;
+				}
+				int c2 = id2;
+				while (c2 < (id2 + dlg2))
+				{
+					tmp.second.set(c2, zadania[zad_m2 - 1].get_nr());
+					c2++;
+				}
+				if (zadania[zad_m2 - 1].get_mach() == 2)  zadania[zad_m2 - 1].set_done_op1(id2 + dlg2); //ustaw op1 na done
+				kol_M2.pop_front();
+			}
+//------------------------------------------------
+			else if ((zadania[zad_m1 - 1].get_mach() == 1)&&(zadania[zad_m2-1].get_mach()==1)) //zadanie na M1 jest op1, a zadanie na M2 op2
+			{
+				int dlg = zadania[zad_m1 - 1].get_op1();;		// d³ugoœæ trwania zadania
+				if (zadania[zad_m1 - 1].get_mach() == 2) dlg = zadania[zad_m1 - 1].get_op2();
+
+				int id = zadania[zad_m1 - 1].get_rt();
+				if (tx_m1 + 1 >  zadania[zad_m1 - 1].get_rt())id = tx_m1 + 1;
+				if ((zadania[zad_m1 - 1].get_mach() == 2) && (id < zadania[zad_m1 - 1].get_done_op1())) id = zadania[zad_m1 - 1].get_done_op1()+1;
+				int empt = 0;
+				while (empt == 0) //szukaj miejsca gdzie mozna umiescic zadanie
+				{
+
+					int c = 0;
+					while (tmp.first.getN(id) != 0)id++; //przeszukiwany poczatek jest pusty
+					if (dlg>1) //jezeli zadanie jest dluzsze niz 1 jednostka czasu to sprawd czy wejdzie
+					{
+						while ((tmp.first.getN(id + dlg - 1) != 0))id += dlg; // przeszukiwany koniec jest pusty
+						for (c = id + 1; (c < id + dlg - 1) && tmp.first.getN(c) == 0; c++); //przejscie po zerach od poczatku do konca
+						if ((c - (id + 1)) == dlg - 2) // jezeli same zera
+						{
+							empt = 1;
+						}
+						else //jezeli nie to przesun do miejsca gdzie jest ostatnie zero
+						{
+							id = c;
+						}
+					}
+					else empt = 1;
+				}
+				int c = id;
+				while (c < (id + dlg))
+				{
+					tmp.first.set(c, zadania[zad_m1 - 1].get_nr());
+					c++;
+				}
+				if (zadania[zad_m1 - 1].get_mach() == 1)  zadania[zad_m1 - 1].set_done_op1(id + dlg); //ustaw op1 na done
+				kol_M1.pop_front();
+
+				int dlg2 = zadania[zad_m2 - 1].get_op2();;		// d³ugoœæ trwania zadania
+				if (zadania[zad_m2 - 1].get_mach() == 2) dlg2 = zadania[zad_m2 - 1].get_op1();
+				int id2 = zadania[zad_m2 - 1].get_rt();
+				if (tx_m2 + 1 >  zadania[zad_m2 - 1].get_rt())id2 = tx_m2 + 1;
+				if ((zadania[zad_m2 - 1].get_mach() == 1) && (id2 < zadania[zad_m2 - 1].get_done_op1())) id2 = zadania[zad_m2 - 1].get_done_op1()+1;
+				int empt2 = 0;
+				while (empt2 == 0) //szukaj miejsca gdzie mozna umiescic zadanie
+				{
+
+					int c2 = 0;
+					while (tmp.second.getN(id2) != 0)id2++; //przeszukiwany poczatek jest pusty
+					if (dlg2>1) //jezeli zadanie jest dluzsze niz 1 jednostka czasu to sprawd czy wejdzie
+					{
+						while ((tmp.second.getN(id2 + dlg2 - 1) != 0))id2 += dlg2; // przeszukiwany koniec jest pusty
+						for (c2 = id2 + 1; (c2 < id2 + dlg2 - 1) && tmp.second.getN(c2) == 0; c2++); //przejscie po zerach od poczatku do konca
+						if ((c2 - (id2 + 1)) == dlg2 - 2) // jezeli same zera
+						{
+							empt2 = 1;
+						}
+						else //jezeli nie to przesun do miejsca gdzie jest ostatnie zero
+						{
+							id2 = c2;
+						}
+					}
+					else empt2 = 1;
+				}
+				int c2 = id2;
+				while (c2 < (id2 + dlg2))
+				{
+					tmp.second.set(c2, zadania[zad_m2 - 1].get_nr());
+					c2++;
+				}
+				if (zadania[zad_m2 - 1].get_mach() == 2)  zadania[zad_m2 - 1].set_done_op1(id2 + dlg2); //ustaw op1 na done
+				kol_M2.pop_front();
 
 
-		return rozw1;
+			}
+//------------------------------------------------------			
+			else if ((zadania[zad_m1 - 1].get_mach() == 2) && (zadania[zad_m2 - 1].get_mach() == 2)) //zadanie na M2 jest op1, a zadanie na M1 op2
+			{
+				int dlg2 = zadania[zad_m2 - 1].get_op2();;		// d³ugoœæ trwania zadania
+				if (zadania[zad_m2 - 1].get_mach() == 2) dlg2 = zadania[zad_m2 - 1].get_op1();
+				int id2 = zadania[zad_m2 - 1].get_rt();
+				if (tx_m2 + 1 >  zadania[zad_m2 - 1].get_rt())id2 = tx_m2 + 1;
+				if ((zadania[zad_m2 - 1].get_mach() == 1) && (id2 < zadania[zad_m2 - 1].get_done_op1())) id2 = zadania[zad_m2 - 1].get_done_op1()+1;
+				int empt2 = 0;
+				while (empt2 == 0) //szukaj miejsca gdzie mozna umiescic zadanie
+				{
+
+					int c2 = 0;
+					while (tmp.second.getN(id2) != 0)id2++; //przeszukiwany poczatek jest pusty
+					if (dlg2>1) //jezeli zadanie jest dluzsze niz 1 jednostka czasu to sprawd czy wejdzie
+					{
+						while ((tmp.second.getN(id2 + dlg2 - 1) != 0))id2 += dlg2; // przeszukiwany koniec jest pusty
+						for (c2 = id2 + 1; (c2 < id2 + dlg2 - 1) && tmp.second.getN(c2) == 0; c2++); //przejscie po zerach od poczatku do konca
+						if ((c2 - (id2 + 1)) == dlg2 - 2) // jezeli same zera
+						{
+							empt2 = 1;
+						}
+						else //jezeli nie to przesun do miejsca gdzie jest ostatnie zero
+						{
+							id2 = c2;
+						}
+					}
+					else empt2 = 1;
+				}
+				int c2 = id2;
+				while (c2 < (id2 + dlg2))
+				{
+					tmp.second.set(c2, zadania[zad_m2 - 1].get_nr());
+					c2++;
+				}
+				if (zadania[zad_m2 - 1].get_mach() == 2)  zadania[zad_m2 - 1].set_done_op1(id2 + dlg2); //ustaw op1 na done
+				kol_M2.pop_front();
+
+			}
+//------------------------------------------------------
+			else if ((zadania[zad_m1 - 1].get_mach() == 1) && (zadania[zad_m2 - 1].get_mach() == 2)) //oba zadania s¹ op1
+			{
+				int dlg = zadania[zad_m1 - 1].get_op1();;		// d³ugoœæ trwania zadania
+				if (zadania[zad_m1 - 1].get_mach() == 2) dlg = zadania[zad_m1 - 1].get_op2();
+
+				int id = zadania[zad_m1 - 1].get_rt();
+				if (tx_m1 + 1 >  zadania[zad_m1 - 1].get_rt())id = tx_m1 + 1;
+				if ((zadania[zad_m1 - 1].get_mach() == 2) && (id < zadania[zad_m1 - 1].get_done_op1())) id = zadania[zad_m1 - 1].get_done_op1()+1;
+				int empt = 0;
+				while (empt == 0) //szukaj miejsca gdzie mozna umiescic zadanie
+				{
+
+					int c = 0;
+					while (tmp.first.getN(id) != 0)id++; //przeszukiwany poczatek jest pusty
+					if (dlg>1) //jezeli zadanie jest dluzsze niz 1 jednostka czasu to sprawd czy wejdzie
+					{
+						while ((tmp.first.getN(id + dlg - 1) != 0))id += dlg; // przeszukiwany koniec jest pusty
+						for (c = id + 1; (c < id + dlg - 1) && tmp.first.getN(c) == 0; c++); //przejscie po zerach od poczatku do konca
+						if ((c - (id + 1)) == dlg - 2) // jezeli same zera
+						{
+							empt = 1;
+						}
+						else //jezeli nie to przesun do miejsca gdzie jest ostatnie zero
+						{
+							id = c;
+						}
+					}
+					else empt = 1;
+				}
+				int c = id;
+				while (c < (id + dlg))
+				{
+					tmp.first.set(c, zadania[zad_m1 - 1].get_nr());
+					c++;
+				}
+				if (zadania[zad_m1 - 1].get_mach() == 1)  zadania[zad_m1 - 1].set_done_op1(id + dlg); //ustaw op1 na done
+				kol_M1.pop_front();
+				
+				int dlg2 = zadania[zad_m2 - 1].get_op2();;		// d³ugoœæ trwania zadania
+				if (zadania[zad_m2 - 1].get_mach() == 2) dlg2 = zadania[zad_m2 - 1].get_op1();
+				int id2 = zadania[zad_m2 - 1].get_rt();
+				if (tx_m2 + 1 >  zadania[zad_m2 - 1].get_rt())id2 = tx_m2 + 1;
+				if ((zadania[zad_m2 - 1].get_mach() == 1) && (id2 < zadania[zad_m2 - 1].get_done_op1())) id2 = zadania[zad_m2 - 1].get_done_op1()+1;
+				int empt2 = 0;
+				while (empt2 == 0) //szukaj miejsca gdzie mozna umiescic zadanie
+				{
+
+					int c2 = 0;
+					while (tmp.second.getN(id2) != 0)id2++; //przeszukiwany poczatek jest pusty
+					if (dlg2>1) //jezeli zadanie jest dluzsze niz 1 jednostka czasu to sprawd czy wejdzie
+					{
+						while ((tmp.second.getN(id2 + dlg2 - 1) != 0))id2 += dlg2; // przeszukiwany koniec jest pusty
+						for (c2 = id2 + 1; (c2 < id2 + dlg2 - 1) && tmp.second.getN(c2) == 0; c2++); //przejscie po zerach od poczatku do konca
+						if ((c2 - (id2 + 1)) == dlg2 - 2) // jezeli same zera
+						{
+							empt2 = 1;
+						}
+						else //jezeli nie to przesun do miejsca gdzie jest ostatnie zero
+						{
+							id2 = c2;
+						}
+					}
+					else empt2 = 1;
+				}
+				int c2 = id2;
+				while (c2 < (id2 + dlg2))
+				{
+					tmp.second.set(c2, zadania[zad_m2 - 1].get_nr());
+					c2++;
+				}
+				if (zadania[zad_m2 - 1].get_mach() == 2)  zadania[zad_m2 - 1].set_done_op1(id2 + dlg2); //ustaw op1 na done
+				kol_M2.pop_front();
+			}
+			else if ((zadania[zad_m1 - 1].get_mach() == 2) && (zadania[zad_m2 - 1].get_mach() == 1)) //oba zadania s¹ op2
+			{
+
+				int dlg = zadania[zad_m1 - 1].get_op1();;		// d³ugoœæ trwania zadania
+				if (zadania[zad_m1 - 1].get_mach() == 2) dlg = zadania[zad_m1 - 1].get_op2();
+
+				int id = zadania[zad_m1 - 1].get_rt();
+				if (tx_m1 + 1 >  zadania[zad_m1 - 1].get_rt())id = tx_m1 + 1;
+				if ((zadania[zad_m1 - 1].get_mach() == 2) && (id < zadania[zad_m1 - 1].get_done_op1())) id = zadania[zad_m1 - 1].get_done_op1()+1;
+				int empt = 0;
+				while (empt == 0) //szukaj miejsca gdzie mozna umiescic zadanie
+				{
+
+					int c = 0;
+					while (tmp.first.getN(id) != 0)id++; //przeszukiwany poczatek jest pusty
+					if (dlg>1) //jezeli zadanie jest dluzsze niz 1 jednostka czasu to sprawd czy wejdzie
+					{
+						while ((tmp.first.getN(id + dlg - 1) != 0))id += dlg; // przeszukiwany koniec jest pusty
+						for (c = id + 1; (c < id + dlg - 1) && tmp.first.getN(c) == 0; c++); //przejscie po zerach od poczatku do konca
+						if ((c - (id + 1)) == dlg - 2) // jezeli same zera
+						{
+							empt = 1;
+						}
+						else //jezeli nie to przesun do miejsca gdzie jest ostatnie zero
+						{
+							id = c;
+						}
+					}
+					else empt = 1;
+				}
+				int c = id;
+				while (c < (id + dlg))
+				{
+					tmp.first.set(c, zadania[zad_m1 - 1].get_nr());
+					c++;
+				}
+				if (zadania[zad_m1 - 1].get_mach() == 1)  zadania[zad_m1 - 1].set_done_op1(id + dlg); //ustaw op1 na done
+				kol_M1.pop_front();
+
+				int dlg2 = zadania[zad_m2 - 1].get_op2();;		// d³ugoœæ trwania zadania
+				if (zadania[zad_m2 - 1].get_mach() == 2) dlg2 = zadania[zad_m2 - 1].get_op1();
+				int id2 = zadania[zad_m2 - 1].get_rt();
+				if (tx_m2 + 1 >  zadania[zad_m2 - 1].get_rt())id2 = tx_m2 + 1;
+				if ((zadania[zad_m2 - 1].get_mach() == 1) && (id2 < zadania[zad_m2 - 1].get_done_op1())) id2 = zadania[zad_m2 - 1].get_done_op1()+1;
+				int empt2 = 0;
+				while (empt2 == 0) //szukaj miejsca gdzie mozna umiescic zadanie
+				{
+
+					int c2 = 0;
+					while (tmp.second.getN(id2) != 0)id2++; //przeszukiwany poczatek jest pusty
+					if (dlg2>1) //jezeli zadanie jest dluzsze niz 1 jednostka czasu to sprawd czy wejdzie
+					{
+						while ((tmp.second.getN(id2 + dlg2 - 1) != 0))id2 += dlg2; // przeszukiwany koniec jest pusty
+						for (c2 = id2 + 1; (c2 < id2 + dlg2 - 1) && tmp.second.getN(c2) == 0; c2++); //przejscie po zerach od poczatku do konca
+						if ((c2 - (id2 + 1)) == dlg2 - 2) // jezeli same zera
+						{
+							empt2 = 1;
+						}
+						else //jezeli nie to przesun do miejsca gdzie jest ostatnie zero
+						{
+							id2 = c2;
+						}
+					}
+					else empt2 = 1;
+				}
+				int c2 = id2;
+				while (c2 < (id2 + dlg2))
+				{
+					tmp.second.set(c2, zadania[zad_m2 - 1].get_nr());
+					c2++;
+				}
+				if (zadania[zad_m2 - 1].get_mach() == 2)  zadania[zad_m2 - 1].set_done_op1(id2 + dlg2); //ustaw op1 na done
+				kol_M2.pop_front();
+			}
+
+		}
+
+		std::cout << "Po pierwszej kolejce zadan " << std::endl;
+		//tmp.first.test();
+		std::cout << std::endl;
+		//tmp.second.test();
+		std::cout << "--------------------------------------" << std::endl;
+
+		while (kol_po_M1.empty() == false || kol_po_M2.empty() == false)
+		{
+
+			if (kol_po_M1.empty() == false) { zad_m1 = kol_po_M1.front(); }
+			if (kol_po_M2.empty() == false) { zad_m2 = kol_po_M2.front(); }
+			//------------------------
+			if (kol_po_M2.empty() == true) //robi zadania z kolejki M1
+			{
+				int dlg = zadania[zad_m1 - 1].get_op1();;		// d³ugoœæ trwania zadania
+				if (zadania[zad_m1 - 1].get_mach() == 2) dlg = zadania[zad_m1 - 1].get_op2();
+				int id = zadania[zad_m1 - 1].get_rt();
+				if (tx_m1 + 1 >  zadania[zad_m1 - 1].get_rt())id = tx_m1 + 1;
+				if ((zadania[zad_m1 - 1].get_mach() == 2) && (id < zadania[zad_m1 - 1].get_done_op1())) id = zadania[zad_m1 - 1].get_done_op1()+1;
+				int empt = 0;
+				while (empt == 0) //szukaj miejsca gdzie mozna umiescic zadanie
+				{
+
+					int c = 0;
+					while (tmp.first.getN(id) != 0)id++; //przeszukiwany poczatek jest pusty
+					if (dlg>1) //jezeli zadanie jest dluzsze niz 1 jednostka czasu to sprawd czy wejdzie
+					{
+						while ((tmp.first.getN(id + dlg - 1) != 0))id += dlg; // przeszukiwany koniec jest pusty
+						for (c = id + 1; (c < id + dlg - 1) && tmp.first.getN(c) == 0; c++); //przejscie po zerach od poczatku do konca
+						if ((c - (id + 1)) == dlg - 2) // jezeli same zera
+						{
+							empt = 1;
+						}
+						else //jezeli nie to przesun do miejsca gdzie jest ostatnie zero
+						{
+							id = c;
+						}
+					}
+					else empt = 1;
+				}
+				int c = id;
+				while (c < (id + dlg))
+				{
+					tmp.first.set(c, zadania[zad_m1 - 1].get_nr());
+					c++;
+				}
+				if (zadania[zad_m1 - 1].get_mach() == 1)  zadania[zad_m1 - 1].set_done_op1(id + dlg); //ustaw op1 na done
+				kol_po_M1.pop_front();
+			}
+			//------------------------------
+			else if (kol_po_M1.empty() == true) //robi zadania z kolejki M2
+			{
+				int dlg2 = zadania[zad_m2 - 1].get_op2();;		// d³ugoœæ trwania zadania
+				if (zadania[zad_m2 - 1].get_mach() == 2) dlg2 = zadania[zad_m2 - 1].get_op1();
+				int id2 = zadania[zad_m2 - 1].get_rt();
+				if (tx_m2 + 1 >  zadania[zad_m2 - 1].get_rt())id2 = tx_m2 + 1;
+				if ((zadania[zad_m2 - 1].get_mach() == 1) && (id2 < zadania[zad_m2 - 1].get_done_op1())) id2 = zadania[zad_m2 - 1].get_done_op1()+1;
+				int empt2 = 0;
+				while (empt2 == 0) //szukaj miejsca gdzie mozna umiescic zadanie
+				{
+
+					int c2 = 0;
+					while (tmp.second.getN(id2) != 0)id2++; //przeszukiwany poczatek jest pusty
+					if (dlg2>1) //jezeli zadanie jest dluzsze niz 1 jednostka czasu to sprawd czy wejdzie
+					{
+						while ((tmp.second.getN(id2 + dlg2 - 1) != 0))id2 += dlg2; // przeszukiwany koniec jest pusty
+						for (c2 = id2 + 1; (c2 < id2 + dlg2 - 1) && tmp.second.getN(c2) == 0; c2++); //przejscie po zerach od poczatku do konca
+						if ((c2 - (id2 + 1)) == dlg2 - 2) // jezeli same zera
+						{
+							empt2 = 1;
+						}
+						else //jezeli nie to przesun do miejsca gdzie jest ostatnie zero
+						{
+							id2 = c2;
+						}
+					}
+					else empt2 = 1;
+				}
+				int c2 = id2;
+				while (c2 < (id2 + zadania[zad_m2 - 1].get_op1()))
+				{
+					tmp.second.set(c2, zadania[zad_m2 - 1].get_nr());
+					c2++;
+				}
+				if (zadania[zad_m2 - 1].get_mach() == 2)  zadania[zad_m2 - 1].set_done_op1(id2 + dlg2); //ustaw op1 na done
+				kol_po_M2.pop_front();
+			}
+			//------------------------------------------------
+			else if ((zadania[zad_m1 - 1].get_mach() == 1) && (zadania[zad_m2 - 1].get_mach() == 1)) //zadanie na M1 jest op1, a zadanie na M2 op2
+			{
+
+				int dlg = zadania[zad_m1 - 1].get_op1();;		// d³ugoœæ trwania zadania
+				if (zadania[zad_m1 - 1].get_mach() == 2) dlg = zadania[zad_m1 - 1].get_op2();
+				int id = zadania[zad_m1 - 1].get_rt();
+				if (tx_m1 + 1 >  zadania[zad_m1 - 1].get_rt())id = tx_m1 + 1;
+				if ((zadania[zad_m1 - 1].get_mach() == 2) && (id < zadania[zad_m1 - 1].get_done_op1())) id = zadania[zad_m1 - 1].get_done_op1()+1;
+				int empt = 0;
+				while (empt == 0) //szukaj miejsca gdzie mozna umiescic zadanie
+				{
+
+					int c = 0;
+					while (tmp.first.getN(id) != 0)id++; //przeszukiwany poczatek jest pusty
+					if (dlg>1) //jezeli zadanie jest dluzsze niz 1 jednostka czasu to sprawd czy wejdzie
+					{
+						while ((tmp.first.getN(id + dlg - 1) != 0))id += dlg; // przeszukiwany koniec jest pusty
+						for (c = id + 1; (c < id + dlg - 1) && tmp.first.getN(c) == 0; c++); //przejscie po zerach od poczatku do konca
+						if ((c - (id + 1)) == dlg - 2) // jezeli same zera
+						{
+							empt = 1;
+						}
+						else //jezeli nie to przesun do miejsca gdzie jest ostatnie zero
+						{
+							id = c;
+						}
+					}
+					else empt = 1;
+				}
+				int c = id;
+				while (c < (id + dlg))
+				{
+					tmp.first.set(c, zadania[zad_m1 - 1].get_nr());
+					c++;
+				}
+				if (zadania[zad_m1 - 1].get_mach() == 1)  zadania[zad_m1 - 1].set_done_op1(id + dlg); //ustaw op1 na done
+				kol_po_M1.pop_front();
+
+				int dlg2 = zadania[zad_m2 - 1].get_op2();;		// d³ugoœæ trwania zadania
+				if (zadania[zad_m2 - 1].get_mach() == 2) dlg2 = zadania[zad_m2 - 1].get_op1();
+				int id2 = zadania[zad_m2 - 1].get_rt();
+				if (tx_m2 + 1 >  zadania[zad_m2 - 1].get_rt())id2 = tx_m2 + 1;
+				if ((zadania[zad_m2 - 1].get_mach() == 1) && (id2 < zadania[zad_m2 - 1].get_done_op1())) id2 = zadania[zad_m2 - 1].get_done_op1()+1;
+				int empt2 = 0;
+				while (empt2 == 0) //szukaj miejsca gdzie mozna umiescic zadanie
+				{
+
+					int c2 = 0;
+					while (tmp.second.getN(id2) != 0)id2++; //przeszukiwany poczatek jest pusty
+					if (dlg2>1) //jezeli zadanie jest dluzsze niz 1 jednostka czasu to sprawd czy wejdzie
+					{
+						while ((tmp.second.getN(id2 + dlg2 - 1) != 0))id2 += dlg2; // przeszukiwany koniec jest pusty
+						for (c2 = id2 + 1; (c2 < id2 + dlg2 - 1) && tmp.second.getN(c2) == 0; c2++); //przejscie po zerach od poczatku do konca
+						if ((c2 - (id2 + 1)) == dlg2 - 2) // jezeli same zera
+						{
+							empt2 = 1;
+						}
+						else //jezeli nie to przesun do miejsca gdzie jest ostatnie zero
+						{
+							id2 = c2;
+						}
+					}
+					else empt2 = 1;
+				}
+				int c2 = id2;
+				while (c2 < (id2 + zadania[zad_m2 - 1].get_op1()))
+				{
+					tmp.second.set(c2, zadania[zad_m2 - 1].get_nr());
+					c2++;
+				}
+				if (zadania[zad_m2 - 1].get_mach() == 2)  zadania[zad_m2 - 1].set_done_op1(id2 + dlg2); //ustaw op1 na done
+				kol_po_M2.pop_front();
+
+
+			}
+			//------------------------------------------------------			
+			else if ((zadania[zad_m1 - 1].get_mach() == 2) && (zadania[zad_m2 - 1].get_mach() == 2)) //zadanie na M2 jest op1, a zadanie na M1 op2
+			{
+				int dlg2 = zadania[zad_m2 - 1].get_op2();;		// d³ugoœæ trwania zadania
+				if (zadania[zad_m2 - 1].get_mach() == 2) dlg2 = zadania[zad_m2 - 1].get_op1();
+				int id2 = zadania[zad_m2 - 1].get_rt();
+				if (tx_m2 + 1 >  zadania[zad_m2 - 1].get_rt())id2 = tx_m2 + 1;
+				if ((zadania[zad_m2 - 1].get_mach() == 1) && (id2 < zadania[zad_m2 - 1].get_done_op1())) id2 = zadania[zad_m2 - 1].get_done_op1()+1;
+				int empt2 = 0;
+				while (empt2 == 0) //szukaj miejsca gdzie mozna umiescic zadanie
+				{
+
+					int c2 = 0;
+					while (tmp.second.getN(id2) != 0)id2++; //przeszukiwany poczatek jest pusty
+					if (dlg2>1) //jezeli zadanie jest dluzsze niz 1 jednostka czasu to sprawd czy wejdzie
+					{
+						while ((tmp.second.getN(id2 + dlg2 - 1) != 0))id2 += dlg2; // przeszukiwany koniec jest pusty
+						for (c2 = id2 + 1; (c2 < id2 + dlg2 - 1) && tmp.second.getN(c2) == 0; c2++); //przejscie po zerach od poczatku do konca
+						if ((c2 - (id2 + 1)) == dlg2 - 2) // jezeli same zera
+						{
+							empt2 = 1;
+						}
+						else //jezeli nie to przesun do miejsca gdzie jest ostatnie zero
+						{
+							id2 = c2;
+						}
+					}
+					else empt2 = 1;
+				}
+				int c2 = id2;
+				while (c2 < (id2 + zadania[zad_m2 - 1].get_op1()))
+				{
+					tmp.second.set(c2, zadania[zad_m2 - 1].get_nr());
+					c2++;
+				}
+				if (zadania[zad_m2 - 1].get_mach() == 2)  zadania[zad_m2 - 1].set_done_op1(id2 + dlg2); //ustaw op1 na done
+				kol_po_M2.pop_front();
+
+				int dlg = zadania[zad_m1 - 1].get_op1();;		// d³ugoœæ trwania zadania
+				if (zadania[zad_m1 - 1].get_mach() == 2) dlg = zadania[zad_m1 - 1].get_op2();
+				int id = zadania[zad_m1 - 1].get_rt();
+				if (tx_m1 + 1 >  zadania[zad_m1 - 1].get_rt())id = tx_m1 + 1;
+				if ((zadania[zad_m1 - 1].get_mach() == 2) && (id < zadania[zad_m1 - 1].get_done_op1())) id = zadania[zad_m1 - 1].get_done_op1()+1;
+				int empt = 0;
+				while (empt == 0) //szukaj miejsca gdzie mozna umiescic zadanie
+				{
+
+					int c = 0;
+					while (tmp.first.getN(id) != 0)id++; //przeszukiwany poczatek jest pusty
+					if (dlg>1) //jezeli zadanie jest dluzsze niz 1 jednostka czasu to sprawd czy wejdzie
+					{
+						while ((tmp.first.getN(id + dlg - 1) != 0))id += dlg; // przeszukiwany koniec jest pusty
+						for (c = id + 1; (c < id + dlg - 1) && tmp.first.getN(c) == 0; c++); //przejscie po zerach od poczatku do konca
+						if ((c - (id + 1)) == dlg - 2) // jezeli same zera
+						{
+							empt = 1;
+						}
+						else //jezeli nie to przesun do miejsca gdzie jest ostatnie zero
+						{
+							id = c;
+						}
+					}
+					else empt = 1;
+				}
+				int c = id;
+				while (c < (id + dlg))
+				{
+					tmp.first.set(c, zadania[zad_m1 - 1].get_nr());
+					c++;
+				}
+				if (zadania[zad_m1 - 1].get_mach() == 1)  zadania[zad_m1 - 1].set_done_op1(id + dlg); //ustaw op1 na done
+				kol_po_M1.pop_front();
+
+			}
+			//------------------------------------------------------
+			else if ((zadania[zad_m1 - 1].get_mach() == 1) && (zadania[zad_m2 - 1].get_mach() == 2)) //oba zadania s¹ op1
+			{
+				int dlg = zadania[zad_m1 - 1].get_op1();;		// d³ugoœæ trwania zadania
+				if (zadania[zad_m1 - 1].get_mach() == 2) dlg = zadania[zad_m1 - 1].get_op2();
+				int id = zadania[zad_m1 - 1].get_rt();
+				if (tx_m1 + 1 >  zadania[zad_m1 - 1].get_rt())id = tx_m1 + 1;
+				if ((zadania[zad_m1 - 1].get_mach() == 2) && (id < zadania[zad_m1 - 1].get_done_op1())) id = zadania[zad_m1 - 1].get_done_op1()+1;
+				int empt = 0;
+				while (empt == 0) //szukaj miejsca gdzie mozna umiescic zadanie
+				{
+
+					int c = 0;
+					while (tmp.first.getN(id) != 0)id++; //przeszukiwany poczatek jest pusty
+					if (dlg>1) //jezeli zadanie jest dluzsze niz 1 jednostka czasu to sprawd czy wejdzie
+					{
+						while ((tmp.first.getN(id + dlg - 1) != 0))id += dlg; // przeszukiwany koniec jest pusty
+						for (c = id + 1; (c < id + dlg - 1) && tmp.first.getN(c) == 0; c++); //przejscie po zerach od poczatku do konca
+						if ((c - (id + 1)) == dlg - 2) // jezeli same zera
+						{
+							empt = 1;
+						}
+						else //jezeli nie to przesun do miejsca gdzie jest ostatnie zero
+						{
+							id = c;
+						}
+					}
+					else empt = 1;
+				}
+				int c = id;
+				while (c < (id + dlg))
+				{
+					tmp.first.set(c, zadania[zad_m1 - 1].get_nr());
+					c++;
+				}
+				if (zadania[zad_m1 - 1].get_mach() == 1)  zadania[zad_m1 - 1].set_done_op1(id + dlg); //ustaw op1 na done
+				kol_po_M1.pop_front();
+
+				int dlg2 = zadania[zad_m2 - 1].get_op2();;		// d³ugoœæ trwania zadania
+				if (zadania[zad_m2 - 1].get_mach() == 2) dlg2 = zadania[zad_m2 - 1].get_op1();
+				int id2 = zadania[zad_m2 - 1].get_rt();
+				if (tx_m2 + 1 >  zadania[zad_m2 - 1].get_rt())id2 = tx_m2 + 1;
+				if ((zadania[zad_m2 - 1].get_mach() == 1) && (id2 < zadania[zad_m2 - 1].get_done_op1())) id2 = zadania[zad_m2 - 1].get_done_op1()+1;
+				int empt2 = 0;
+				while (empt2 == 0) //szukaj miejsca gdzie mozna umiescic zadanie
+				{
+
+					int c2 = 0;
+					while (tmp.second.getN(id2) != 0)id2++; //przeszukiwany poczatek jest pusty
+					if (dlg2>1) //jezeli zadanie jest dluzsze niz 1 jednostka czasu to sprawd czy wejdzie
+					{
+						while ((tmp.second.getN(id2 + dlg2 - 1) != 0))id2 += dlg2; // przeszukiwany koniec jest pusty
+						for (c2 = id2 + 1; (c2 < id2 + dlg2 - 1) && tmp.second.getN(c2) == 0; c2++); //przejscie po zerach od poczatku do konca
+						if ((c2 - (id2 + 1)) == dlg2 - 2) // jezeli same zera
+						{
+							empt2 = 1;
+						}
+						else //jezeli nie to przesun do miejsca gdzie jest ostatnie zero
+						{
+							id2 = c2;
+						}
+					}
+					else empt2 = 1;
+				}
+				int c2 = id2;
+				while (c2 < (id2 + zadania[zad_m2 - 1].get_op1()))
+				{
+					tmp.second.set(c2, zadania[zad_m2 - 1].get_nr());
+					c2++;
+				}
+				if (zadania[zad_m2 - 1].get_mach() == 2)  zadania[zad_m2 - 1].set_done_op1(id2 + dlg2); //ustaw op1 na done
+				kol_po_M2.pop_front();
+			}
+			else if ((zadania[zad_m1 - 1].get_mach() == 2) && (zadania[zad_m2 - 1].get_mach() == 1)) //oba zadania s¹ op2
+			{
+				int dlg = zadania[zad_m1 - 1].get_op1();;		// d³ugoœæ trwania zadania
+				if (zadania[zad_m1 - 1].get_mach() == 2) dlg = zadania[zad_m1 - 1].get_op2();
+				int id = zadania[zad_m1 - 1].get_rt();
+				if (tx_m1 + 1 >  zadania[zad_m1 - 1].get_rt())id = tx_m1 + 1;
+				if ((zadania[zad_m1 - 1].get_mach() == 2) && (id < zadania[zad_m1 - 1].get_done_op1())) id = zadania[zad_m1 - 1].get_done_op1()+1;
+				int empt = 0;
+				while (empt == 0) //szukaj miejsca gdzie mozna umiescic zadanie
+				{
+
+					int c = 0;
+					while (tmp.first.getN(id) != 0)id++; //przeszukiwany poczatek jest pusty
+					if (dlg>1) //jezeli zadanie jest dluzsze niz 1 jednostka czasu to sprawd czy wejdzie
+					{
+						while ((tmp.first.getN(id + dlg - 1) != 0))id += dlg; // przeszukiwany koniec jest pusty
+						for (c = id + 1; (c < id + dlg - 1) && tmp.first.getN(c) == 0; c++); //przejscie po zerach od poczatku do konca
+						if ((c - (id + 1)) == dlg - 2) // jezeli same zera
+						{
+							empt = 1;
+						}
+						else //jezeli nie to przesun do miejsca gdzie jest ostatnie zero
+						{
+							id = c;
+						}
+					}
+					else empt = 1;
+				}
+				int c = id;
+				while (c < (id + dlg))
+				{
+					tmp.first.set(c, zadania[zad_m1 - 1].get_nr());
+					c++;
+				}
+				if (zadania[zad_m1 - 1].get_mach() == 1)  zadania[zad_m1 - 1].set_done_op1(id + dlg); //ustaw op1 na done
+				kol_po_M1.pop_front();
+
+				int dlg2 = zadania[zad_m2 - 1].get_op2();;		// d³ugoœæ trwania zadania
+				if (zadania[zad_m2 - 1].get_mach() == 2) dlg2 = zadania[zad_m2 - 1].get_op1();
+				int id2 = zadania[zad_m2 - 1].get_rt();
+				if (tx_m2 + 1 >  zadania[zad_m2 - 1].get_rt())id2 = tx_m2 + 1;
+				if ((zadania[zad_m2 - 1].get_mach() == 1) && (id2 < zadania[zad_m2 - 1].get_done_op1())) id2 = zadania[zad_m2 - 1].get_done_op1()+1;
+				int empt2 = 0;
+				while (empt2 == 0) //szukaj miejsca gdzie mozna umiescic zadanie
+				{
+
+					int c2 = 0;
+					while (tmp.second.getN(id2) != 0)id2++; //przeszukiwany poczatek jest pusty
+					if (dlg2>1) //jezeli zadanie jest dluzsze niz 1 jednostka czasu to sprawd czy wejdzie
+					{
+						while ((tmp.second.getN(id2 + dlg2 - 1) != 0))id2 += dlg2; // przeszukiwany koniec jest pusty
+						for (c2 = id2 + 1; (c2 < id2 + dlg2 - 1) && tmp.second.getN(c2) == 0; c2++); //przejscie po zerach od poczatku do konca
+						if ((c2 - (id2 + 1)) == dlg2 - 2) // jezeli same zera
+						{
+							empt2 = 1;
+						}
+						else //jezeli nie to przesun do miejsca gdzie jest ostatnie zero
+						{
+							id2 = c2;
+						}
+					}
+					else empt2 = 1;
+				}
+				int c2 = id2;
+				while (c2 < (id2 + zadania[zad_m2 - 1].get_op1()))
+				{
+					tmp.second.set(c2, zadania[zad_m2 - 1].get_nr());
+					c2++;
+				}
+				if (zadania[zad_m2 - 1].get_mach() == 2)  zadania[zad_m2 - 1].set_done_op1(id2 + dlg2); //ustaw op1 na done
+				kol_po_M2.pop_front();
+			}
+
+		}
+
+		std::cout << "Jest GIT " << std::endl;
+		//tmp.first.test();
+		std::cout << std::endl;
+		//tmp.second.test();
+		std::cout << "--------------------------------------" << std::endl;
+
+		return tmp;
 	}
 	return rozw;
 }

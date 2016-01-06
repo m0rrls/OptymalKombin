@@ -77,6 +77,8 @@ public:
 	int TargetFnctn2(std::pair<Timeline, Timeline> rozw);
 	int TargetFnctn(std::pair<Timeline, Timeline> rozw);
 
+	int fCelu();
+
 private:
 	std::map<int, int> mp;
 };

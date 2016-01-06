@@ -233,7 +233,7 @@ int main()
 
 // TU BYL BREAKPOINT
 //-------------------------------
-	populacja = crossing(populacja, 80, zadania, sizeOfPopulation);
+	populacja = crossing(populacja, 80, zadania, 3*sizeOfPopulation);
 	for (auto &i : populacja)
 	{
 		if (!i.first.FirstIsFirst(i.second, zadania, 1))
@@ -252,10 +252,10 @@ int main()
 	std::vector<std::pair<Timeline, Timeline>> najlepszyWynik = wybierz(populacja, 1);
 	std::cout << std::endl;
 	najlepszyWynik[0].first.test();
-	std::cout << najlepszyWynik[0].first.TargetFnctn1(najlepszyWynik[0]) << std::endl;
+	std::cout << najlepszyWynik[0].first.TargetFnctn1(najlepszyWynik[0]) <<"\t" << najlepszyWynik[0].first.fCelu() << std::endl;
 	najlepszyWynik[0].second.test();
-	std::cout << najlepszyWynik[0].second.TargetFnctn2(najlepszyWynik[0]) << std::endl;
-
+	std::cout << najlepszyWynik[0].second.TargetFnctn2(najlepszyWynik[0]) << "\t" << najlepszyWynik[0].second.fCelu() << std::endl;
+	std::cout << najlepszyWynik[0].first.TargetFnctn(najlepszyWynik[0]) << "\t" << najlepszyWynik[0].first.fCelu() + najlepszyWynik[0].second.fCelu() << std::endl;
 	//rozw.first.test();
 	//rozw.second.test();
 	//PrintableResult M1 = rozw.first.resOut(zadania, 1);
