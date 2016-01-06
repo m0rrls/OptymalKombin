@@ -269,7 +269,7 @@ std::pair<Timeline, Timeline> Timeline::Instancja(std::vector<Task> z1, int N)
 			}
 			//spr czy uzyto juz wszystkich zadan
 			int check = 0;
-			for each (int i in alrdyUsd)
+			for (auto &i : alrdyUsd)
 			{
 				check += i;
 			}
