@@ -2,14 +2,16 @@
 #include "Mutation.h"
 #include <algorithm>
 
-std::pair<Timeline, Timeline> Mutacja(std::pair<Timeline, Timeline> rozw, std::vector<Task> zadania1, int N, int mutChance)
+std::pair<std::pair<Timeline, Timeline>, int> Mutacja(std::pair<Timeline, Timeline> rozw, std::vector<Task> zadania1, int N, int mutChance)
 {
-	srand(time(0));
+
+	std::pair<std::pair<Timeline, Timeline>, int> instancja;
+	instancja.second = 0;
+	instancja.first = rozw;
 
 	if (rand() % 101 <= mutChance) {
 
 		//DEKLARACJE
-
 		std::vector <int> Tsks_M1;
 		std::vector <int> Tsks_M2;
 		Tsks_M1.resize(N); Tsks_M2.resize(N);
@@ -43,7 +45,7 @@ std::pair<Timeline, Timeline> Mutacja(std::pair<Timeline, Timeline> rozw, std::v
 		if (x + y > N) y = x - y;
 		else y = x + y;
 		if (x > y) { pom = x; x = y; y = pom; }
-		for (int i = 0; i < rozw.first.getSoT(); i++) {
+		for (int i = 0;i < rozw.first.getSoT();i++) {
 			if (rozw.first.getN(i) == -1)
 			{
 				tmp.first.set(i, -1);
@@ -51,11 +53,11 @@ std::pair<Timeline, Timeline> Mutacja(std::pair<Timeline, Timeline> rozw, std::v
 		}
 
 
-		std::cout << "Rozw " << std::endl;
+		/*std::cout << "Rozw " << std::endl;
 		rozw.first.test();
 		std::cout << std::endl;
 		rozw.second.test();
-		std::cout << "--------------------------------------" << std::endl;
+		std::cout << "--------------------------------------" << std::endl;*/
 
 
 
@@ -78,7 +80,7 @@ std::pair<Timeline, Timeline> Mutacja(std::pair<Timeline, Timeline> rozw, std::v
 		int ty_m2 = rozw1.second.getTime_on_M2(ty_m1);
 		//ZADANIA KTORE BYLY UZYTE	I VECTOR NIE UZYTYCH ZADAN	
 		for (int i = 0; i < N; i++) {
-			Tsks_M1[i] = (i + 1); Tsks_M2[i] = (i + 1);
+			Tsks_M1[i] = (i + 1);Tsks_M2[i] = (i + 1);
 		}
 
 		usedTasks_M1 = rozw1.first.getUsdTasks(x - 1);			//zadania które by³y u¿yte
@@ -94,29 +96,29 @@ std::pair<Timeline, Timeline> Mutacja(std::pair<Timeline, Timeline> rozw, std::v
 		}
 		// KOPIOWANIE ROZW PRZED MIEJSCEM ZAMIANY
 
-		for (int i = 0; i < tx_m1; i++) {
+		for (int i = 0;i < tx_m1;i++) {
 			tmp.first.set(i, rozw1.first.getN(i));
 		}
-		for (int i = 0; i < tx_m2 + 1; i++) {
+		for (int i = 0;i < tx_m2 + 1;i++) {
 			tmp.second.set(i, rozw1.second.getN(i));
 		}
 
-		for (int i = 0; i < tmp.first.getSoT() - 1; i++) {
+		for (int i = 0;i < tmp.first.getSoT() - 1;i++) {
 			if (tmp.first.getN(i)>0 && tmp.first.getN(i + 1) != tmp.first.getN(i)) {
 				if (zadania[tmp.first.getN(i) - 1].get_mach() == 1) zadania[tmp.first.getN(i) - 1].set_done_op1(i);
 			}
 		}
-		for (int i = 0; i < tmp.second.getSoT() - 1; i++) {
+		for (int i = 0;i < tmp.second.getSoT() - 1;i++) {
 			if (tmp.second.getN(i)>0 && tmp.second.getN(i + 1) != tmp.second.getN(i)) {
 				if (zadania[tmp.second.getN(i) - 1].get_mach() == 2) zadania[tmp.second.getN(i) - 1].set_done_op1(i);
 			}
 		}
 
-		std::cout << "Po skopiowaniu poczatku " << std::endl;
-		//tmp.first.test();
-		std::cout << std::endl;
-		//tmp.second.test();
-		std::cout << "--------------------------------------" << std::endl;
+		//std::cout <<"Po skopiowaniu poczatku "<< std::endl;
+		////tmp.first.test();
+		//std::cout << std::endl;
+		////tmp.second.test();
+		//std::cout << "--------------------------------------" << std::endl;
 
 		//NIEPOTRZEBNE I NIE DO KONCA DZIALA		
 		//		tmpbegin.first.copyTimeline(tx_m1);				//kopiowanie przodu rozw M1
@@ -130,7 +132,7 @@ std::pair<Timeline, Timeline> Mutacja(std::pair<Timeline, Timeline> rozw, std::v
 
 		//TWORZENIE KOLEJKI ZADAN W OBSZARZE ZAMIANY
 		kol_M1.clear();
-		for (int i = tx_m1 + 1; i < ty_m1; i++)
+		for (int i = tx_m1; i < ty_m1; i++)
 		{
 			if (std::find(Tsks_M1.begin(), Tsks_M1.end(), rozw1.first.getN(i)) != Tsks_M1.end()) //jezeli aktualna wartos jest to dodaj ja do kolejki i usunie ze zbioru wolnych zadan
 			{
@@ -139,7 +141,7 @@ std::pair<Timeline, Timeline> Mutacja(std::pair<Timeline, Timeline> rozw, std::v
 			}
 		}
 		kol_M2.clear();
-		for (int i = tx_m2 + 1; i < ty_m2; i++)
+		for (int i = tx_m2; i < ty_m2; i++)
 		{
 			if (std::find(Tsks_M2.begin(), Tsks_M2.end(), rozw1.second.getN(i)) != Tsks_M2.end()) //jezeli aktualna wartos jest to dodaj ja do kolejki i usunie ze zbioru wolnych zadan
 			{
@@ -149,7 +151,7 @@ std::pair<Timeline, Timeline> Mutacja(std::pair<Timeline, Timeline> rozw, std::v
 		}
 		//TWORZENIE KOLEJKI ZADAN PO OBSZARZE ZAMIANY
 		kol_po_M1.clear();
-		for (int i = ty_m1 + 1; i < rozw1.first.getSoT(); i++)
+		for (int i = ty_m1; i < rozw1.first.getSoT(); i++)
 		{
 			if (std::find(Tsks_M1.begin(), Tsks_M1.end(), rozw1.first.getN(i)) != Tsks_M1.end()) //jezeli aktualna wartos jest to dodaj ja do kolejki i usunie ze zbioru wolnych zadan
 			{
@@ -158,7 +160,7 @@ std::pair<Timeline, Timeline> Mutacja(std::pair<Timeline, Timeline> rozw, std::v
 			}
 		}
 		kol_po_M2.clear();
-		for (int i = ty_m2 + 1; i < rozw1.second.getSoT(); i++)
+		for (int i = ty_m2; i < rozw1.second.getSoT(); i++)
 		{
 			if (std::find(Tsks_M2.begin(), Tsks_M2.end(), rozw1.second.getN(i)) != Tsks_M2.end()) //jezeli aktualna wartos jest to dodaj ja do kolejki i usunie ze zbioru wolnych zadan
 			{
@@ -182,13 +184,18 @@ std::pair<Timeline, Timeline> Mutacja(std::pair<Timeline, Timeline> rozw, std::v
 		if (zady != 0)	kol_M1.push_back(zady); 	//zady wrzucone na koniec (czyli by³e zadx)
 		if (zadx != 0)	kol_M1.push_front(zadx);	//zadx wrzucone na pocz¹tek (czyli by³e zady)
 
+		if (zadx == 0 || zady == 0) {
+			std::cout << "Coœ posz³o nie tak" << std::endl;
+			return instancja;
+		}
+
 		if (zadania[zadx - 1].get_mach() == 2 && kol_M2.empty() == false) {
 			for (itM2 = kol_M2.begin(); itM2 != kol_M2.end(); itM2++) {
 				//std::cout << *itM2 << "   ";
 				if (*itM2 == zadx) {
-					std::cout << std::endl << "YES_przerzucono op2 na pocz¹tek " << *itM2 << std::endl;
+					//std::cout << std::endl << "YES_przerzucono op2 na pocz¹tek "<<*itM2 << std::endl;
 					kol_M2.erase(itM2);
-					for (int i = tx_m2 + 1; i < tx_m2 + zadania[zadx - 1].get_op1() + 1; i++)
+					for (int i = tx_m2 + 1;i < tx_m2 + zadania[zadx - 1].get_op1() + 1; i++)
 					{
 						tmp.second.set(i, zadx);
 					}
@@ -202,8 +209,8 @@ std::pair<Timeline, Timeline> Mutacja(std::pair<Timeline, Timeline> rozw, std::v
 				}
 			}
 		}
-		else
-			std::cout << "Not this time1" << std::endl;
+		/*else
+		std::cout << "Not this time1" << std::endl;*/
 
 		if (zadania[zady - 1].get_mach() == 1 && kol_M2.empty() == false) {
 			for (itM2 = kol_M2.begin(); itM2 != kol_M2.end(); itM2++)
@@ -212,7 +219,7 @@ std::pair<Timeline, Timeline> Mutacja(std::pair<Timeline, Timeline> rozw, std::v
 				if (*itM2 == zady)
 				{
 					int pom;
-					std::cout << std::endl << "YES_przerzucono op1 na koniec  " << *itM2 << std::endl;
+					//std::cout << std::endl << "YES_przerzucono op1 na koniec  " << *itM2<< std::endl;
 					itM2_po = kol_po_M2.begin();
 					pom = *itM2;
 					kol_M2.erase(itM2);
@@ -221,14 +228,14 @@ std::pair<Timeline, Timeline> Mutacja(std::pair<Timeline, Timeline> rozw, std::v
 				}
 			}
 		}
-		else
-			std::cout << "Not this time2" << std::endl;
+		/*else
+		std::cout << "Not this time2" << std::endl;*/
 
-		std::cout << "Po przerzuceniu zadan " << std::endl;
-		//tmp.first.test();
-		std::cout << std::endl;
-		//tmp.second.test();
-		std::cout << "--------------------------------------" << std::endl;
+		//std::cout << "Po przerzuceniu zadan " << std::endl;
+		////tmp.first.test();
+		//std::cout << std::endl;
+		////tmp.second.test();
+		//std::cout << "--------------------------------------" << std::endl;
 
 		int zad_m1 = 0, zad_m2 = 0;
 
@@ -580,11 +587,11 @@ std::pair<Timeline, Timeline> Mutacja(std::pair<Timeline, Timeline> rozw, std::v
 
 		}
 
-		std::cout << "Po pierwszej kolejce zadan " << std::endl;
+		//std::cout << "Po pierwszej kolejce zadan " << std::endl;
 		//tmp.first.test();
-		std::cout << std::endl;
+		//std::cout << std::endl;
 		//tmp.second.test();
-		std::cout << "--------------------------------------" << std::endl;
+		//std::cout << "--------------------------------------" << std::endl;
 
 		while (kol_po_M1.empty() == false || kol_po_M2.empty() == false)
 		{
@@ -965,13 +972,15 @@ std::pair<Timeline, Timeline> Mutacja(std::pair<Timeline, Timeline> rozw, std::v
 
 		}
 
-		std::cout << "Jest GIT " << std::endl;
+		/*std::cout << "Jest GIT " << std::endl;
 		tmp.first.test();
 		std::cout << std::endl;
 		tmp.second.test();
-		std::cout << "--------------------------------------" << std::endl;
+		std::cout << "--------------------------------------" << std::endl;*/
 
-		return tmp;
+		instancja.first = tmp;
+		instancja.second = 1;
+		return instancja;
 	}
-	return rozw;
+	return instancja;
 }
