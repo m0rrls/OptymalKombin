@@ -209,18 +209,18 @@ int main()
 		iq++;
 	}
 
-	std::pair<Timeline, Timeline> proba;
-	std::vector<int> tab1 = {3,3,-1,4,4,4,4,0,0,-1,1,0,2,2,0};
-	proba.first.copy(tab1);
-	tab1 = { 0,3,3,3,3,1,1,4,4,4,4,2,0,0,0};
-	proba.second.copy(tab1);
+	//std::pair<Timeline, Timeline> proba;
+	//std::vector<int> tab1 = {3,3,-1,4,4,4,4,0,0,-1,1,0,2,2,0};
+	//proba.first.copy(tab1);
+	//tab1 = { 0,3,3,3,3,1,1,4,4,4,4,2,0,0,0};
+	//proba.second.copy(tab1);
 
-	proba.first.test();
-	proba.second.test();
-	if (!proba.first.FirstIsFirst(proba.second, zadania, 1))
-	{
-		std::cout << "dziala\n";
-	}
+	//proba.first.test();
+	//proba.second.test();
+	//if (!proba.first.FirstIsFirst(proba.second, zadania, 1))
+	//{
+	//	std::cout << "dziala\n";
+	//}
 
 
 	for (auto &i : populacja)
@@ -252,16 +252,16 @@ int main()
 	std::vector<std::pair<Timeline, Timeline>> najlepszyWynik = wybierz(populacja, 1);
 	std::cout << std::endl;
 	najlepszyWynik[0].first.test();
-	std::cout << najlepszyWynik[0].first.TargetFnctn1(najlepszyWynik[0]) <<"\t" << najlepszyWynik[0].first.fCelu() << std::endl;
+	std::cout << najlepszyWynik[0].first.TargetFnctn1(najlepszyWynik[0]) << std::endl;
 	najlepszyWynik[0].second.test();
-	std::cout << najlepszyWynik[0].second.TargetFnctn2(najlepszyWynik[0]) << "\t" << najlepszyWynik[0].second.fCelu() << std::endl;
-	std::cout << najlepszyWynik[0].first.TargetFnctn(najlepszyWynik[0]) << "\t" << najlepszyWynik[0].first.fCelu() + najlepszyWynik[0].second.fCelu() << std::endl;
+	std::cout << najlepszyWynik[0].second.TargetFnctn2(najlepszyWynik[0]) << std::endl;
+	std::cout << najlepszyWynik[0].first.TargetFnctn(najlepszyWynik[0]) << std::endl;
 	//rozw.first.test();
 	//rozw.second.test();
 	//PrintableResult M1 = rozw.first.resOut(zadania, 1);
-	PrintableResult M1 = populacja[0].first.resOut(zadania, 1);
+	PrintableResult M1 = najlepszyWynik[0].first.resOut(zadania, 1);
 	//PrintableResult M2 = rozw.second.resOut(zadania, 2);
-	PrintableResult M2 = populacja[0].first.resOut(zadania, 2);
+	PrintableResult M2 = najlepszyWynik[0].first.resOut(zadania, 2);
 //	int wartFnCelu1 = populacja[0].first.TargetFnctn1(rozw);
 //	int wartFnCelu2 = populacja[0].first.TargetFnctn2(rozw);
 //	int wartFnCelu = populacja[0].first.TargetFnctn(rozw);
