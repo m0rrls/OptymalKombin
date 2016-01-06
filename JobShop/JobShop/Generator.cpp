@@ -39,6 +39,16 @@ void Generator::test()
 	cout << endl;
 }
 
+void Generator::test2()
+{
+	for (int j = 0; j < 36; j++)
+	{
+		cout << tab[j] << " ";
+		//	if (j % 100 == 0) for (int z = 0;z < 100000000;z++);
+	}
+	cout << endl;
+}
+
 int Generator::getN(int a)
 {
 	return tab[a];

@@ -54,9 +54,9 @@ std::pair<std::pair<Timeline, Timeline>, int> Mutacja(std::pair<Timeline, Timeli
 
 
 		/*std::cout << "Rozw " << std::endl;
-		rozw.first.test();
+		rozw.first.test2();
 		std::cout << std::endl;
-		rozw.second.test();
+		rozw.second.test2();
 		std::cout << "--------------------------------------" << std::endl;*/
 
 
@@ -973,10 +973,12 @@ std::pair<std::pair<Timeline, Timeline>, int> Mutacja(std::pair<Timeline, Timeli
 		}
 
 		/*std::cout << "Jest GIT " << std::endl;
-		tmp.first.test();
+		tmp.first.test2();
 		std::cout << std::endl;
-		tmp.second.test();
+		tmp.second.test2();
 		std::cout << "--------------------------------------" << std::endl;*/
+
+		//std::cout<<std::endl<<tmp.first.FirstIsFirst(tmp.second, zadania, 1) << std::endl;
 
 		instancja.first = tmp;
 		instancja.second = 1;

@@ -10,6 +10,7 @@ public:
 	//generowanie w tablicy w przedziale [start;end] liczb z zakresu [k;j]
 	virtual void rdm(int start, int end, int k, int j);
 	void test();
+	void test2();
 	int getN(int a);
 	int getSoT();
 	
