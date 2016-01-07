@@ -41,7 +41,7 @@ void Generator::test()
 
 void Generator::test2()
 {
-	for (int j = 0; j < 36; j++)
+	for (int j = 0; j < 30; j++)
 	{
 		cout << tab[j] << " ";
 		//	if (j % 100 == 0) for (int z = 0;z < 100000000;z++);

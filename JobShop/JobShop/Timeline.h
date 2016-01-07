@@ -37,6 +37,9 @@ public:
 	//tworzenie tablicy ju¿ uzytych N operacji
 	std::vector<int> getUsdTasks(int N);
 
+	//tworzenie tablicy ju¿ uzytych N operacji dla m2 mutacji
+	std::vector<int> getUsdTasks_m2(int N);
+
 	//kopiowanie rozwi¹zania do pewnego momentu dla m1
 	std::vector<Timeline> copyTimeline(int dokiedy);
 

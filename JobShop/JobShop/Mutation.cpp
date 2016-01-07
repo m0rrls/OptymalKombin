@@ -55,12 +55,12 @@ std::pair<std::pair<Timeline, Timeline>, int> Mutacja(std::pair<Timeline, Timeli
 			zadania[i].set_done_op1(-1);
 		}
 
-		std::cout << "Rozw " << std::endl;
+		/*std::cout << "Rozw " << std::endl;
 		rozw.first.test2();
 		std::cout << std::endl;
 		rozw.second.test2();
 		std::cout << "--------------------------------------" << std::endl;
-
+*/
 
 
 		//NR ZADAN
@@ -73,8 +73,8 @@ std::pair<std::pair<Timeline, Timeline>, int> Mutacja(std::pair<Timeline, Timeli
 													//CZASY ZADAN
 		int tx_m1 = rozw1.first.whenDone(xzad);			//czas skoñczenia zadania przed x
 		int ty_m1 = rozw1.first.whenDone(yzad);			//czas rozpoczecia zadania po zadaniu y 
-
-		if (xmach == 1) tx_m1 = tx_m1 - zadania[xzad - 1].get_op1() - 1;	//czas skoñczenia zadania przed x
+//TU BY£O -1
+		if (xmach == 1) tx_m1 = tx_m1 - zadania[xzad - 1].get_op1();	//czas skoñczenia zadania przed x
 		else
 			tx_m1 = tx_m1 - zadania[xzad - 1].get_op2();
 
@@ -86,7 +86,7 @@ std::pair<std::pair<Timeline, Timeline>, int> Mutacja(std::pair<Timeline, Timeli
 		}
 
 		usedTasks_M1 = rozw1.first.getUsdTasks(x - 1);			//zadania które by³y u¿yte
-		usedTasks_M2 = rozw1.second.getUsdTasks(x - 1);			//zadania które by³y u¿yte
+		usedTasks_M2 = rozw1.second.getUsdTasks_m2(tx_m1+1);			//zadania które by³y u¿yte
 
 		for (auto &i : usedTasks_M1)
 		{
@@ -143,7 +143,7 @@ std::pair<std::pair<Timeline, Timeline>, int> Mutacja(std::pair<Timeline, Timeli
 			}
 		}
 		kol_M2.clear();
-		for (int i = tx_m2; i < ty_m2; i++)
+		for (int i = tx_m2+1; i < ty_m2; i++)
 		{
 			if (std::find(Tsks_M2.begin(), Tsks_M2.end(), rozw1.second.getN(i)) != Tsks_M2.end()) //jezeli aktualna wartos jest to dodaj ja do kolejki i usunie ze zbioru wolnych zadan
 			{
@@ -238,8 +238,8 @@ std::pair<std::pair<Timeline, Timeline>, int> Mutacja(std::pair<Timeline, Timeli
 		tmp.first.test2();
 		std::cout << std::endl;
 		tmp.second.test2();
-		std::cout << "--------------------------------------" << std::endl;*/
-
+		std::cout << "--------------------------------------" << std::endl;
+*/
 		int zad_m1 = 0, zad_m2 = 0;
 
 		while (kol_M1.empty() == false || kol_M2.empty() == false)
@@ -363,6 +363,7 @@ std::pair<std::pair<Timeline, Timeline>, int> Mutacja(std::pair<Timeline, Timeli
 				if (zadania[zad_m1 - 1].get_mach() == 1)  zadania[zad_m1 - 1].set_done_op1(id + dlg); //ustaw op1 na done
 				kol_M1.pop_front();
 
+				if (zadania[zad_m2 - 1].get_done_op1() == -1) continue;
 				int dlg2 = zadania[zad_m2 - 1].get_op2();;		// d³ugoœæ trwania zadania
 				if (zadania[zad_m2 - 1].get_mach() == 2) dlg2 = zadania[zad_m2 - 1].get_op1();
 				int id2 = zadania[zad_m2 - 1].get_rt();
@@ -437,6 +438,43 @@ std::pair<std::pair<Timeline, Timeline>, int> Mutacja(std::pair<Timeline, Timeli
 				}
 				if (zadania[zad_m2 - 1].get_mach() == 2)  zadania[zad_m2 - 1].set_done_op1(id2 + dlg2); //ustaw op1 na done
 				kol_M2.pop_front();
+
+				if (zadania[zad_m1 - 1].get_done_op1() == -1) continue;
+				int dlg = zadania[zad_m1 - 1].get_op1();;		// d³ugoœæ trwania zadania
+				if (zadania[zad_m1 - 1].get_mach() == 2) dlg = zadania[zad_m1 - 1].get_op2();
+
+				int id = zadania[zad_m1 - 1].get_rt();
+				if (tx_m1 + 1 >  zadania[zad_m1 - 1].get_rt())id = tx_m1 + 1;
+				if ((zadania[zad_m1 - 1].get_mach() == 2) && (id < zadania[zad_m1 - 1].get_done_op1())) id = zadania[zad_m1 - 1].get_done_op1() + 1;
+				int empt = 0;
+				while (empt == 0) //szukaj miejsca gdzie mozna umiescic zadanie
+				{
+
+					int c = 0;
+					while (tmp.first.getN(id) != 0)id++; //przeszukiwany poczatek jest pusty
+					if (dlg>1) //jezeli zadanie jest dluzsze niz 1 jednostka czasu to sprawd czy wejdzie
+					{
+						while ((tmp.first.getN(id + dlg - 1) != 0))id += dlg; // przeszukiwany koniec jest pusty
+						for (c = id + 1; (c < id + dlg - 1) && tmp.first.getN(c) == 0; c++); //przejscie po zerach od poczatku do konca
+						if ((c - (id + 1)) == dlg - 2) // jezeli same zera
+						{
+							empt = 1;
+						}
+						else //jezeli nie to przesun do miejsca gdzie jest ostatnie zero
+						{
+							id = c;
+						}
+					}
+					else empt = 1;
+				}
+				int c = id;
+				while (c < (id + dlg))
+				{
+					tmp.first.set(c, zadania[zad_m1 - 1].get_nr());
+					c++;
+				}
+				if (zadania[zad_m1 - 1].get_mach() == 1)  zadania[zad_m1 - 1].set_done_op1(id + dlg); //ustaw op1 na done
+				kol_M1.pop_front();
 
 			}
 			//------------------------------------------------------
@@ -590,16 +628,16 @@ std::pair<std::pair<Timeline, Timeline>, int> Mutacja(std::pair<Timeline, Timeli
 			/*std::cout << std::endl;
 			tmp.first.test2();
 			std::cout << std::endl;
-			tmp.second.test2();*/
-			std::cout << "--------------------------------------" << std::endl;
+			tmp.second.test2();
+			std::cout << "--------------------------------------" << std::endl;*/
 
 		}
 
-		//std::cout << "Po pierwszej kolejce zadan " << std::endl;
-		//tmp.first.test();
-		//std::cout << std::endl;
-		//tmp.second.test();
-		std::cout << "--------------------------------------" << std::endl;
+		/*std::cout << "Po pierwszej kolejce zadan " << std::endl;
+		tmp.first.test2();
+		std::cout << std::endl;
+		tmp.second.test2();
+		std::cout << "--------------------------------------" << std::endl;*/
 
 		while (kol_po_M1.empty() == false || kol_po_M2.empty() == false)
 		{
@@ -721,6 +759,7 @@ std::pair<std::pair<Timeline, Timeline>, int> Mutacja(std::pair<Timeline, Timeli
 				if (zadania[zad_m1 - 1].get_mach() == 1)  zadania[zad_m1 - 1].set_done_op1(id + dlg); //ustaw op1 na done
 				kol_po_M1.pop_front();
 
+				if (zadania[zad_m2 - 1].get_done_op1() == -1) continue;
 				int dlg2 = zadania[zad_m2 - 1].get_op2();;		// d³ugoœæ trwania zadania
 				if (zadania[zad_m2 - 1].get_mach() == 2) dlg2 = zadania[zad_m2 - 1].get_op1();
 				int id2 = zadania[zad_m2 - 1].get_rt();
@@ -796,6 +835,7 @@ std::pair<std::pair<Timeline, Timeline>, int> Mutacja(std::pair<Timeline, Timeli
 				if (zadania[zad_m2 - 1].get_mach() == 2)  zadania[zad_m2 - 1].set_done_op1(id2 + dlg2); //ustaw op1 na done
 				kol_po_M2.pop_front();
 
+				if (zadania[zad_m1 - 1].get_done_op1() == -1) continue;
 				int dlg = zadania[zad_m1 - 1].get_op1();;		// d³ugoœæ trwania zadania
 				if (zadania[zad_m1 - 1].get_mach() == 2) dlg = zadania[zad_m1 - 1].get_op2();
 				int id = zadania[zad_m1 - 1].get_rt();
@@ -942,6 +982,7 @@ std::pair<std::pair<Timeline, Timeline>, int> Mutacja(std::pair<Timeline, Timeli
 				if (zadania[zad_m1 - 1].get_mach() == 1)  zadania[zad_m1 - 1].set_done_op1(id + dlg); //ustaw op1 na done
 				kol_po_M1.pop_front();
 
+				if (zadania[zad_m2 - 1].get_done_op1() == -1) continue;
 				int dlg2 = zadania[zad_m2 - 1].get_op2();;		// d³ugoœæ trwania zadania
 				if (zadania[zad_m2 - 1].get_mach() == 2) dlg2 = zadania[zad_m2 - 1].get_op1();
 				int id2 = zadania[zad_m2 - 1].get_rt();
@@ -980,8 +1021,8 @@ std::pair<std::pair<Timeline, Timeline>, int> Mutacja(std::pair<Timeline, Timeli
 			/*std::cout << std::endl;
 			tmp.first.test2();
 			std::cout << std::endl;
-			tmp.second.test2();*/
-			std::cout << "--------------------------------------" << std::endl;
+			tmp.second.test2();
+			std::cout << "--------------------------------------" << std::endl;*/
 
 		}
 
@@ -991,7 +1032,11 @@ std::pair<std::pair<Timeline, Timeline>, int> Mutacja(std::pair<Timeline, Timeli
 		tmp.second.test2();
 		std::cout << "--------------------------------------" << std::endl;*/
 
-		std::cout<<std::endl<<tmp.first.FirstIsFirst(tmp.second, zadania, 1) << std::endl;
+		if ((tmp.first.FirstIsFirst(tmp.second, zadania, 1) > -1) &&
+			(tmp.first.checkMach(zadania, 1) != true) &&
+			(tmp.second.checkMach(zadania, 2) != true)) {
+			return instancja;
+		}
 
 		instancja.first = tmp;
 		instancja.second = 1;

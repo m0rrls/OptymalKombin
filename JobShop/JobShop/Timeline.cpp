@@ -715,6 +715,25 @@ std::vector<int> Timeline::getUsdTasks(int N)
 	return vec;
 }
 
+std::vector<int> Timeline::getUsdTasks_m2(int N)
+{
+	int i = 0;
+	int j = 0;
+	std::vector<int> vec;
+	vec.clear();
+	while (i < N)
+	{
+		if (tab[i] > 0)
+		{
+			vec.insert(vec.end(), tab[i]);
+			int pom = tab[i];
+			while (tab[i] == pom)i++;
+		}
+		else i++;
+	}
+	return vec;
+}
+
 int Timeline::getIAftrNTsks(int N)
 {
 	int i = 0;
