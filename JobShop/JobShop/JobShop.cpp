@@ -255,7 +255,7 @@ int main()
 	for (int kek = 0; kek < repeats; kek++)
 	{
 		std::cout << "\t\t\t\t\t" << kek << std::endl;
-		afterCross = crossing(populacja, crossChance, zadania, 2 * sizeOfPopulation);
+		//afterCross = crossing(populacja, crossChance, zadania, 2 * sizeOfPopulation);
 
 		//	for (auto &i : populacja)
 		//	{
@@ -278,7 +278,7 @@ int main()
 			if (instan.second == 1) {
 				mut_done++;
 				afterMut.insert(afterMut.end(), instan.first);
-				std::cout << std::endl << "Mutacja " << mut_done << std::endl;
+				std::cout << std::endl << "Mutacja " << mut_done <<"\t"<< instan.first.first.TargetFnctn(instan.first) << std::endl;
 			}
 			licznik++;
 			if (licznik == sizeOfPopulation - 1) { licznik = 0; }

@@ -41,9 +41,11 @@ std::pair<std::pair<Timeline, Timeline>, int> Mutacja(std::pair<Timeline, Timeli
 
 									//LOSOWANIE ZADAÑ
 		x = rand() % (N - 1) + 2;				//które zadanie od pocz¹tku
-		y = rand() % (N / 5) + 1;				//które zadanie od pocz¹tku
-		if (x + y > N) y = x - y;
-		else y = x + y;
+		y = rand() % (N - 1) + 2;				//dodane
+		//y = rand() % (N / 5) + 1;				//które zadanie od pocz¹tku
+		//if (x + y > N) y = x - y;
+		//else y = x + y;
+		while(x==y) y = rand() % (N - 1) + 2;	//dodane
 		if (x > y) { pom = x; x = y; y = pom; }
 		for (int i = 0;i < rozw.first.getSoT();i++) {
 			if (rozw.first.getN(i) == -1)
