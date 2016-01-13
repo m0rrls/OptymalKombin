@@ -3,16 +3,28 @@
 
 #include "stdafx.h"
 
-int main()
+int main(int argc, char * argv[])
 {
 	srand(time(NULL));
 
-	int sizeOfPopulation = 30;
+	int sizeOfPopulation = 80; //ZBADANE
 	int testNr = 4;
-	int mut_chance = 100;
-	int crossChance = 80;
+	if (argc == 2)
+	{
+		//std::cout << "KEK\n";
+		testNr = std::stoi(argv[1]);
+	}
+	int mut_chance = 50;//ZBADANE
+	int crossChance = 80;//BADAMY
 
-	int repeats = 100;
+	const int sizeOfNewPop = 3 * sizeOfPopulation;
+
+	int crossPopSize = 100; //ZBADANE
+	int mutPopSize = sizeOfNewPop - crossPopSize; //ZBADANE
+
+	int repeats = 125; //ZBADANE
+
+	std::cout << "TestNr " << testNr << std::endl;
 
 	std::string tasksFile = "tests/tasks.txt";
 	std::string resFile = "tests/results.txt";
@@ -141,7 +153,7 @@ int main()
 	//}
 
 
-	Timeline* TimeL = new Timeline(10000);
+	Timeline* TimeL = new Timeline(8000);
 	while (!fileIN.eof() && zad[0] != '*')
 	{
 		for (int k = 0; k < 4; k++)
@@ -255,7 +267,7 @@ int main()
 	for (int kek = 0; kek < repeats; kek++)
 	{
 		std::cout << "\t\t\t\t\t" << kek << std::endl;
-		//afterCross = crossing(populacja, crossChance, zadania, 2 * sizeOfPopulation);
+		afterCross = crossing(populacja, crossChance, zadania, crossPopSize);
 
 		//	for (auto &i : populacja)
 		//	{
@@ -272,18 +284,19 @@ int main()
 		std::pair<std::pair<Timeline, Timeline>, int> instan;
 		int licznik = 0;
 		//std::cout << "\tKappa\n";
-		while (mut_done < sizeOfPopulation) {
+		while (mut_done < mutPopSize) {
 			//std::cout << mut_done<< std::endl;
 			instan = Mutacja(populacja[licznik], zadania, N, mut_chance);
 			if (instan.second == 1) {
 				mut_done++;
 				afterMut.insert(afterMut.end(), instan.first);
-				std::cout << std::endl << "Mutacja " << mut_done <<"\t"<< instan.first.first.TargetFnctn(instan.first) << std::endl;
+				//std::cout << std::endl << "Mutacja " << mut_done << std::endl;
 			}
 			licznik++;
 			if (licznik == sizeOfPopulation - 1) { licznik = 0; }
 			//std::cout << wartFnCelu << std::endl;
 		}
+		std::cout << std::endl << "Mutacja " << mut_done << std::endl;
 
 		afterCross.insert(afterCross.end(), afterMut.begin(), afterMut.end()); //konkatenacja wektorow
 
@@ -312,7 +325,7 @@ int main()
 	//PrintableResult M1 = rozw.first.resOut(zadania, 1);
 	PrintableResult M1 = najlepszyWynik[0].first.resOut(zadania, 1);
 	//PrintableResult M2 = rozw.second.resOut(zadania, 2);
-	PrintableResult M2 = najlepszyWynik[0].first.resOut(zadania, 2);
+	PrintableResult M2 = najlepszyWynik[0].second.resOut(zadania, 2);
 	//	int wartFnCelu1 = populacja[0].first.TargetFnctn1(rozw);
 	//	int wartFnCelu2 = populacja[0].first.TargetFnctn2(rozw);
 	//	int wartFnCelu = populacja[0].first.TargetFnctn(rozw);

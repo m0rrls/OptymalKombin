@@ -1,4 +1,4 @@
-#include "Crossover.h"
+ï»¿#include "Crossover.h"
 #include "stdafx.h"
 #include <algorithm>
 
@@ -37,14 +37,15 @@ std::vector<std::pair<Timeline, Timeline>> crossing(std::vector<std::pair<Timeli
 	std::list<int> kol;
 	std::vector<std::pair<Timeline, Timeline>> child;
 	child.resize(2);
-	
+
 
 	int licz = 0; //postep
 	while (licz < rozmiar)
 	{
-		
-		//int nrOfTsks = rand() % (N - 2) + 1; //uciecie wszystkich zadan nie ma sensu tak samo uciecie wszystkich lub oprócz jednego, wiec ucinamy przynajmniej 2
-		int nrOfTsks = rand() % ((int)(std::ceil(N / 2) - 1)) + (std::ceil(N / 2) - 1);	//poprawka: ucinamy za polowa, zeby jak najmniej naprawiac
+		int zawiecha = 0;
+		//int nrOfTsks = rand() % (N - 2) + 1; //uciecie wszystkich zadan nie ma sensu tak samo uciecie wszystkich lub oprï¿½cz jednego, wiec ucinamy przynajmniej 2
+		//int nrOfTsks = rand() % ((int)(std::ceil(N / 2) - 1)) + (std::ceil(N / 2) - 1);	//poprawka: ucinamy za polowa, zeby jak najmniej naprawiac
+		int nrOfTsks = rand() % (N - 4) + 2;
 		i1 = rand() % tmp.size();
 		i2 = rand() % tmp.size();
 		while (i1 == i2 || usedSol[i1][i2] == 1 || tmp[i1].first.cmp(tmp[i2].first)) //jezeli wylosowano te same liczby 
@@ -92,14 +93,14 @@ std::vector<std::pair<Timeline, Timeline>> crossing(std::vector<std::pair<Timeli
 			for (auto &i : usedTasks)
 			{
 				Tsks.erase(std::remove(Tsks.begin(), Tsks.end(), i), Tsks.end()); //usuwanie wszystkich zadan kt juz wykonano
-			//	std::cout << i << std::endl;
+																				  //	std::cout << i << std::endl;
 			}
 
 			//std::cout << "Po ilu ciac M1: " << nrOfTsks << std::endl << std::endl;
 			for (auto &i : Tsks)
 			{
 				usT++;
-			//	std::cout << i << std::endl;
+				//	std::cout << i << std::endl;
 			}
 
 			child[ren].first.del(child[ren].first.getIAftrNTsks(nrOfTsks));
@@ -114,9 +115,11 @@ std::vector<std::pair<Timeline, Timeline>> crossing(std::vector<std::pair<Timeli
 				}
 			}
 
-			id = zadania[kol.front() - 1].get_rt();
+			//id = zadania[kol.front() - 1].get_rt();
+			id = child[ren].first.getIAftrNTsks(nrOfTsks);
 
 			//umieszczanie zadan w kolejnosci
+
 			while (!kol.empty())
 			{
 				int i = kol.front();
@@ -191,6 +194,50 @@ std::vector<std::pair<Timeline, Timeline>> crossing(std::vector<std::pair<Timeli
 				}
 
 			}
+			/*
+			while (!kol.empty())
+			{
+			int i = kol.front() - 1;
+			int space = 0;
+			if (zadania[i].get_mach() == 1 && id < zadania[i].get_rt())id = zadania[i].get_rt();
+			if (zadania[i].get_mach() == 2 && id < zadania[i].get_done_op1())id = zadania[i].get_done_op1();
+			int tmp123 = id;
+			bool empty = false;
+			while (!empty)
+			{
+			while (tmp123 < child[ren].first.getSoT() && child[ren].first.getN(tmp123++) != 0); //dojdz do zer
+			while (tmp123 < child[ren].first.getSoT() && child[ren].first.getN(tmp123++) == 0)
+			{
+			space++; //licz zera
+			}
+			//wstawiamy na M1
+			if (zadania[i].get_mach() == 1 && zadania[i].get_op1() <= space) empty = true;
+			else if (zadania[i].get_mach() == 2 && zadania[i].get_op2() <= space) empty = true;
+			else
+			{
+			id = tmp123;
+			}
+			}
+			int pom = 0;
+			if (zadania[i].get_mach() == 1)
+			{
+			pom = zadania[i].get_op1();
+			zadania[i].set_done_op1(id + pom);
+			kol.pop_front();
+			}
+			else if (zadania[i].get_mach() == 2)
+			{
+			pom = zadania[i].get_op2();
+			kol.pop_front();
+			}
+			for (int j = id; j < id + pom; j++)
+			{
+			child[ren].first.set(j, zadania[i].get_nr());
+			}
+			id += pom;
+			}
+			*/
+
 			//---------------------------------------------------------------------------------------------------------------
 			//tworzenia rozw1 dla drugiej czesci M2
 			Tsks.resize(N);
@@ -205,13 +252,13 @@ std::vector<std::pair<Timeline, Timeline>> crossing(std::vector<std::pair<Timeli
 			for (auto &i : usedTasks)
 			{
 				Tsks.erase(std::remove(Tsks.begin(), Tsks.end(), i), Tsks.end()); //usuwanie wszystkich zadan kt juz wykonano
-			//	std::cout << i << std::endl;
+																				  //	std::cout << i << std::endl;
 			}
 			//std::cout << "\nPo ilu ciac M2: " << nrOfTsks << std::endl << std::endl;
 
 			for (auto &i : Tsks)
 			{
-			//	std::cout << i << std::endl;
+				//	std::cout << i << std::endl;
 			}
 			if (Tsks.size() == usT)
 			{
@@ -227,18 +274,27 @@ std::vector<std::pair<Timeline, Timeline>> crossing(std::vector<std::pair<Timeli
 			std::cout << "Child" << ren + 1 << " M2: \n";
 			child[ren].second.test();
 			*/
-			
+
 			if (child[ren].first.checkMach(zadania, 1) &&
 				child[ren].second.checkMach(zadania, 2) &&
-				child[ren].first.FirstIsFirst(child[ren].second, zadania, 1)<0)
+				child[ren].first.FirstIsFirst(child[ren].second, zadania, 1) < 0)
 			{
 				ren++;
 			}
 			else //
 			{
-				bool ch1 = child[ren].first.checkMach(zadania, 1);
-				bool ch2 = child[ren].second.checkMach(zadania, 2);
-				int ch3 = child[ren].first.FirstIsFirst(child[ren].second, zadania, 1);
+				zawiecha++;
+
+				if (zawiecha == 100 || zawiecha == 500 || zawiecha == 1000) std::cout << zawiecha << std::endl;
+
+				if (zawiecha>3000)
+				{
+					std::cout << "FeelsBadMan " << licz << std::endl;
+					exit(EXIT_FAILURE);
+				}
+				//bool ch1 = child[ren].first.checkMach(zadania, 1);
+				//bool ch2 = child[ren].second.checkMach(zadania, 2);
+				//int ch3 = child[ren].first.FirstIsFirst(child[ren].second, zadania, 1);
 				ren = 0;
 				i1 = rand() % tmp.size(); //byl problem? losujemy inna pare
 				i2 = rand() % tmp.size();
@@ -249,19 +305,22 @@ std::vector<std::pair<Timeline, Timeline>> crossing(std::vector<std::pair<Timeli
 				}
 				child[0] = tmp[i1];
 				child[1] = tmp[i2];
+
+				//nrOfTsks = rand() % ((int)(std::ceil(N / 2) - 1)) + (std::ceil(N / 2) - 1);
+				nrOfTsks = rand() % (N - 4) + 2;
 			}
 
 		}
 
 		if (child[0].first.checkMach(zadania, 1) &&
 			child[0].second.checkMach(zadania, 2) &&
-			child[0].first.FirstIsFirst(child[0].second, zadania, 1)<0 &&
+			child[0].first.FirstIsFirst(child[0].second, zadania, 1) < 0 &&
 			child[1].first.checkMach(zadania, 1) &&
 			child[1].second.checkMach(zadania, 2) &&
-			child[1].first.FirstIsFirst(child[1].second, zadania, 1)<0) //warunek sprawdzajacy poprawnosc rozwiazan
+			child[1].first.FirstIsFirst(child[1].second, zadania, 1) < 0) //warunek sprawdzajacy poprawnosc rozwiazan
 		{
 			licz++;
-			std::cout << "\tdobre rozw nr "<< licz << std::endl;
+			std::cout << "\tdobre rozw nr " << licz << std::endl;
 			licz++;
 			std::cout << "\tdobre rozw nr " << licz << std::endl;
 			res.insert(res.end(), child[0]);
@@ -269,13 +328,13 @@ std::vector<std::pair<Timeline, Timeline>> crossing(std::vector<std::pair<Timeli
 
 			//if (i1 > i2)
 			//{
-				//tmp.erase(tmp.begin() + i1);
-				//tmp.erase(tmp.begin() + i2);
+			//tmp.erase(tmp.begin() + i1);
+			//tmp.erase(tmp.begin() + i2);
 			//}
 			//else
 			//{
-				//tmp.erase(tmp.begin() + i2);
-				//tmp.erase(tmp.begin() + i1);
+			//tmp.erase(tmp.begin() + i2);
+			//tmp.erase(tmp.begin() + i1);
 			//}
 
 			usedSol[i1][i2] = 1; //
