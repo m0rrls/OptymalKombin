@@ -1,4 +1,4 @@
 # OptymalKombin
-together with Zielony
+together with Zielony/Viride
 
-realization of generic algorithms
+implementation of generic algorithm for Job shop scheduling problem
